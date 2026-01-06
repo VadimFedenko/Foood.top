@@ -1,7 +1,7 @@
 {
   "states": {
     "raw": 1.0,
-    "fermented": 1.1,
+    "fermented": 1.15,
     "steamed": 0.98,
     "boiled": 0.97,
     "baked": 0.94,

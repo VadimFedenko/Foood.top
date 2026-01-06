@@ -1,59 +1,58 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { Search, Filter, SortDesc, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import DishCard from './DishCard';
 import PriceUnitToggle from './PriceUnitToggle';
 import { useIsMobile } from '../lib/useIsMobile';
 
 /**
- * Search and filter bar for the dish list
+ * Stats summary bar with integrated search
  */
-function SearchBar({ searchQuery, onSearchChange }) {
-  return (
-    <div className="relative">
-      <Search 
-        size={18} 
-        className="absolute left-3 top-1/2 -translate-y-1/2 text-surface-400" 
-      />
-      <input
-        type="text"
-        value={searchQuery}
-        onChange={(e) => onSearchChange(e.target.value)}
-        placeholder="Search dishes..."
-        className="w-full pl-10 pr-10 py-2.5 rounded-xl
-                   bg-white/80 dark:bg-surface-800/80 
-                   border border-surface-300/50 dark:border-surface-700/50
-                   text-surface-800 dark:text-surface-100 
-                   placeholder:text-surface-400 dark:placeholder:text-surface-500
-                   focus:outline-none focus:border-food-500/50
-                   transition-colors shadow-sm dark:shadow-none"
-      />
-      {searchQuery && (
-        <button
-          onClick={() => onSearchChange('')}
-          className="absolute right-3 top-1/2 -translate-y-1/2 
-                     text-surface-400 hover:text-surface-600 dark:hover:text-surface-200"
-        >
-          <X size={16} />
-        </button>
-      )}
-    </div>
-  );
-}
-
-/**
- * Stats summary bar
- */
-function StatsBar({ totalDishes, filteredCount, allPrioritiesZero = false, priceUnit, onPriceUnitChange }) {
+function StatsBar({ 
+  totalDishes, 
+  filteredCount, 
+  allPrioritiesZero = false, 
+  priceUnit, 
+  onPriceUnitChange,
+  searchQuery,
+  onSearchChange
+}) {
   return (
     <div className="space-y-2">
-      <div className="flex items-center justify-between px-1 text-sm text-surface-500 dark:text-surface-400 gap-3 min-h-[28px]">
-        <div className="flex items-center gap-2">
-          <SortDesc size={14} />
-          <span>Ranked by your priorities</span>
+      <div className="grid grid-cols-[1fr_auto] items-center gap-3 px-1 text-sm text-surface-500 dark:text-surface-400 min-h-[28px]">
+        {/* Search bar */}
+        <div className="relative min-w-0">
+          <Search 
+            size={18} 
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-surface-400" 
+          />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
+            placeholder="Search dishes..."
+            className="w-full pl-10 pr-10 py-2.5 rounded-xl
+                       bg-white/80 dark:bg-surface-800/80 
+                       border border-surface-300/50 dark:border-surface-700/50
+                       text-surface-800 dark:text-surface-100 
+                       placeholder:text-surface-400 dark:placeholder:text-surface-500
+                       focus:outline-none focus:border-food-500/50
+                       transition-colors shadow-sm dark:shadow-none"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => onSearchChange('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 
+                         text-surface-400 hover:text-surface-600 dark:hover:text-surface-200"
+            >
+              <X size={16} />
+            </button>
+          )}
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-surface-500 dark:text-surface-400">
+        
+        {/* Right: Price per */}
+        <div className="flex items-center gap-2 whitespace-nowrap">
+          <span className="hidden sm:inline text-xs font-semibold text-surface-500 dark:text-surface-400">
             Price per
           </span>
           <PriceUnitToggle 
@@ -157,22 +156,20 @@ export default function DishList({
   return (
     <div className="flex flex-col h-full">
       {/* Search and stats */}
-      <div className="px-4 py-3 space-y-3 border-b border-surface-200/50 dark:border-surface-800/50">
-        <SearchBar 
-          searchQuery={searchQuery} 
-          onSearchChange={setSearchQuery} 
-        />
+      <div className="px-4 pt-3 pb-2 space-y-3 border-b border-surface-200/50 dark:border-surface-800/50">
         <StatsBar 
           totalDishes={dishes.length} 
           filteredCount={filteredDishes.length}
           allPrioritiesZero={allPrioritiesZero}
           priceUnit={priceUnit}
           onPriceUnitChange={onPriceUnitChange}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
         />
       </div>
 
       {/* Dish list */}
-      <div className="flex-1 overflow-y-auto px-4 py-4">
+      <div className="flex-1 overflow-y-auto px-4 pt-0 pb-4">
         {filteredDishes.length === 0 ? (
           <EmptyState hasSearch={!!searchQuery} />
         ) : (

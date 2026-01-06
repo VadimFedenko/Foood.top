@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { 
   ChevronDown, 
@@ -265,36 +266,33 @@ export default function PrioritiesPanel({
   onCollapseExpandedDish,
 }) {
   const [isExpanded, setIsExpanded] = useState(true);
+  const [isZoneDropdownOpen, setIsZoneDropdownOpen] = useState(false);
+  const [dropdownPosition, setDropdownPosition] = useState(null);
   const reduceMotion = useReducedMotion();
   const isMobile = useIsMobile();
   const lite = isMobile || reduceMotion;
+  const zoneButtonRefLite = useRef(null);
+  const zoneButtonRef = useRef(null);
+  const zoneDropdownRef = useRef(null);
   
-  // Draft state for smooth slider interaction without triggering list recalc
   const [draft, setDraft] = useState(priorities);
   const [isDragging, setIsDragging] = useState(false);
-  
-  // Keep ref to latest draft for commit on pointerup
   const draftRef = useRef(draft);
-  useEffect(() => { draftRef.current = draft; }, [draft]);
-  
-  // Track when a dish card was expanded to prevent false scroll triggers
   const lastExpandedAtRef = useRef(0);
   
-  // Sync draft with external priorities when not dragging
-  // (e.g., on initial load or external reset)
+  useEffect(() => { draftRef.current = draft; }, [draft]);
+  
   useEffect(() => {
     if (!isDragging) {
       setDraft(priorities);
     }
   }, [priorities, isDragging]);
   
-  // Global pointerup listener to commit draft when drag ends
   useEffect(() => {
     if (!isDragging) return;
     
     const handlePointerUp = () => {
       setIsDragging(false);
-      // Commit the draft to parent (triggers list recalculation)
       onPrioritiesChange(draftRef.current);
     };
     
@@ -302,7 +300,6 @@ export default function PrioritiesPanel({
     return () => window.removeEventListener('pointerup', handlePointerUp);
   }, [isDragging, onPrioritiesChange]);
 
-  // Auto-collapse on scroll down (> 30px), expand again when near top
   useEffect(() => {
     const scrollable =
       document.querySelector('main .overflow-y-auto') ||
@@ -312,29 +309,17 @@ export default function PrioritiesPanel({
 
     const handleScroll = () => {
       const currentScrollY = scrollable.scrollTop;
-
-      // Игнорируем авто-скролл события сразу после открытия карточки
-      // (когда сворачивание панели вызывает изменение layout и scrollTop)
       const timeSinceExpansion = Date.now() - lastExpandedAtRef.current;
       const justExpanded = expandedDish && timeSinceExpansion < 600;
 
-      // Если пользователь скроллит вверх и близко к верху (<= 10px)
       if (currentScrollY <= 10) {
-        // Если карточка блюда открыта, закрываем её и открываем панель priorities
-        // Но только если это не ложное срабатывание от изменения layout
         if (expandedDish && !justExpanded) {
-          if (onCollapseExpandedDish) {
-            onCollapseExpandedDish();
-          }
+          onCollapseExpandedDish?.();
+          setIsExpanded(true);
+        } else if (!isExpanded && !expandedDish) {
           setIsExpanded(true);
         }
-        // Если панель свернута и карточка не открыта, разворачиваем панель
-        else if (!isExpanded && !expandedDish) {
-          setIsExpanded(true);
-        }
-      }
-      // Collapse once пользователь ушел дальше 30px вниз (только если карточка не открыта)
-      else if (isExpanded && currentScrollY > 30 && !expandedDish) {
+      } else if (isExpanded && currentScrollY > 30 && !expandedDish) {
         setIsExpanded(false);
       }
     };
@@ -345,7 +330,6 @@ export default function PrioritiesPanel({
     };
   }, [isExpanded, onCollapseExpandedDish, expandedDish]);
 
-  // Если раскрылась карточка блюда — сворачиваем панель
   useEffect(() => {
     if (expandedDish && isExpanded) {
       lastExpandedAtRef.current = Date.now();
@@ -353,15 +337,66 @@ export default function PrioritiesPanel({
     }
   }, [expandedDish, isExpanded]);
 
-  // Use draft for display (smooth updates during drag)
+  const closeDropdown = () => {
+    setIsZoneDropdownOpen(false);
+    setDropdownPosition(null);
+  };
+
+  const handleZoneButtonClick = () => {
+    if (!isZoneDropdownOpen) {
+      const buttonRef = lite ? zoneButtonRefLite.current : zoneButtonRef.current;
+      if (buttonRef) {
+        const rect = buttonRef.getBoundingClientRect();
+        setDropdownPosition({
+          top: rect.bottom + 4,
+          left: rect.left,
+          width: rect.width,
+        });
+      }
+    }
+    setIsZoneDropdownOpen(!isZoneDropdownOpen);
+  };
+
+  useEffect(() => {
+    if (!isZoneDropdownOpen) return;
+
+    const buttonRef = lite ? zoneButtonRefLite.current : zoneButtonRef.current;
+    
+    const handleClickOutside = (event) => {
+      if (
+        buttonRef && !buttonRef.contains(event.target) &&
+        zoneDropdownRef.current && !zoneDropdownRef.current.contains(event.target)
+      ) {
+        closeDropdown();
+      }
+    };
+
+    const handleScroll = (event) => {
+      let element = event.target;
+      while (element && element !== document.body) {
+        if (element === zoneDropdownRef.current) {
+          return;
+        }
+        element = element.parentElement;
+      }
+      closeDropdown();
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    window.addEventListener('scroll', handleScroll, true);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+      window.removeEventListener('scroll', handleScroll, true);
+    };
+  }, [isZoneDropdownOpen, lite]);
+
   const displayed = draft;
-  
-  // Get active priorities (non-zero values)
   const activePriorities = PRIORITY_CONFIG.filter(
     config => displayed[config.key] !== 0
   );
-  
-  // Check if all priorities are zero
   const allPrioritiesZero = Object.values(displayed).every(v => v === 0);
 
   const handleDragStart = () => {
@@ -369,7 +404,6 @@ export default function PrioritiesPanel({
   };
 
   const handleSliderChange = (key, value) => {
-    // Update only the draft state (no parent update yet)
     setDraft(prev => ({ ...prev, [key]: value }));
   };
 
@@ -378,7 +412,6 @@ export default function PrioritiesPanel({
     PRIORITY_CONFIG.forEach(config => {
       resetPriorities[config.key] = 0;
     });
-    // Reset is immediate (not a drag), so update both draft and parent
     setDraft(resetPriorities);
     onPrioritiesChange(resetPriorities);
   };
@@ -556,9 +589,19 @@ export default function PrioritiesPanel({
                     />
                   </div>
 
-                  <div className="mt-2 flex items-center gap-2 text-sm font-medium text-surface-700 dark:text-surface-200">
-                    <span className="text-lg">{ECONOMIC_ZONES[selectedZone]?.emoji}</span>
-                    <span className="truncate">{ECONOMIC_ZONES[selectedZone]?.name}</span>
+                  <div className="mt-2 relative">
+                    <button
+                      ref={zoneButtonRefLite}
+                      onClick={handleZoneButtonClick}
+                      className="flex items-center gap-2 text-sm font-medium text-surface-700 dark:text-surface-200 hover:opacity-80 transition-opacity w-full text-left"
+                    >
+                      <span className="text-lg">{ECONOMIC_ZONES[selectedZone]?.emoji}</span>
+                      <span className="truncate flex-1">{ECONOMIC_ZONES[selectedZone]?.name}</span>
+                      <ChevronDown 
+                        size={16} 
+                        className={`text-surface-500 dark:text-surface-400 transition-transform ${isZoneDropdownOpen ? 'rotate-180' : ''}`}
+                      />
+                    </button>
                   </div>
                   <div className="mt-1 text-[11px] text-surface-500 dark:text-surface-400 leading-snug">
                     Select an economic zone to calculate local prices
@@ -638,9 +681,19 @@ export default function PrioritiesPanel({
                       />
                     </div>
 
-                    <div className="mt-2 flex items-center gap-2 text-sm font-medium text-surface-700 dark:text-surface-200">
-                      <span className="text-lg">{ECONOMIC_ZONES[selectedZone]?.emoji}</span>
-                      <span className="truncate">{ECONOMIC_ZONES[selectedZone]?.name}</span>
+                    <div className="mt-2 relative">
+                      <button
+                        ref={zoneButtonRef}
+                        onClick={handleZoneButtonClick}
+                        className="flex items-center gap-2 text-sm font-medium text-surface-700 dark:text-surface-200 hover:opacity-80 transition-opacity w-full text-left"
+                      >
+                        <span className="text-lg">{ECONOMIC_ZONES[selectedZone]?.emoji}</span>
+                        <span className="truncate flex-1">{ECONOMIC_ZONES[selectedZone]?.name}</span>
+                        <ChevronDown 
+                          size={16} 
+                          className={`text-surface-500 dark:text-surface-400 transition-transform ${isZoneDropdownOpen ? 'rotate-180' : ''}`}
+                        />
+                      </button>
                     </div>
                     <div className="mt-1 text-[11px] text-surface-500 dark:text-surface-400 leading-snug">
                       Select an economic zone to calculate local prices
@@ -651,6 +704,43 @@ export default function PrioritiesPanel({
             </motion.div>
           )}
         </AnimatePresence>
+      )}
+
+      {isZoneDropdownOpen && dropdownPosition && createPortal(
+        <div 
+          ref={zoneDropdownRef}
+          className="fixed bg-white dark:bg-surface-800 rounded-lg border border-surface-300 dark:border-surface-700 shadow-lg z-[100] max-h-64 overflow-y-auto"
+          style={{
+            top: `${dropdownPosition.top}px`,
+            left: `${dropdownPosition.left}px`,
+            width: `${dropdownPosition.width}px`,
+          }}
+        >
+          {Object.entries(ECONOMIC_ZONES).map(([zoneId, zone]) => (
+            <button
+              key={zoneId}
+              onClick={() => {
+                onZoneChange(zoneId);
+                closeDropdown();
+              }}
+              className={`
+                w-full px-3 py-2 text-left text-sm flex items-center gap-2
+                transition-colors
+                ${selectedZone === zoneId
+                  ? 'bg-blue-500/20 text-blue-600 dark:text-blue-400'
+                  : 'text-surface-700 dark:text-surface-200 hover:bg-surface-200 dark:hover:bg-surface-700'
+                }
+              `}
+            >
+              <span className="text-lg">{zone.emoji}</span>
+              <span className="flex-1">{zone.name}</span>
+              {selectedZone === zoneId && (
+                <span className="text-blue-500">✓</span>
+              )}
+            </button>
+          ))}
+        </div>,
+        document.body
       )}
     </div>
   );

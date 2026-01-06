@@ -343,24 +343,31 @@ function HealthBreakdownSlide({ dishName, dishHealth, ingredients, ingredientInd
   }
 
   // Get health info for each ingredient with cooking impact
-  const ingredientsWithHealth = ingredients.map((ing) => {
-    const ingData = ingredientIndex.get(normalizeIngredientName(ing.name));
-    const baseHealth = ingData?.health_index ?? 5;
-    const cookingCoef = getCookingCoef(ing.state);
-    const adjustedHealth = Math.min(10, Math.max(0, baseHealth * cookingCoef));
-    const cookingEffect = getCookingEffect(cookingCoef);
+  // Filter out ingredients where health_index is null (excluded from health calculation)
+  const ingredientsWithHealth = ingredients
+    .map((ing) => {
+      const ingData = ingredientIndex.get(normalizeIngredientName(ing.name));
+      const baseHealth = ingData?.health_index;
+      // Skip ingredients with null health_index
+      if (baseHealth === null || baseHealth === undefined) {
+        return null;
+      }
+      const cookingCoef = getCookingCoef(ing.state);
+      const adjustedHealth = Math.min(10, Math.max(0, baseHealth * cookingCoef));
+      const cookingEffect = getCookingEffect(cookingCoef);
 
-    return {
-      name: ing.name,
-      grams: ing.g,
-      state: ing.state,
-      baseHealth,
-      adjustedHealth,
-      cookingCoef,
-      cookingLabel: getCookingLabel(ing.state),
-      cookingEffect,
-    };
-  });
+      return {
+        name: ing.name,
+        grams: ing.g,
+        state: ing.state,
+        baseHealth,
+        adjustedHealth,
+        cookingCoef,
+        cookingLabel: getCookingLabel(ing.state),
+        cookingEffect,
+      };
+    })
+    .filter((ing) => ing !== null);
 
   // Sort by contribution (weight * health) for visual hierarchy
   const sortedIngredients = [...ingredientsWithHealth].sort((a, b) => (b.grams * b.adjustedHealth) - (a.grams * a.adjustedHealth));

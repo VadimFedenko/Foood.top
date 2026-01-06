@@ -1931,6 +1931,27 @@
         "ethics_index": 7,
         "ethics_reason": "Cultivated crop with moderate water and pesticide use."
     },
+{
+    "ingredient": "Corn Flour",
+    "cal_per_g": 3.64,
+    "prices": {
+        "east_euro_agrarian": 1.5,
+        "west_eu_industrial": 2.0,
+        "northern_import": 3.0,
+        "mediterranean": 1.8,
+        "north_american": 1.4,
+        "latam_agrarian": 1.0,
+        "asian_rice_labor": 1.6,
+        "developed_asia": 2.5,
+        "mena_arid": 2.0,
+        "oceanic": 3.5,
+        "subsaharan_subsistence": 0.8
+    },
+    "yield_ratio": 1.0,
+    "health_index": 4,
+    "ethics_index": 7,
+    "ethics_reason": "Cultivated crop with moderate water and pesticide use."
+},
     {
         "ingredient": "Fresh Cheese",
         "cal_per_g": 2.7,
@@ -2603,27 +2624,27 @@
         "ethics_index": 8,
         "ethics_reason": "Low animal impact; moderate pesticide use in some regions."
     },
-    {
-        "ingredient": "Lime Juice",
-        "cal_per_g": 0.3,
-        "prices": {
-            "east_euro_agrarian": 8.0,
-            "west_eu_industrial": 12.0,
-            "northern_import": 20.0,
-            "mediterranean": 6.0,
-            "north_american": 10.0,
-            "latam_agrarian": 5.0,
-            "asian_rice_labor": 7.0,
-            "developed_asia": 15.0,
-            "mena_arid": 9.0,
-            "oceanic": 18.0,
-            "subsaharan_subsistence": 4.0
-        },
-        "yield_ratio": 1.0,
-        "health_index": 8,
-        "ethics_index": 8,
-        "ethics_reason": "Low animal impact; moderate pesticide use in some regions."
-    },
+{
+  "ingredient": "Lime Juice",
+  "cal_per_g": 0.25,
+  "prices": {
+    "east_euro_agrarian": 3.0,
+    "west_eu_industrial": 4.5,
+    "northern_import": 7.0,
+    "mediterranean": 2.5,
+    "north_american": 3.0,
+    "latam_agrarian": 1.5,
+    "asian_rice_labor": 2.5,
+    "developed_asia": 6.0,
+    "mena_arid": 4.0,
+    "oceanic": 5.5,
+    "subsaharan_subsistence": 1.0
+  },
+  "yield_ratio": 1,
+  "health_index": 8,
+  "ethics_index": 8,
+  "ethics_reason": "Plant-based acidic juice with low environmental footprint; main impact comes from citrus monoculture and irrigation."
+},
     {
         "ingredient": "Makrut Lime Leaves",
         "cal_per_g": 0.4,
@@ -7036,24 +7057,24 @@
     },
     {
         "ingredient": "Teff Flour",
-        "cal_per_g": 3.64,
+        "cal_per_g": 3.67,
         "prices": {
-            "east_euro_agrarian": 5.0,
-            "west_eu_industrial": 7.0,
-            "northern_import": 12.0,
-            "mediterranean": 6.0,
-            "north_american": 8.0,
-            "latam_agrarian": 4.0,
-            "asian_rice_labor": 9.0,
-            "developed_asia": 15.0,
-            "mena_arid": 10.0,
-            "oceanic": 14.0,
-            "subsaharan_subsistence": 1.5
+            "east_euro_agrarian": 10.5,
+            "west_eu_industrial": 7.5,
+            "northern_import": 16.0,
+            "mediterranean": 8.5,
+            "north_american": 14.0,
+            "latam_agrarian": 12.0,
+            "asian_rice_labor": 18.0,
+            "developed_asia": 22.0,
+            "mena_arid": 9.0,
+            "oceanic": 19.0,
+            "subsaharan_subsistence": 0.8
         },
-        "yield_ratio": 0.95,
-        "health_index": 8.0,
-        "ethics_index": 9,
-        "ethics_reason": "Low-input, high-fiber grain with minimal carbon footprint and no animal suffering."
+        "yield_ratio": 0.98,
+        "health_index": 8.5,
+        "ethics_index": 10,
+        "ethics_reason": "Low-input, high-fiber ancient grain with minimal carbon footprint and no animal suffering. Supports smallholder farmers in Ethiopia."
     },
     {
         "ingredient": "Corned Beef",
@@ -7495,5 +7516,47 @@
     "health_index": 9.9,
     "ethics_index": 9,
     "ethics_reason": "Fermented product, generally low impact production."
-  }
+  },
+  {
+    "ingredient": "Berbere",
+    "cal_per_g": 3.0,
+    "prices": {
+        "east_euro_agrarian": 15.0,
+        "west_eu_industrial": 22.0,
+        "northern_import": 28.0,
+        "mediterranean": 18.0,
+        "north_american": 12.0,
+        "latam_agrarian": 10.0,
+        "asian_rice_labor": 8.0,
+        "developed_asia": 25.0,
+        "mena_arid": 12.0,
+        "oceanic": 20.0,
+        "subsaharan_subsistence": 5.0
+    },
+    "yield_ratio": 1.0,
+    "health_index": 8,
+    "ethics_index": 9,
+    "ethics_reason": "Plant-based spice blend with minimal environmental impact and low animal footprint."
+},
+{
+    "ingredient": "Aji Panca",
+    "cal_per_g": 0.4,
+    "prices": {
+        "east_euro_agrarian": 6.0,
+        "west_eu_industrial": 10.0,
+        "northern_import": 12.0,
+        "mediterranean": 8.0,
+        "north_american": 7.0,
+        "latam_agrarian": 2.5,
+        "asian_rice_labor": 5.0,
+        "developed_asia": 12.0,
+        "mena_arid": 9.0,
+        "oceanic": 14.0,
+        "subsaharan_subsistence": 3.0
+    },
+    "yield_ratio": 1.0,
+    "health_index": 8,
+    "ethics_index": 8,
+    "ethics_reason": "Plant-based spice with low environmental impact; primarily cultivated in traditional small-scale Peruvian farms."
+}
 ]
