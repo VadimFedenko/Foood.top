@@ -160,6 +160,24 @@ input[type="range"]::-moz-range-thumb {
   background-size: 32px 32px;
 }
 
+/* Mobile performance: disable expensive backdrop blur + heavy background paints */
+@media (max-width: 639px), (prefers-reduced-motion: reduce) {
+  .glass {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    /* reduce layer blending cost on mobile: prefer opaque */
+    background: rgba(255, 255, 255, 0.92) !important;
+  }
+
+  :root.dark .glass {
+    background: rgba(15, 23, 42, 0.92) !important;
+  }
+
+  .pattern-grid {
+    background-image: none !important;
+  }
+}
+
 /* Glow effects */
 .glow-orange {
   box-shadow: 0 0 20px rgba(255, 145, 48, 0.3), 0 0 40px rgba(255, 145, 48, 0.1);

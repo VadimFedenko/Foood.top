@@ -1171,7 +1171,7 @@
             "subsaharan_subsistence": null
         },
         "yield_ratio": 0.9,
-        "health_index": 6.5,
+        "health_index": 9,
         "ethics_index": 4,
         "ethics_reason": "Plant-based but often produced under poor labor conditions and linked to deforestation."
     },
@@ -1528,7 +1528,7 @@
             "subsaharan_subsistence": 4.0
         },
         "yield_ratio": 0.9,
-        "health_index": 7.9,
+        "health_index": 9,
         "ethics_index": 8,
         "ethics_reason": "Plant‑based spice with minimal animal impact and relatively low environmental footprint, though some monoculture production can occur."
     },
@@ -2939,6 +2939,27 @@
         "ethics_index": 6,
         "ethics_reason": "Harvested from tropical trees; production involves significant land use and pesticide runoff but no animal suffering."
     },
+	{
+  "ingredient": "Brazil nut",
+  "cal_per_g": 6.59,
+  "prices": {
+    "east_euro_agrarian": 18.0,
+    "west_eu_industrial": 22.0,
+    "northern_import": 25.0,
+    "mediterranean": 20.0,
+    "north_american": 18.0,
+    "latam_agrarian": 6.0,
+    "asian_rice_labor": 20.0,
+    "developed_asia": 30.0,
+    "mena_arid": 22.0,
+    "oceanic": 28.0,
+    "subsaharan_subsistence": 25.0
+  },
+  "yield_ratio": 1.0,
+  "health_index": 9.5,
+  "ethics_index": 9,
+  "ethics_reason": "Harvested primarily from wild trees in the Amazon rainforest. This economic value encourages forest conservation and prevents deforestation, although harvesting labor can be hazardous."
+ },
     {
         "ingredient": "Olive Oil",
         "cal_per_g": 8.84,
@@ -4321,7 +4342,7 @@
             "subsaharan_subsistence": 10.0
         },
         "yield_ratio": 0.9,
-        "health_index": 8,
+        "health_index": 9,
         "ethics_index": 7,
         "ethics_reason": "Cultivated mushrooms have minimal animal impact but require energy and water inputs."
     },
@@ -7306,5 +7327,173 @@
         "health_index": 7.5,
         "ethics_index": 8,
         "ethics_reason": "Plant-based paste made from green chilies, lemongrass, galangal, and herbs. Low animal impact, but some ingredients may require moderate agricultural inputs."
-    }
+    },
+  {
+    "ingredient": "Chia seeds",
+    "cal_per_g": 4.86,
+    "prices": {
+      "east_euro_agrarian": 8.0,
+      "west_eu_industrial": 10.0,
+      "northern_import": 12.0,
+      "mediterranean": 9.0,
+      "north_american": 8.0,
+      "latam_agrarian": 4.0,
+      "asian_rice_labor": 6.0,
+      "developed_asia": 15.0,
+      "mena_arid": 10.0,
+      "oceanic": 12.0,
+      "subsaharan_subsistence": 14.0
+    },
+    "yield_ratio": 1.0,
+    "health_index": 9.7,
+    "ethics_index": 9.5,
+    "ethics_reason": "Low environmental impact crop with high omega-3 yield!"
+  },
+  {
+    "ingredient": "Flaxseed",
+    "cal_per_g": 5.34,
+    "prices": {
+      "east_euro_agrarian": 2.5,
+      "west_eu_industrial": 4.0,
+      "northern_import": 5.0,
+      "mediterranean": 3.0,
+      "north_american": 2.5,
+      "latam_agrarian": 2.0,
+      "asian_rice_labor": 3.0,
+      "developed_asia": 6.0,
+      "mena_arid": 4.0,
+      "oceanic": 5.0,
+      "subsaharan_subsistence": 3.0
+    },
+    "yield_ratio": 1.0,
+    "health_index": 9.7,
+    "ethics_index": 9.5,
+    "ethics_reason": "Sustainable crop, very low water footprint."
+  },
+  {
+    "ingredient": "Pomegranate juice",
+    "cal_per_g": 0.54,
+    "prices": {
+      "east_euro_agrarian": 4.0,
+      "west_eu_industrial": 6.0,
+      "northern_import": 8.0,
+      "mediterranean": 3.0,
+      "north_american": 5.0,
+      "latam_agrarian": 3.5,
+      "asian_rice_labor": 5.0,
+      "developed_asia": 10.0,
+      "mena_arid": 2.5,
+      "oceanic": 8.0,
+      "subsaharan_subsistence": 12.0
+    },
+    "yield_ratio": 1.0,
+    "health_index": 7,
+    "ethics_index": 7,
+    "ethics_reason": "Juice processing adds industrial overhead; shelf stability often requires pasteurization."
+  },
+  {
+    "ingredient": "Black Lentils",
+    "cal_per_g": 3.40,
+    "prices": {
+      "east_euro_agrarian": 3.0,
+      "west_eu_industrial": 5.0,
+      "northern_import": 6.0,
+      "mediterranean": 4.5,
+      "north_american": 4.0,
+      "latam_agrarian": 3.5,
+      "asian_rice_labor": 5.5,
+      "developed_asia": 9.0,
+      "mena_arid": 6.0,
+      "oceanic": 8.0,
+      "subsaharan_subsistence": 7.0
+    },
+    "yield_ratio": 2.3,
+    "health_index": 9.8,
+    "ethics_index": 10,
+    "ethics_reason": "Nitrogen-fixing legume, improves soil, very low carbon footprint."
+  },
+  {
+    "ingredient": "Broccoli",
+    "cal_per_g": 0.34,
+    "prices": {
+      "east_euro_agrarian": 2.0,
+      "west_eu_industrial": 3.5,
+      "northern_import": 5.0,
+      "mediterranean": 2.5,
+      "north_american": 3.0,
+      "latam_agrarian": 2.0,
+      "asian_rice_labor": 4.0,
+      "developed_asia": 8.0,
+      "mena_arid": 4.0,
+      "oceanic": 6.0,
+      "subsaharan_subsistence": 9.0
+    },
+    "yield_ratio": 0.8,
+    "health_index": 9.8,
+    "ethics_index": 9.5,
+    "ethics_reason": "Low environmental impact, but cold chain dependent."
+  },
+  {
+    "ingredient": "Cauliflower",
+    "cal_per_g": 0.25,
+    "prices": {
+      "east_euro_agrarian": 2.2,
+      "west_eu_industrial": 3.8,
+      "northern_import": 5.5,
+      "mediterranean": 2.8,
+      "north_american": 3.2,
+      "latam_agrarian": 2.2,
+      "asian_rice_labor": 4.2,
+      "developed_asia": 8.5,
+      "mena_arid": 4.2,
+      "oceanic": 6.5,
+      "subsaharan_subsistence": 9.5
+    },
+    "yield_ratio": 0.85,
+    "health_index": 9.5,
+    "ethics_index": 9.5,
+    "ethics_reason": "Low environmental impact, but cold chain dependent."
+  },
+  {
+    "ingredient": "Hemp Seeds",
+    "cal_per_g": 5.53,
+    "prices": {
+      "east_euro_agrarian": 12.0,
+      "west_eu_industrial": 18.0,
+      "northern_import": 22.0,
+      "mediterranean": 16.0,
+      "north_american": 14.0,
+      "latam_agrarian": 15.0,
+      "asian_rice_labor": 20.0,
+      "developed_asia": 25.0,
+      "mena_arid": 20.0,
+      "oceanic": 24.0,
+      "subsaharan_subsistence": 28.0
+    },
+    "yield_ratio": 1.0,
+    "health_index": 9.7,
+    "ethics_index": 10,
+    "ethics_reason": "Exceptionally sustainable crop, captures carbon, requires minimal inputs."
+  },
+  {
+    "ingredient": "Apple Cider Vinegar",
+    "cal_per_g": 0.21,
+    "prices": {
+      "east_euro_agrarian": 2.0,
+      "west_eu_industrial": 4.0,
+      "northern_import": 5.0,
+      "mediterranean": 3.0,
+      "north_american": 3.5,
+      "latam_agrarian": 2.5,
+      "asian_rice_labor": 4.0,
+      "developed_asia": 8.0,
+      "mena_arid": 4.5,
+      "oceanic": 6.0,
+      "subsaharan_subsistence": 7.0
+    },
+    "yield_ratio": 1.0,
+    "health_index": 9.9,
+    "ethics_index": 9,
+    "ethics_reason": "Fermented product, generally low impact production."
+  }
 ]

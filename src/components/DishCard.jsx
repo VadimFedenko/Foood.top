@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { 
   Clock, 
   DollarSign, 
@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import InfoSlider from './dishCard/InfoSlider';
 import MetricIndicator from './dishCard/MetricIndicator';
+import { useIsMobile } from '../lib/useIsMobile';
 import {
   formatTime,
   getEthicsColor,
@@ -27,10 +28,21 @@ import {
 export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange, overrides = {}, ingredientIndex, priceUnit = 'serving', priorities = {} }) {
   const cardRef = useRef(null);
   const scoreColors = getScoreColor(dish.score);
+  const reduceMotion = useReducedMotion();
+  const isMobile = useIsMobile();
+  const lite = isMobile || reduceMotion;
 
   // Auto-scroll to top of card when expanded
   useEffect(() => {
     if (isExpanded && cardRef.current) {
+      if (lite) {
+        cardRef.current?.scrollIntoView({
+          behavior: 'auto',
+          block: 'start',
+        });
+        return;
+      }
+
       // Wait for closing animation of previous card (250ms) + layout recalculation
       // Use a delay that accounts for both the animation and layout updates
       const timeoutId = setTimeout(() => {
@@ -42,7 +54,7 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
       
       return () => clearTimeout(timeoutId);
     }
-  }, [isExpanded]);
+  }, [isExpanded, lite]);
 
   // Calculate effective values (with overrides)
   const effectiveTaste = overrides.taste ?? dish.taste;
@@ -88,7 +100,7 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
   return (
     <motion.div
       ref={cardRef}
-      layout
+      layout={!lite}
       className={`
         bg-white/70 dark:bg-surface-800/60 rounded-xl border transition-colors shadow-sm dark:shadow-none
         ${isExpanded 
@@ -104,7 +116,7 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
       >
         {/* Score Badge */}
         <motion.div
-          layout="position"
+          layout={lite ? false : 'position'}
           className={`
             flex-shrink-0 w-12 h-12 rounded-xl
             flex items-center justify-center
@@ -206,20 +218,13 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
       </div>
 
       {/* Expanded Details */}
-      <AnimatePresence>
-        {isExpanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: 'easeInOut' }}
-            className="overflow-hidden"
-          >
+      {lite ? (
+        isExpanded ? (
+          <div className="overflow-hidden">
             <div className="px-4 pb-4">
               {/* Divider */}
               <div className="h-px bg-surface-300 dark:bg-surface-700 mb-4" />
 
-              {/* Info Slider (Overview / Index Map / Health / Ethics) */}
               <InfoSlider 
                 dish={dish}
                 dishName={dish.name}
@@ -231,11 +236,44 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
                 unavailableIngredients={unavailableIngredients}
                 missingIngredients={missingIngredients}
                 missingPrices={missingPrices}
+                liteMotion={true}
               />
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        ) : null
+      ) : (
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: 'easeInOut' }}
+              className="overflow-hidden"
+            >
+              <div className="px-4 pb-4">
+                {/* Divider */}
+                <div className="h-px bg-surface-300 dark:bg-surface-700 mb-4" />
+
+                {/* Info Slider (Overview / Index Map / Health / Ethics) */}
+                <InfoSlider 
+                  dish={dish}
+                  dishName={dish.name}
+                  dishHealth={dish.health}
+                  dishEthics={dish.ethics}
+                  ingredients={ingredients}
+                  ingredientIndex={ingredientIndex}
+                  priorities={priorities}
+                  unavailableIngredients={unavailableIngredients}
+                  missingIngredients={missingIngredients}
+                  missingPrices={missingPrices}
+                  liteMotion={false}
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      )}
     </motion.div>
   );
 }

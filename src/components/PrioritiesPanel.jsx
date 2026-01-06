@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { 
   ChevronDown, 
   ChevronUp, 
@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import WorldMapWidget from './WorldMapWidget';
 import { ECONOMIC_ZONES } from '../lib/RankingEngine';
+import { useIsMobile } from '../lib/useIsMobile';
 
 /**
  * Priority slider configuration
@@ -264,6 +265,9 @@ export default function PrioritiesPanel({
   onCollapseExpandedDish,
 }) {
   const [isExpanded, setIsExpanded] = useState(true);
+  const reduceMotion = useReducedMotion();
+  const isMobile = useIsMobile();
+  const lite = isMobile || reduceMotion;
   
   // Draft state for smooth slider interaction without triggering list recalc
   const [draft, setDraft] = useState(priorities);
@@ -434,16 +438,46 @@ export default function PrioritiesPanel({
               </h2>
               {(activePriorities.length > 0 || selectedZone) && (
                 <div className="flex flex-wrap gap-1.5 min-w-0">
-                  <AnimatePresence mode="popLayout">
-                    {activePriorities.map(config => (
-                      <PriorityChip
-                        key={config.key}
-                        config={config}
-                        value={displayed[config.key]}
-                      />
-                    ))}
-                    {selectedZone && <ZoneChip key="zone" zoneId={selectedZone} />}
-                  </AnimatePresence>
+                  {lite ? (
+                    <>
+                      {activePriorities.map(config => (
+                        <div
+                          key={config.key}
+                          className={`
+                            inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full
+                            text-xs font-semibold
+                            ${displayed[config.key] > 0
+                              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                              : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                            }
+                          `}
+                        >
+                          <config.icon size={12} />
+                          <span>{config.label}</span>
+                          <span className="font-mono">
+                            {displayed[config.key] === 10 ? 'max' : displayed[config.key] === -10 ? 'min' : (displayed[config.key] > 0 ? '+' : '') + displayed[config.key]}
+                          </span>
+                        </div>
+                      ))}
+                      {selectedZone && (
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                          <span className="text-sm">{ECONOMIC_ZONES[selectedZone]?.emoji}</span>
+                          <span>{ECONOMIC_ZONES[selectedZone]?.name}</span>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <AnimatePresence mode="popLayout">
+                      {activePriorities.map(config => (
+                        <PriorityChip
+                          key={config.key}
+                          config={config}
+                          value={displayed[config.key]}
+                        />
+                      ))}
+                      {selectedZone && <ZoneChip key="zone" zoneId={selectedZone} />}
+                    </AnimatePresence>
+                  )}
                 </div>
               )}
             </button>
@@ -463,15 +497,9 @@ export default function PrioritiesPanel({
       </div>
 
       {/* Main content: left priorities + right economic zone map */}
-      <AnimatePresence>
-        {isExpanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: 'easeInOut' }}
-            className="overflow-hidden"
-          >
+      {lite ? (
+        isExpanded ? (
+          <div className="overflow-hidden">
             <div className="px-4 pb-4">
               <div className="flex flex-col md:flex-row gap-4">
                 {/* Left: priorities board (wide) */}
@@ -509,16 +537,12 @@ export default function PrioritiesPanel({
                   
                   {/* Hint when all priorities are zero */}
                   {allPrioritiesZero && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-3 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20"
-                    >
+                    <div className="mt-3 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
                       <p className="text-xs text-amber-600 dark:text-amber-300/90 text-center">
                         💡 Adjust the sliders above to rank dishes by your preferences. 
                         All dishes currently show a neutral score (50).
                       </p>
-                    </motion.div>
+                    </div>
                   )}
                 </div>
 
@@ -542,9 +566,92 @@ export default function PrioritiesPanel({
                 </div>
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        ) : null
+      ) : (
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: 'easeInOut' }}
+              className="overflow-hidden"
+            >
+              <div className="px-4 pb-4">
+                <div className="flex flex-col md:flex-row gap-4">
+                  {/* Left: priorities board (wide) */}
+                  <div className="flex-1 bg-white/60 dark:bg-surface-800/80 rounded-xl p-4 border border-surface-300/50 dark:border-surface-700/50 shadow-sm dark:shadow-none">
+                    {/* Scale markers on the side */}
+                    <div className="flex">
+                      {/* Left scale */}
+                      <div className="hidden sm:flex flex-col justify-between h-[140px] pr-3 py-1 text-[10px] text-surface-500 dark:text-surface-500 font-mono">
+                        <span>+10</span>
+                        <span>+5</span>
+                        <span>0</span>
+                        <span>-5</span>
+                        <span>-10</span>
+                      </div>
+
+                      {/* Sliders grid */}
+                      <div className="flex-1 flex justify-around items-start gap-1 sm:gap-4 overflow-x-auto pb-2">
+                        {PRIORITY_CONFIG.map(config => (
+                          <VerticalSlider
+                            key={config.key}
+                            config={config}
+                            value={displayed[config.key]}
+                            onChange={(val) => handleSliderChange(config.key, val)}
+                            onDragStart={handleDragStart}
+                          />
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Helper text */}
+                    <div className="mt-3 pt-3 border-t border-surface-300/50 dark:border-surface-700/50 flex justify-between text-[11px] text-surface-500">
+                      <span>↑ Maximize / Prefer</span>
+                      <span>↓ Minimize / Avoid</span>
+                    </div>
+                    
+                    {/* Hint when all priorities are zero */}
+                    {allPrioritiesZero && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-3 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20"
+                      >
+                        <p className="text-xs text-amber-600 dark:text-amber-300/90 text-center">
+                          💡 Adjust the sliders above to rank dishes by your preferences. 
+                          All dishes currently show a neutral score (50).
+                        </p>
+                      </motion.div>
+                    )}
+                  </div>
+
+                  {/* Right: economic zone (square) */}
+                  <div className="md:w-[260px] bg-white/60 dark:bg-surface-800/80 rounded-xl p-3 border border-surface-300/50 dark:border-surface-700/50 shadow-sm dark:shadow-none">
+                    <div className="w-full" style={{ height: '180px' }}>
+                      <WorldMapWidget
+                        variant="square"
+                        selectedZone={selectedZone}
+                        onZoneSelect={onZoneChange}
+                      />
+                    </div>
+
+                    <div className="mt-2 flex items-center gap-2 text-sm font-medium text-surface-700 dark:text-surface-200">
+                      <span className="text-lg">{ECONOMIC_ZONES[selectedZone]?.emoji}</span>
+                      <span className="truncate">{ECONOMIC_ZONES[selectedZone]?.name}</span>
+                    </div>
+                    <div className="mt-1 text-[11px] text-surface-500 dark:text-surface-400 leading-snug">
+                      Select an economic zone to calculate local prices
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      )}
     </div>
   );
 }

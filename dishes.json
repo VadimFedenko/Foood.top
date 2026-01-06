@@ -4745,21 +4745,71 @@
 "taste_score": 9.3,
 "satiety_index": 170.0
 },
-{"dish": "Churros",  "ingredients":
-[{"name": "Flour", "g": 100, "state": "raw"},
- {"name": "Water", "g": 150, "state": "raw"},
- {"name": "Butter", "g": 30, "state": "melted"},
- {"name": "Eggs", "g": 50, "state": "raw"},
+{
+"dish": "Churros",
+"ingredients": [
+ {"name": "Flour", "g": 100, "state": "deep_fried"},
+ {"name": "Water", "g": 150, "state": "boiled"},
+ {"name": "Eggs", "g": 50, "state": "deep_fried"},
+ {"name": "Butter", "g": 30, "state": "deep_fried"},
+ {"name": "Vegetable Oil", "g": 40, "state": "deep_fried"},
  {"name": "Sugar", "g": 30, "state": "raw"},
- {"name": "Cinnamon", "g": 3, "state": "raw"}
+ {"name": "Cinnamon", "g": 3, "state": "raw"},
+ {"name": "Vanilla", "g": 3, "state": "deep_fried"},
+ {"name": "Salt", "g": 2, "state": "deep_fried"}
 ],
 "desc": "Spanish fried dough pastries made from choux pastry, piped into long strips and deep-fried until golden and crispy. Coated in cinnamon sugar, they're traditionally served with hot chocolate for dipping. A beloved street food that's both simple and indulgent.",
-"prep_t": 15,
-"prep_t_optimized": 10,
+"prep_t": 20,
+"prep_t_optimized": 2,
 "cook_t": 10,
-"cook_t_optimized": 8,
-"comment": "Prepare the dough in advance and let it rest. Fry multiple churros at once in a large pot. Use a piping bag with a star tip for consistent shape. Roll in cinnamon sugar while still warm.",
+"cook_t_optimized": 10,
+"comment": "Pipe raw dough strips onto a parchment-lined baking sheet and freeze until solid, then transfer to a ziplock bag. You can fry them directly from frozen (add 1-2 minutes to cook time), which reduces prep time to zero for future snacks. Use kitchen shears to snip the dough directly into the hot oil to avoid handling sticky raw pastry and ensure clean edges.",
 "taste_score": 8.8,
 "satiety_index": 125.0
-}
+},
+  {
+    "dish": "Bryan Johnson's Nutty Pudding",
+    "ingredients": [
+      {"name": "Walnuts", "g": 20, "state": "raw"},
+      {"name": "Berries", "g": 100, "state": "raw"},
+      {"name": "Cocoa Powder", "g": 6, "state": "raw"},
+      {"name": "Chia seeds", "g": 20, "state": "raw"},
+      {"name": "Flaxseed", "g": 3, "state": "raw"},
+      {"name": "Brazil nut", "g": 2, "state": "raw"},
+      {"name": "Pomegranate juice", "g": 60, "state": "raw"},
+      {"name": "Cinnamon", "g": 1, "state": "raw"}
+    ],
+    "desc": "A nutrient-dense smoothie bowl packed with ground nuts, seeds, berries, and cocoa. Designed for optimal nutrition with healthy fats, omega-3s, antioxidants, and fiber.",
+    "prep_t": 10,
+    "prep_t_optimized": 3,
+    "cook_t": 0,
+    "cook_t_optimized": 0,
+    "comment": "Grind nuts and seeds in bulk once a week and store in airtight containers in the fridge to cut daily prep time in half. Use frozen berries instead of fresh—they're often cheaper and blend into a creamier texture. Make 2-3 servings at once; the chia seeds will thicken it overnight, improving the pudding consistency.",
+    "taste_score": 7.5,
+    "satiety_index": 140.0
+  },
+  {
+    "dish": "Bryan Johnson's Super Veggie",
+    "ingredients": [
+      {"name": "Black Lentils", "g": 150, "state": "boiled"},
+      {"name": "Broccoli", "g": 250, "state": "boiled"},
+      {"name": "Cauliflower", "g": 150, "state": "boiled"},
+      {"name": "Shiitake", "g": 50, "state": "boiled"},
+      {"name": "Garlic", "g": 5, "state": "boiled"},
+      {"name": "Ginger", "g": 5, "state": "boiled"},
+      {"name": "Lime", "g": 20, "state": "raw"},
+      {"name": "Cumin", "g": 2, "state": "raw"},
+      {"name": "Apple Cider Vinegar", "g": 15, "state": "raw"},
+      {"name": "Hemp Seeds", "g": 10, "state": "raw"},
+      {"name": "Olive Oil", "g": 14, "state": "raw"}
+    ],
+    "desc": "A longevity powerhouse featuring black lentils, cruciferous vegetables, and mushrooms. Delivers massive amounts of fiber, plant protein, and sulforaphane.",
+    "prep_t": 20,
+    "prep_t_optimized": 5,
+    "cook_t": 20,
+    "cook_t_optimized": 6,
+    "comment": "The biggest time-saver is cooking lentils in bulk for 3-4 days (they keep well). You can also buy frozen pre-cut broccoli/cauliflower mixes to skip washing and chopping—nutritionally they are just as good. If eating daily, blend the sauce ingredients (lime, vinegar, spices, oil) in a small jar for the whole week to just pour over.",
+    "taste_score": 6.8,
+    "satiety_index": 195.0
+  }
 ]

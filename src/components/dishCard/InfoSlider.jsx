@@ -237,7 +237,7 @@ function OverviewSlide({
 /**
  * Ethics Breakdown Slide
  */
-function EthicsBreakdownSlide({ dishName, dishEthics, ingredients, ingredientIndex }) {
+function EthicsBreakdownSlide({ dishName, dishEthics, ingredients, ingredientIndex, liteMotion = false }) {
   if (!ingredients || ingredients.length === 0 || !ingredientIndex) {
     return (
       <div className="flex items-center justify-center h-48 text-surface-500 dark:text-surface-500 text-sm">
@@ -292,7 +292,7 @@ function EthicsBreakdownSlide({ dishName, dishEthics, ingredients, ingredientInd
               key={idx}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: idx * 0.05 }}
+              transition={{ delay: liteMotion ? 0 : (idx * 0.05) }}
               className={`
                 rounded-lg p-2 border flex items-center gap-3
                 ${colors.bg} ${colors.border}
@@ -333,7 +333,7 @@ function EthicsBreakdownSlide({ dishName, dishEthics, ingredients, ingredientInd
 /**
  * Health Breakdown Slide
  */
-function HealthBreakdownSlide({ dishName, dishHealth, ingredients, ingredientIndex }) {
+function HealthBreakdownSlide({ dishName, dishHealth, ingredients, ingredientIndex, liteMotion = false }) {
   if (!ingredients || ingredients.length === 0 || !ingredientIndex) {
     return (
       <div className="flex items-center justify-center h-48 text-surface-500 dark:text-surface-500 text-sm">
@@ -427,7 +427,7 @@ function HealthBreakdownSlide({ dishName, dishHealth, ingredients, ingredientInd
               key={idx}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: idx * 0.04 }}
+              transition={{ delay: liteMotion ? 0 : (idx * 0.04) }}
               className={`
                 rounded-lg p-2.5 border
                 ${colors.bg} ${colors.border}
@@ -477,7 +477,11 @@ function HealthBreakdownSlide({ dishName, dishHealth, ingredients, ingredientInd
                     className={`h-full rounded-full ${colors.bar}`}
                     initial={{ width: 0 }}
                     animate={{ width: `${healthPercent}%` }}
-                    transition={{ duration: 0.5, delay: idx * 0.04, ease: 'easeOut' }}
+                    transition={{
+                      duration: liteMotion ? 0.2 : 0.5,
+                      delay: liteMotion ? 0 : (idx * 0.04),
+                      ease: 'easeOut',
+                    }}
                   />
                 </div>
 
@@ -516,7 +520,7 @@ function HealthBreakdownSlide({ dishName, dishHealth, ingredients, ingredientInd
 /**
  * Index Map Slide - Big Mac Index style price visualization with ingredient breakdown
  */
-function IndexMapSlide({ dish, ingredientIndex }) {
+function IndexMapSlide({ dish, ingredientIndex, liteMotion = false }) {
   const [hoveredZone, setHoveredZone] = useState(null);
 
   // Calculate prices and breakdowns for all zones
@@ -700,7 +704,7 @@ function IndexMapSlide({ dish, ingredientIndex }) {
                     key={item.name}
                     initial={{ opacity: 0, x: 10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.02 }}
+                    transition={{ delay: liteMotion ? 0 : (idx * 0.02) }}
                     className="flex items-center gap-1.5 px-1.5 py-0.5 rounded bg-surface-200/30 dark:bg-surface-800/30"
                   >
                     {/* Ingredient name */}
@@ -712,7 +716,10 @@ function IndexMapSlide({ dish, ingredientIndex }) {
                         className={`h-full rounded-full ${barColor}`}
                         initial={{ width: 0 }}
                         animate={{ width: `${Math.min(percentage, 100)}%` }}
-                        transition={{ duration: 0.3, delay: idx * 0.02 }}
+                        transition={{
+                          duration: liteMotion ? 0.15 : 0.3,
+                          delay: liteMotion ? 0 : (idx * 0.02),
+                        }}
                       />
                     </div>
 
@@ -847,6 +854,7 @@ export default function InfoSlider({
   unavailableIngredients = [],
   missingIngredients = [],
   missingPrices = [],
+  liteMotion = false,
 }) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -938,14 +946,8 @@ export default function InfoSlider({
 
       {/* Slide content */}
       <div className="p-4 relative overflow-hidden" onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentSlide}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.2 }}
-          >
+        {liteMotion ? (
+          <div>
             {currentSlide === 0 && (
               <OverviewSlide 
                 dish={dish}
@@ -955,15 +957,66 @@ export default function InfoSlider({
                 missingPrices={missingPrices}
               />
             )}
-            {currentSlide === 1 && <IndexMapSlide dish={dish} ingredientIndex={ingredientIndex} />}
+            {currentSlide === 1 && <IndexMapSlide dish={dish} ingredientIndex={ingredientIndex} liteMotion={true} />}
             {currentSlide === 2 && (
-              <HealthBreakdownSlide dishName={dishName} dishHealth={dishHealth} ingredients={ingredients} ingredientIndex={ingredientIndex} />
+              <HealthBreakdownSlide
+                dishName={dishName}
+                dishHealth={dishHealth}
+                ingredients={ingredients}
+                ingredientIndex={ingredientIndex}
+                liteMotion={true}
+              />
             )}
             {currentSlide === 3 && (
-              <EthicsBreakdownSlide dishName={dishName} dishEthics={dishEthics} ingredients={ingredients} ingredientIndex={ingredientIndex} />
+              <EthicsBreakdownSlide
+                dishName={dishName}
+                dishEthics={dishEthics}
+                ingredients={ingredients}
+                ingredientIndex={ingredientIndex}
+                liteMotion={true}
+              />
             )}
-          </motion.div>
-        </AnimatePresence>
+          </div>
+        ) : (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentSlide}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.2 }}
+            >
+              {currentSlide === 0 && (
+                <OverviewSlide 
+                  dish={dish}
+                  priorities={priorities}
+                  unavailableIngredients={unavailableIngredients}
+                  missingIngredients={missingIngredients}
+                  missingPrices={missingPrices}
+                />
+              )}
+              {currentSlide === 1 && <IndexMapSlide dish={dish} ingredientIndex={ingredientIndex} liteMotion={false} />}
+              {currentSlide === 2 && (
+                <HealthBreakdownSlide
+                  dishName={dishName}
+                  dishHealth={dishHealth}
+                  ingredients={ingredients}
+                  ingredientIndex={ingredientIndex}
+                  liteMotion={false}
+                />
+              )}
+              {currentSlide === 3 && (
+                <EthicsBreakdownSlide
+                  dishName={dishName}
+                  dishEthics={dishEthics}
+                  ingredients={ingredients}
+                  ingredientIndex={ingredientIndex}
+                  liteMotion={false}
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
+        )}
       </div>
 
       {/* Dot indicators */}

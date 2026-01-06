@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Search, Filter, SortDesc, X } from 'lucide-react';
 import DishCard from './DishCard';
 import PriceUnitToggle from './PriceUnitToggle';
+import { useIsMobile } from '../lib/useIsMobile';
 
 /**
  * Search and filter bar for the dish list
@@ -120,12 +121,10 @@ export default function DishList({
   const reduceMotion = useReducedMotion();
 
   // Mobile gets a smaller initial render budget to avoid heavy DOM + layout work.
-  // (MatchTailwind "sm" breakpoint: < 640px)
-  const isMobile = typeof window !== 'undefined'
-    ? (window.matchMedia?.('(max-width: 639px)')?.matches ?? false)
-    : false;
+  const isMobile = useIsMobile();
   const pageSize = isMobile ? 50 : 200;
-  const [visibleCount, setVisibleCount] = useState(pageSize);
+  // Always start at 50 on mobile (or 200 on desktop); keep in sync with detection changes.
+  const [visibleCount, setVisibleCount] = useState(() => pageSize);
 
   // Filter dishes by search query
   const filteredDishes = useMemo(() => {

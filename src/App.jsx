@@ -198,7 +198,7 @@ export default function App() {
       <div className="mx-auto max-w-md sm:max-w-lg md:max-w-[960px] flex flex-col h-screen 
                       sm:border-x sm:border-surface-300/50 dark:sm:border-surface-700/50 
                       sm:shadow-2xl sm:shadow-black/10 dark:sm:shadow-black/30 
-                      bg-white/50 dark:bg-transparent transition-colors duration-300">
+                      bg-white dark:bg-surface-900 sm:bg-white/50 sm:dark:bg-transparent transition-colors duration-300">
         {/* Sticky Header - highest z-index for dropdowns */}
         <div className="sticky top-0 z-50">
           <Header
