@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useMemo, useState } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Search, Filter, SortDesc, X } from 'lucide-react';
 import DishCard from './DishCard';
 import PriceUnitToggle from './PriceUnitToggle';
@@ -51,10 +51,15 @@ function StatsBar({ totalDishes, filteredCount, allPrioritiesZero = false, price
           <SortDesc size={14} />
           <span>Ranked by your priorities</span>
         </div>
-        <PriceUnitToggle 
-          priceUnit={priceUnit} 
-          onPriceUnitChange={onPriceUnitChange} 
-        />
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-semibold text-surface-500 dark:text-surface-400">
+            Price per
+          </span>
+          <PriceUnitToggle 
+            priceUnit={priceUnit} 
+            onPriceUnitChange={onPriceUnitChange} 
+          />
+        </div>
       </div>
       {allPrioritiesZero && (
         <div className="px-1 py-1.5 rounded-lg bg-surface-200/50 dark:bg-surface-800/50 border border-surface-300/30 dark:border-surface-700/30">
@@ -112,6 +117,15 @@ export default function DishList({
   onExpandedDishChange
 }) {
   const [searchQuery, setSearchQuery] = useState('');
+  const reduceMotion = useReducedMotion();
+
+  // Mobile gets a smaller initial render budget to avoid heavy DOM + layout work.
+  // (MatchTailwind "sm" breakpoint: < 640px)
+  const isMobile = typeof window !== 'undefined'
+    ? (window.matchMedia?.('(max-width: 639px)')?.matches ?? false)
+    : false;
+  const pageSize = isMobile ? 50 : 200;
+  const [visibleCount, setVisibleCount] = useState(pageSize);
 
   // Filter dishes by search query
   const filteredDishes = useMemo(() => {
@@ -124,9 +138,22 @@ export default function DishList({
     );
   }, [dishes, searchQuery]);
 
+  // Reset pagination when search changes or when the dataset changes.
+  useEffect(() => {
+    setVisibleCount(pageSize);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery, dishes, pageSize]);
+
+  const visibleDishes = useMemo(() => {
+    return filteredDishes.slice(0, visibleCount);
+  }, [filteredDishes, visibleCount]);
+
   const handleToggle = (dishName) => {
     onExpandedDishChange(expandedDish === dishName ? null : dishName);
   };
+
+  const useLiteList = isMobile || reduceMotion;
+  const remaining = Math.max(0, filteredDishes.length - visibleCount);
 
   return (
     <div className="flex flex-col h-full">
@@ -150,37 +177,65 @@ export default function DishList({
         {filteredDishes.length === 0 ? (
           <EmptyState hasSearch={!!searchQuery} />
         ) : (
-          <motion.div 
-            className="space-y-3"
-            layout
-          >
-            <AnimatePresence mode="popLayout">
-              {filteredDishes.map((dish, index) => (
-                <motion.div
-                  key={dish.name}
-                  layout
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ 
-                    opacity: 1, 
-                    y: 0,
-                    transition: { delay: index * 0.03 }
-                  }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                >
-                  <DishCard
-                    dish={dish}
-                    isExpanded={expandedDish === dish.name}
-                    onToggle={() => handleToggle(dish.name)}
-                    onOverrideChange={onOverrideChange}
-                    overrides={overrides[dish.name] || {}}
-                    ingredientIndex={ingredientIndex}
-                    priceUnit={priceUnit}
-                    priorities={priorities}
-                  />
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
+          <>
+            {useLiteList ? (
+              <div className="space-y-3">
+                {visibleDishes.map((dish) => (
+                  <div key={dish.name}>
+                    <DishCard
+                      dish={dish}
+                      isExpanded={expandedDish === dish.name}
+                      onToggle={() => handleToggle(dish.name)}
+                      onOverrideChange={onOverrideChange}
+                      overrides={overrides[dish.name] || {}}
+                      ingredientIndex={ingredientIndex}
+                      priceUnit={priceUnit}
+                      priorities={priorities}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <motion.div className="space-y-3">
+                <AnimatePresence mode="popLayout">
+                  {visibleDishes.map((dish) => (
+                    <motion.div
+                      key={dish.name}
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                    >
+                      <DishCard
+                        dish={dish}
+                        isExpanded={expandedDish === dish.name}
+                        onToggle={() => handleToggle(dish.name)}
+                        onOverrideChange={onOverrideChange}
+                        overrides={overrides[dish.name] || {}}
+                        ingredientIndex={ingredientIndex}
+                        priceUnit={priceUnit}
+                        priorities={priorities}
+                      />
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </motion.div>
+            )}
+
+            {remaining > 0 && (
+              <button
+                type="button"
+                onClick={() => setVisibleCount((c) => c + pageSize)}
+                className="w-full mt-4 py-3 rounded-xl
+                           bg-white/80 dark:bg-surface-800/80
+                           border border-surface-300/50 dark:border-surface-700/50
+                           text-sm font-semibold text-surface-700 dark:text-surface-200
+                           hover:bg-white dark:hover:bg-surface-800
+                           transition-colors shadow-sm dark:shadow-none"
+              >
+                Show more ({remaining} left)
+              </button>
+            )}
+          </>
         )}
       </div>
     </div>

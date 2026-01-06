@@ -23,10 +23,10 @@ export default function Header({
           </div>
           <div>
             <h1 className="font-display font-bold text-lg text-surface-900 dark:text-surface-100">
-              Best Food Ever:)
+              Best Food Ever
             </h1>
             <p className="text-[10px] text-surface-500 dark:text-surface-400 uppercase tracking-wider">
-              Personal Ranking Engine
+              Personal Food Leaderboard
             </p>
           </div>
         </div>

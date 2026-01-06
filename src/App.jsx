@@ -42,8 +42,8 @@ export default function App() {
   );
   const [overrides, setOverrides] = useLocalStorageState(STORAGE_KEYS.OVERRIDES, {});
   const [selectedZone, setSelectedZone] = useLocalStorageState(STORAGE_KEYS.ZONE, 'west_eu_industrial');
-  const [isOptimized, setIsOptimized] = useLocalStorageState(STORAGE_KEYS.OPTIMIZED, false);
-  const [priceUnit, setPriceUnit] = useLocalStorageState(STORAGE_KEYS.PRICE_UNIT, 'serving');
+  const [isOptimized, setIsOptimized] = useLocalStorageState(STORAGE_KEYS.OPTIMIZED, true);
+  const [priceUnit, setPriceUnit] = useLocalStorageState(STORAGE_KEYS.PRICE_UNIT, 'per1000kcal');
   const [theme, setTheme] = useLocalStorageState(STORAGE_KEYS.THEME, 'dark');
   const isDark = theme !== 'light';
   
@@ -216,6 +216,8 @@ export default function App() {
             onPrioritiesChange={handlePrioritiesChange}
             selectedZone={selectedZone}
             onZoneChange={handleZoneChange}
+            expandedDish={expandedDish}
+            onCollapseExpandedDish={() => setExpandedDish(null)}
           />
         </div>
 

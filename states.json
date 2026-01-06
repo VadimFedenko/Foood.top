@@ -1,0 +1,42 @@
+{
+  "states": {
+    "raw": 1.0,
+    "fermented": 1.1,
+    "steamed": 0.98,
+    "boiled": 0.97,
+    "baked": 0.94,
+    "roasted": 0.93,
+    "grilled": 0.92,
+    "fried": 0.92,
+    "deep_fried": 0.7,
+    "melted": 1.0,
+    "toasted": 0.8,
+    "cooked": 1.0,
+    "simmered": 0.8,
+    "stewed": 0.8,
+    "braised": 0.75,
+    "battered": 0.6,
+    "warmed": 1.0,
+    "heated": 1.0,
+    "marinated": 1.0,
+    "pickled": 1.0,
+    "infused": 1.0,
+    "soaked": 1.0,
+    "fresh": 1.0,
+    "dry": 1.0,
+    "chopped": 1.0,
+    "sliced": 1.0,
+    "minced": 1.0,
+    "grated": 1.0,
+    "julienned": 1.0,
+    "ground": 1.0,
+    "mixed": 1.0,
+    "pasted": 1.0,
+    "blanched": 0.9,
+    "sauteed": 0.75,
+    "default": 1.0
+  },
+  "aliases": {
+    "sauteed": "sauteed"
+  }
+}

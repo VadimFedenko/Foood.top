@@ -255,7 +255,14 @@ function ZoneChip({ zoneId }) {
  * Optimization: Uses draft state during slider drag to avoid
  * expensive re-renders. Only commits to parent on pointer release.
  */
-export default function PrioritiesPanel({ priorities, onPrioritiesChange, selectedZone, onZoneChange }) {
+export default function PrioritiesPanel({ 
+  priorities, 
+  onPrioritiesChange, 
+  selectedZone, 
+  onZoneChange,
+  expandedDish,
+  onCollapseExpandedDish,
+}) {
   const [isExpanded, setIsExpanded] = useState(true);
   
   // Draft state for smooth slider interaction without triggering list recalc
@@ -265,6 +272,9 @@ export default function PrioritiesPanel({ priorities, onPrioritiesChange, select
   // Keep ref to latest draft for commit on pointerup
   const draftRef = useRef(draft);
   useEffect(() => { draftRef.current = draft; }, [draft]);
+  
+  // Track when a dish card was expanded to prevent false scroll triggers
+  const lastExpandedAtRef = useRef(0);
   
   // Sync draft with external priorities when not dragging
   // (e.g., on initial load or external reset)
@@ -287,6 +297,57 @@ export default function PrioritiesPanel({ priorities, onPrioritiesChange, select
     window.addEventListener('pointerup', handlePointerUp, { once: true });
     return () => window.removeEventListener('pointerup', handlePointerUp);
   }, [isDragging, onPrioritiesChange]);
+
+  // Auto-collapse on scroll down (> 30px), expand again when near top
+  useEffect(() => {
+    const scrollable =
+      document.querySelector('main .overflow-y-auto') ||
+      document.querySelector('.overflow-y-auto');
+
+    if (!scrollable) return;
+
+    const handleScroll = () => {
+      const currentScrollY = scrollable.scrollTop;
+
+      // Игнорируем авто-скролл события сразу после открытия карточки
+      // (когда сворачивание панели вызывает изменение layout и scrollTop)
+      const timeSinceExpansion = Date.now() - lastExpandedAtRef.current;
+      const justExpanded = expandedDish && timeSinceExpansion < 600;
+
+      // Если пользователь скроллит вверх и близко к верху (<= 10px)
+      if (currentScrollY <= 10) {
+        // Если карточка блюда открыта, закрываем её и открываем панель priorities
+        // Но только если это не ложное срабатывание от изменения layout
+        if (expandedDish && !justExpanded) {
+          if (onCollapseExpandedDish) {
+            onCollapseExpandedDish();
+          }
+          setIsExpanded(true);
+        }
+        // Если панель свернута и карточка не открыта, разворачиваем панель
+        else if (!isExpanded && !expandedDish) {
+          setIsExpanded(true);
+        }
+      }
+      // Collapse once пользователь ушел дальше 30px вниз (только если карточка не открыта)
+      else if (isExpanded && currentScrollY > 30 && !expandedDish) {
+        setIsExpanded(false);
+      }
+    };
+
+    scrollable.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      scrollable.removeEventListener('scroll', handleScroll);
+    };
+  }, [isExpanded, onCollapseExpandedDish, expandedDish]);
+
+  // Если раскрылась карточка блюда — сворачиваем панель
+  useEffect(() => {
+    if (expandedDish && isExpanded) {
+      lastExpandedAtRef.current = Date.now();
+      setIsExpanded(false);
+    }
+  }, [expandedDish, isExpanded]);
 
   // Use draft for display (smooth updates during drag)
   const displayed = draft;
@@ -327,7 +388,7 @@ export default function PrioritiesPanel({ priorities, onPrioritiesChange, select
             {/* Left header: priorities */}
             <div className="flex items-center justify-between">
               <h2 className="font-display font-semibold text-lg text-surface-800 dark:text-surface-100">
-                Your Priorities
+                My Priorities
               </h2>
               <motion.button
                 initial={{ opacity: 0 }}
@@ -359,9 +420,17 @@ export default function PrioritiesPanel({ priorities, onPrioritiesChange, select
           </div>
         ) : (
           <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-3 min-w-0">
+            <button
+              onClick={() => {
+                setIsExpanded(true);
+                if (onCollapseExpandedDish) {
+                  onCollapseExpandedDish();
+                }
+              }}
+              className="flex items-center gap-3 min-w-0 hover:opacity-80 transition-opacity"
+            >
               <h2 className="font-display font-semibold text-lg text-surface-800 dark:text-surface-100 whitespace-nowrap">
-                Your Priorities
+                My Priorities
               </h2>
               {(activePriorities.length > 0 || selectedZone) && (
                 <div className="flex flex-wrap gap-1.5 min-w-0">
@@ -377,9 +446,14 @@ export default function PrioritiesPanel({ priorities, onPrioritiesChange, select
                   </AnimatePresence>
                 </div>
               )}
-            </div>
+            </button>
             <button
-              onClick={() => setIsExpanded(!isExpanded)}
+              onClick={() => {
+                setIsExpanded(true);
+                if (onCollapseExpandedDish) {
+                  onCollapseExpandedDish();
+                }
+              }}
               className="p-2 rounded-lg hover:bg-surface-200/50 dark:hover:bg-surface-700/50 transition-colors"
             >
               <ChevronDown size={20} className="text-surface-500 dark:text-surface-300" />

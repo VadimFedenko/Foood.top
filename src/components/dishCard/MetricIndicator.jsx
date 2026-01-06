@@ -17,6 +17,17 @@ export default function MetricIndicator({
   const iconColor = isOverridden ? 'text-amber-500 dark:text-amber-400' : 'text-surface-600 dark:text-surface-200';
   const textColor = isOverridden ? 'text-amber-600 dark:text-amber-300' : 'text-surface-500 dark:text-surface-400';
 
+  // Split formatted output into main value and unit (unit goes under the value)
+  const formatted = format(value);
+  let mainValue = formatted;
+  let unit = null;
+
+  if (typeof formatted === 'string' && formatted.includes('/')) {
+    const slashIndex = formatted.indexOf('/');
+    mainValue = formatted.slice(0, slashIndex);
+    unit = formatted.slice(slashIndex);
+  }
+
   return (
     <div
       className={`
@@ -46,7 +57,14 @@ export default function MetricIndicator({
       )}
 
       <Icon size={12} className={iconColor} />
-      <span className={`font-mono ${textColor}`}>{format(value)}</span>
+      <span className={`font-mono ${textColor} relative inline-flex flex-col items-start leading-none`}>
+        <span>{mainValue}</span>
+        {unit && (
+          <span className="text-[8px] leading-none opacity-70 -mt-0.5">
+            {unit}
+          </span>
+        )}
+      </span>
 
       {isEditing && (
         <button
@@ -71,5 +89,7 @@ export default function MetricIndicator({
     </div>
   );
 }
+
+
 
 

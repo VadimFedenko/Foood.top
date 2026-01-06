@@ -9,6 +9,10 @@
  * - Final weighted scoring based on user priorities
  */
 
+// Import cooking states configuration
+// Use absolute path from Vite project root so we can keep JSON in app root.
+import cookingStatesData from '/states.json';
+
 // ============================================================================
 // CONSTANTS & CONFIGURATION
 // ============================================================================
@@ -33,46 +37,9 @@ const FALLBACK_ZONE = 'west_eu_industrial';
 
 // Cooking method health penalty coefficients
 // Higher values = healthier preparation methods
-export const COOKING_STATE_COEFS = {
-  raw: 1.0,
-  fermented: 1.1,
-  steamed: 0.98,
-  boiled: 0.97,
-  baked: 0.94,
-  roasted: 0.93,
-  grilled: 0.92,
-  fried: 0.92,
-  deep_fried: 0.7,
-  // Additional states that might appear in data
-  // NOTE: dishes.json contains a lot of "prep-like" states (chopped, sliced, etc).
-  // We treat them as neutral (≈raw) unless there's a clear reason to penalize.
-  melted: 0.9,
-  toasted: 0.8,
-  cooked: 0.8,
-  simmered: 0.8,
-  stewed: 0.8,
-  braised: 0.75,
-  battered: 0.6,
-  warmed: 0.9,
-  heated: 0.9,
-  marinated: 1.0,
-  pickled: 1.05,
-  infused: 1.0,
-  soaked: 1.0,
-  fresh: 1.0,
-  dry: 1.0,
-  // Prep states (no real cooking impact)
-  chopped: 1.0,
-  sliced: 1.0,
-  minced: 1.0,
-  grated: 1.0,
-  julienned: 1.0,
-  ground: 1.0,
-  mixed: 1.0,
-  pasted: 1.0,
-  blanched: 0.9,
-  default: 0.85,      // Fallback for unknown states
-};
+// Imported from states.json (root-level config)
+export const COOKING_STATE_COEFS = cookingStatesData.states;
+const COOKING_STATE_ALIASES = cookingStatesData.aliases || {};
 
 // ============================================================================
 // UTILITY FUNCTIONS
@@ -100,13 +67,8 @@ export function getCookingCoef(state) {
     .normalize('NFKD')
     .replace(/[\u0300-\u036f]/g, '');
 
-  // Common aliases
-  const alias = {
-    sauteed: 'sauteed',
-  };
-
-  const key = alias[normalized] ?? normalized;
-  if (key === 'sauteed') return 0.75;
+  // Use aliases from cookingStates.json
+  const key = COOKING_STATE_ALIASES[normalized] ?? normalized;
   return COOKING_STATE_COEFS[key] ?? COOKING_STATE_COEFS.default;
 }
 
