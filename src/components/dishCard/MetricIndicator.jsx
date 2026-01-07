@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Minus, Plus } from 'lucide-react';
 
 /**
@@ -10,12 +11,66 @@ export default function MetricIndicator({
   isEditing = false,
   onIncrement,
   onDecrement,
+  onEditEnd,
   isOverridden = false,
   isAtMin = false,
   isAtMax = false,
 }) {
   const iconColor = isOverridden ? 'text-amber-500 dark:text-amber-400' : 'text-surface-600 dark:text-surface-200';
   const textColor = isOverridden ? 'text-amber-600 dark:text-amber-300' : 'text-surface-500 dark:text-surface-400';
+
+  const holdRef = useRef({ timeoutId: null, intervalId: null });
+  const endedRef = useRef(false);
+  const listenersRef = useRef({ pointerup: null, pointercancel: null });
+
+  const stopHold = (callEnd = true) => {
+    if (holdRef.current.timeoutId) {
+      window.clearTimeout(holdRef.current.timeoutId);
+      holdRef.current.timeoutId = null;
+    }
+    if (holdRef.current.intervalId) {
+      window.clearInterval(holdRef.current.intervalId);
+      holdRef.current.intervalId = null;
+    }
+    // Ensure we never leak global listeners (e.g. component unmounts mid-hold).
+    if (listenersRef.current.pointerup) {
+      window.removeEventListener('pointerup', listenersRef.current.pointerup);
+      listenersRef.current.pointerup = null;
+    }
+    if (listenersRef.current.pointercancel) {
+      window.removeEventListener('pointercancel', listenersRef.current.pointercancel);
+      listenersRef.current.pointercancel = null;
+    }
+    if (callEnd && !endedRef.current) {
+      endedRef.current = true;
+      onEditEnd?.();
+    }
+  };
+
+  const startHold = (action) => {
+    endedRef.current = false;
+    stopHold(false);
+
+    action?.();
+
+    // Start repeating after a short delay (press-and-hold)
+    holdRef.current.timeoutId = window.setTimeout(() => {
+      holdRef.current.intervalId = window.setInterval(() => {
+        action?.();
+      }, 75);
+    }, 320);
+
+    const handlePointerUp = () => stopHold(true);
+    listenersRef.current.pointerup = handlePointerUp;
+    listenersRef.current.pointercancel = handlePointerUp;
+    window.addEventListener('pointerup', handlePointerUp, { once: true });
+    window.addEventListener('pointercancel', handlePointerUp, { once: true });
+  };
+
+  useEffect(() => {
+    return () => stopHold(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Split formatted output into main value and unit (unit goes under the value)
   const formatted = format(value);
@@ -37,9 +92,19 @@ export default function MetricIndicator({
     >
       {isEditing && (
         <button
+          type="button"
           onClick={(e) => {
+            // Prevent parent card header click-toggle
+            e.preventDefault();
             e.stopPropagation();
-            onDecrement?.();
+          }}
+          onPointerDown={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            if (isAtMin) return;
+            // Keep receiving pointer events even if the pointer leaves the button while holding.
+            try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* ignore */ }
+            startHold(onDecrement);
           }}
           disabled={isAtMin}
           className={`
@@ -68,9 +133,19 @@ export default function MetricIndicator({
 
       {isEditing && (
         <button
+          type="button"
           onClick={(e) => {
+            // Prevent parent card header click-toggle
+            e.preventDefault();
             e.stopPropagation();
-            onIncrement?.();
+          }}
+          onPointerDown={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            if (isAtMax) return;
+            // Keep receiving pointer events even if the pointer leaves the button while holding.
+            try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* ignore */ }
+            startHold(onIncrement);
           }}
           disabled={isAtMax}
           className={`

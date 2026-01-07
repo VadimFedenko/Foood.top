@@ -5,7 +5,7 @@ import PrioritiesPanel from './components/PrioritiesPanel';
 import DishList from './components/DishList';
 import { 
   buildIngredientIndex,
-  analyzeAllDishesBase,
+  analyzeAllDishesVariants,
   scoreAndSortDishes,
   calculateFinalScore,
 } from './lib/RankingEngine';
@@ -55,6 +55,7 @@ export default function App() {
   
   // Protection against rapid clicks during sorting
   const isProcessingRef = useRef(false);
+  const processingTimeoutRef = useRef(null);
 
   // Apply theme class to document
   useEffect(() => {
@@ -72,20 +73,21 @@ export default function App() {
     return buildIngredientIndex(ingredientsData);
   }, []);
 
-  // Heavy computation: analyze all dishes (doesn't depend on priorities)
-  // This runs when dishes/zone/optimized/overrides/priceUnit change
-  // NOTE: When cards are expanded, we still need to recalculate analysis for updated overrides
-  // but we won't re-rank, so the order stays stable
-  const analysisBase = useMemo(() => {
-    return analyzeAllDishesBase(
+  // Heavy computation: analyze all dishes ONCE per (zone + overrides).
+  // Then materialize the 2x3 variants (timeMode x priceUnit) without re-analyzing.
+  const analysisVariants = useMemo(() => {
+    return analyzeAllDishesVariants(
       dishesData,
       ingredientIndex,
       selectedZone,
-      isOptimized,
-      overrides,
-      priceUnit
+      overrides
     );
-  }, [ingredientIndex, selectedZone, isOptimized, overrides, priceUnit]);
+  }, [ingredientIndex, selectedZone, overrides]);
+
+  const analysisBase = useMemo(() => {
+    const key = `${isOptimized ? 'optimized' : 'normal'}:${priceUnit}`;
+    return analysisVariants?.variants?.[key] ?? { analyzed: [], datasetStats: {} };
+  }, [analysisVariants, isOptimized, priceUnit]);
 
   // Lightweight computation: score and sort (runs when priorities change)
   // FREEZE: If cards are expanded, don't re-rank (keep previous order)
@@ -179,9 +181,24 @@ export default function App() {
     
     // Reset processing flag after a short delay
     // This prevents multiple rapid clicks while sorting is in progress
-    setTimeout(() => {
+    if (processingTimeoutRef.current) {
+      clearTimeout(processingTimeoutRef.current);
+      processingTimeoutRef.current = null;
+    }
+    processingTimeoutRef.current = setTimeout(() => {
       isProcessingRef.current = false;
+      processingTimeoutRef.current = null;
     }, 300);
+  }, []);
+
+  // Safety: clear pending timers on unmount.
+  useEffect(() => {
+    return () => {
+      if (processingTimeoutRef.current) {
+        clearTimeout(processingTimeoutRef.current);
+        processingTimeoutRef.current = null;
+      }
+    };
   }, []);
 
   const handlePriceUnitChange = useCallback((newPriceUnit) => {
@@ -237,8 +254,10 @@ export default function App() {
             priceUnit={priceUnit}
             onPriceUnitChange={handlePriceUnitChange}
             priorities={priorities}
+            isOptimized={isOptimized}
             expandedDish={expandedDish}
             onExpandedDishChange={setExpandedDish}
+            analysisVariants={analysisVariants}
           />
         </motion.main>
 

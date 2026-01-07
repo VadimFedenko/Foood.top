@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { 
   Clock, 
@@ -15,9 +15,6 @@ import MetricIndicator from './dishCard/MetricIndicator';
 import { useIsMobile } from '../lib/useIsMobile';
 import {
   formatTime,
-  getEthicsColor,
-  getHealthColor,
-  getPriceUnitLabel,
   getScoreColor,
 } from './dishCardUtils';
 
@@ -25,12 +22,47 @@ import {
  * Main Dish Card Component
  * Compact view with expandable details
  */
-export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange, overrides = {}, ingredientIndex, priceUnit = 'serving', priorities = {} }) {
+export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange, overrides = {}, ingredientIndex, priceUnit = 'serving', priorities = {}, isOptimized = false, analysisVariants = null }) {
   const cardRef = useRef(null);
   const scoreColors = getScoreColor(dish.score);
   const reduceMotion = useReducedMotion();
   const isMobile = useIsMobile();
   const lite = isMobile || reduceMotion;
+
+  const [draftOverrides, setDraftOverrides] = useState(overrides);
+  const draftRef = useRef(draftOverrides);
+  const commitTimerRef = useRef(null);
+  const localEditingRef = useRef(false);
+
+  useEffect(() => { draftRef.current = draftOverrides; }, [draftOverrides]);
+
+  // Safety: never leave debounced commit timers running after unmount.
+  useEffect(() => {
+    return () => {
+      if (commitTimerRef.current) {
+        clearTimeout(commitTimerRef.current);
+        commitTimerRef.current = null;
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    // Sync external overrides when not actively editing this card
+    if (!localEditingRef.current) {
+      setDraftOverrides(overrides);
+    }
+  }, [overrides]);
+
+  useEffect(() => {
+    if (!isExpanded) {
+      localEditingRef.current = false;
+      if (commitTimerRef.current) {
+        clearTimeout(commitTimerRef.current);
+        commitTimerRef.current = null;
+      }
+      setDraftOverrides(overrides);
+    }
+  }, [isExpanded, overrides]);
 
   // Auto-scroll to top of card when expanded
   useEffect(() => {
@@ -56,22 +88,132 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
     }
   }, [isExpanded, lite]);
 
-  // Calculate effective values (with overrides)
-  const effectiveTaste = overrides.taste ?? dish.taste;
-  const effectiveTime = overrides.time ?? dish.time;
-  
-  // Get the price for the selected unit
-  const effectivePrice = dish.prices?.[priceUnit] ?? dish.cost;
+  const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+  const sanitizeOverrides = (o) => {
+    const next = { ...(o || {}) };
+    const eps = 1e-6;
+
+    // If multiplier exists, drop legacy absolute
+    if (next.tasteMul !== undefined) delete next.taste;
+    if (next.priceMul !== undefined) delete next.price;
+    if (next.timeMul !== undefined) delete next.time;
+    if (next.healthMul !== undefined) delete next.health;
+    if (next.ethicsMul !== undefined) delete next.ethics;
+    if (next.caloriesMul !== undefined) delete next.calories;
+
+    // Drop near-default multipliers
+    for (const k of ['tasteMul', 'priceMul', 'timeMul', 'healthMul', 'ethicsMul', 'caloriesMul']) {
+      if (Number.isFinite(next[k]) && Math.abs(next[k] - 1) < eps) delete next[k];
+    }
+
+    return next;
+  };
+
+  const scheduleCommit = (nextOverrides) => {
+    if (commitTimerRef.current) clearTimeout(commitTimerRef.current);
+    commitTimerRef.current = setTimeout(() => {
+      commitTimerRef.current = null;
+      localEditingRef.current = false;
+      onOverrideChange(dish.name, sanitizeOverrides(nextOverrides));
+    }, 250);
+  };
+
+  const commitNow = () => {
+    if (commitTimerRef.current) {
+      clearTimeout(commitTimerRef.current);
+      commitTimerRef.current = null;
+    }
+    localEditingRef.current = false;
+    onOverrideChange(dish.name, sanitizeOverrides(draftRef.current));
+  };
+
+  const updateDraft = (patch) => {
+    localEditingRef.current = true;
+    setDraftOverrides((prev) => {
+      const next = sanitizeOverrides({ ...(prev || {}), ...(patch || {}) });
+      // Keep ref in sync immediately (important for quick tap -> pointerup -> commitNow)
+      draftRef.current = next;
+      scheduleCommit(next);
+      return next;
+    });
+  };
+
+  // Baselines (pre-override) computed by engine
+  const baseTaste = dish.baseTaste ?? dish.taste ?? 5;
+  const basePriceServing = dish.basePriceServing ?? dish.baseCost ?? dish.prices?.serving ?? 0;
+  const baseTimeCurrentMode = isOptimized ? (dish.baseTimeOptimized ?? dish.time ?? 30) : (dish.baseTimeNormal ?? dish.time ?? 30);
+  const baseHealth = dish.baseHealth ?? dish.health ?? 5;
+  const baseEthics = dish.baseEthics ?? dish.ethics ?? 5;
+  const baseCalories = dish.baseCalories ?? dish.calories ?? 0;
+
+  // Effective values (apply draft overrides in-card without forcing global re-analysis each tick)
+  const effectiveTaste = (() => {
+    if (Number.isFinite(draftOverrides?.taste)) return clamp(draftOverrides.taste, 0, 10);
+    if (Number.isFinite(draftOverrides?.tasteMul)) return clamp(baseTaste * draftOverrides.tasteMul, 0, 10);
+    return dish.taste;
+  })();
+
+  const effectiveTime = (() => {
+    if (Number.isFinite(draftOverrides?.time)) return Math.max(1, draftOverrides.time);
+    if (Number.isFinite(draftOverrides?.timeMul)) {
+      const base = isOptimized ? (dish.baseTimeOptimized ?? dish.time ?? 30) : (dish.baseTimeNormal ?? dish.time ?? 30);
+      return Math.max(1, base * draftOverrides.timeMul);
+    }
+    return dish.time;
+  })();
+
+  const effectiveBasePriceServing = (() => {
+    if (Number.isFinite(draftOverrides?.price)) return Math.max(0.01, draftOverrides.price);
+    if (Number.isFinite(draftOverrides?.priceMul)) return Math.max(0.01, basePriceServing * draftOverrides.priceMul);
+    return dish.prices?.serving ?? dish.baseCost ?? dish.cost ?? 0;
+  })();
+
+  const convertPrice = (servingCost) => {
+    const weight = dish?.weight ?? 0;
+    const calories = dish?.calories ?? 0;
+    if (!Number.isFinite(servingCost) || servingCost <= 0) return 0;
+
+    if (priceUnit === 'per1kg') {
+      if (!Number.isFinite(weight) || weight <= 0) return servingCost;
+      return (servingCost * 1000) / weight;
+    }
+    if (priceUnit === 'per1000kcal') {
+      if (!Number.isFinite(calories) || calories <= 0) return servingCost;
+      return servingCost / (calories / 1000);
+    }
+    return servingCost;
+  };
+
+  const effectivePrice = convertPrice(effectiveBasePriceServing);
+
+  const effectiveHealth = (() => {
+    if (Number.isFinite(draftOverrides?.health)) return clamp(draftOverrides.health, 0, 10);
+    if (Number.isFinite(draftOverrides?.healthMul)) return clamp(baseHealth * draftOverrides.healthMul, 0, 10);
+    return dish.health;
+  })();
+
+  const effectiveEthics = (() => {
+    if (Number.isFinite(draftOverrides?.ethics)) return clamp(draftOverrides.ethics, 0, 10);
+    if (Number.isFinite(draftOverrides?.ethicsMul)) return clamp(baseEthics * draftOverrides.ethicsMul, 0, 10);
+    return dish.ethics;
+  })();
+
+  const effectiveCalories = (() => {
+    if (Number.isFinite(draftOverrides?.calories)) return Math.max(0, Math.round(draftOverrides.calories));
+    if (Number.isFinite(draftOverrides?.caloriesMul)) return Math.max(0, Math.round(baseCalories * draftOverrides.caloriesMul));
+    return dish.calories ?? 0;
+  })();
+
   const kcalPer100g = (dish?.weight ?? 0) > 0 && (dish?.calories ?? 0) > 0
-    ? ((dish.calories / dish.weight) * 100)
+    ? ((effectiveCalories / dish.weight) * 100)
     : 0;
 
   const handleResetOverrides = () => {
     onOverrideChange(dish.name, {});
   };
 
-  const hasAnyOverride = Object.keys(overrides).length > 0;
-  const priceUnitLabel = getPriceUnitLabel(priceUnit);
+  const hasAnyOverride = Object.keys(draftOverrides || {}).length > 0;
   const missingIngredients = dish.missingIngredients || [];
   const missingPrices = dish.missingPrices || [];
   const unavailableIngredients = dish.unavailableIngredients || [];
@@ -79,28 +221,95 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
   // Get original ingredients from dish data
   const ingredients = dish.originalDish?.ingredients || [];
 
-  const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
-  const updateOverrides = (patch) => onOverrideChange(dish.name, { ...overrides, ...patch });
+  const stepPct = 0.01;
 
-  // Handlers for metric adjustments
-  const handleTasteChange = (delta) => {
-    updateOverrides({ taste: clamp(effectiveTaste + delta, 0, 10) });
+  const bumpMul = (currentMul, pctDelta) => {
+    const m = Number.isFinite(currentMul) ? currentMul : 1;
+    return m * (1 + pctDelta);
   };
 
-  const handleTimeChange = (delta) => {
-    updateOverrides({ time: Math.max(1, effectiveTime + delta) });
+  const handleTasteChangePct = (pctDelta) => {
+    const current = draftRef.current || {};
+    if (Number.isFinite(baseTaste) && baseTaste > 0) {
+      const currentMul = Number.isFinite(current.tasteMul)
+        ? current.tasteMul
+        : (Number.isFinite(current.taste) ? (current.taste / baseTaste) : 1);
+      updateDraft({ tasteMul: bumpMul(currentMul, pctDelta) });
+      return;
+    }
+    const effective = Number.isFinite(current.taste) ? current.taste : (Number.isFinite(current.tasteMul) ? baseTaste * current.tasteMul : dish.taste);
+    updateDraft({ taste: clamp(effective * (1 + pctDelta), 0, 10) });
   };
 
-  const handlePriceChange = (delta) => {
-    // Always modify the base price (per serving)
-    const basePrice = dish.prices?.serving ?? dish.baseCost ?? dish.cost;
-    updateOverrides({ price: Math.max(0.1, basePrice + delta) });
+  const handleTimeChangePct = (pctDelta) => {
+    const current = draftRef.current || {};
+    if (Number.isFinite(baseTimeCurrentMode) && baseTimeCurrentMode > 0) {
+      const currentMul = Number.isFinite(current.timeMul)
+        ? current.timeMul
+        : (Number.isFinite(current.time) ? (current.time / baseTimeCurrentMode) : 1);
+      updateDraft({ timeMul: bumpMul(currentMul, pctDelta) });
+      return;
+    }
+    const effective = Number.isFinite(current.time) ? current.time : (Number.isFinite(current.timeMul) ? baseTimeCurrentMode * current.timeMul : dish.time);
+    updateDraft({ time: Math.max(1, effective * (1 + pctDelta)) });
+  };
+
+  const handlePriceChangePct = (pctDelta) => {
+    const current = draftRef.current || {};
+    if (Number.isFinite(basePriceServing) && basePriceServing > 0) {
+      const currentMul = Number.isFinite(current.priceMul)
+        ? current.priceMul
+        : (Number.isFinite(current.price) ? (current.price / basePriceServing) : 1);
+      updateDraft({ priceMul: bumpMul(currentMul, pctDelta) });
+      return;
+    }
+    const effective = Number.isFinite(current.price) ? current.price : (Number.isFinite(current.priceMul) ? basePriceServing * current.priceMul : basePriceServing);
+    updateDraft({ price: Math.max(0.01, effective * (1 + pctDelta)) });
+  };
+
+  const handleHealthChangePct = (pctDelta) => {
+    const current = draftRef.current || {};
+    if (Number.isFinite(baseHealth) && baseHealth > 0) {
+      const currentMul = Number.isFinite(current.healthMul)
+        ? current.healthMul
+        : (Number.isFinite(current.health) ? (current.health / baseHealth) : 1);
+      updateDraft({ healthMul: bumpMul(currentMul, pctDelta) });
+      return;
+    }
+    const effective = Number.isFinite(current.health) ? current.health : (Number.isFinite(current.healthMul) ? baseHealth * current.healthMul : dish.health);
+    updateDraft({ health: clamp(effective * (1 + pctDelta), 0, 10) });
+  };
+
+  const handleEthicsChangePct = (pctDelta) => {
+    const current = draftRef.current || {};
+    if (Number.isFinite(baseEthics) && baseEthics > 0) {
+      const currentMul = Number.isFinite(current.ethicsMul)
+        ? current.ethicsMul
+        : (Number.isFinite(current.ethics) ? (current.ethics / baseEthics) : 1);
+      updateDraft({ ethicsMul: bumpMul(currentMul, pctDelta) });
+      return;
+    }
+    const effective = Number.isFinite(current.ethics) ? current.ethics : (Number.isFinite(current.ethicsMul) ? baseEthics * current.ethicsMul : dish.ethics);
+    updateDraft({ ethics: clamp(effective * (1 + pctDelta), 0, 10) });
+  };
+
+  const handleCaloriesChangePct = (pctDelta) => {
+    const current = draftRef.current || {};
+    if (Number.isFinite(baseCalories) && baseCalories > 0) {
+      const currentMul = Number.isFinite(current.caloriesMul)
+        ? current.caloriesMul
+        : (Number.isFinite(current.calories) ? (current.calories / baseCalories) : 1);
+      updateDraft({ caloriesMul: bumpMul(currentMul, pctDelta) });
+      return;
+    }
+    const effective = Number.isFinite(current.calories) ? current.calories : (Number.isFinite(current.caloriesMul) ? baseCalories * current.caloriesMul : dish.calories ?? 0);
+    updateDraft({ calories: Math.max(0, effective * (1 + pctDelta)) });
   };
 
   return (
     <motion.div
       ref={cardRef}
-      layout={!lite}
+      layout={false}
       className={`
         bg-white/70 dark:bg-surface-800/60 rounded-xl border transition-colors shadow-sm dark:shadow-none
         ${isExpanded 
@@ -149,46 +358,69 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
               value={effectiveTaste}
               format={(v) => v.toFixed(1)}
               isEditing={isExpanded}
-              onIncrement={() => handleTasteChange(0.1)}
-              onDecrement={() => handleTasteChange(-0.1)}
-              isOverridden={overrides.taste !== undefined}
+              onIncrement={() => handleTasteChangePct(stepPct)}
+              onDecrement={() => handleTasteChangePct(-stepPct)}
+              onEditEnd={commitNow}
+              isOverridden={draftOverrides.taste !== undefined || draftOverrides.tasteMul !== undefined}
               isAtMin={effectiveTaste <= 0}
               isAtMax={effectiveTaste >= 10}
             />
             <MetricIndicator
               icon={Heart}
-              value={dish.health}
+              value={effectiveHealth}
               format={(v) => v.toFixed(1)}
+              isEditing={isExpanded}
+              onIncrement={() => handleHealthChangePct(stepPct)}
+              onDecrement={() => handleHealthChangePct(-stepPct)}
+              onEditEnd={commitNow}
+              isOverridden={draftOverrides.health !== undefined || draftOverrides.healthMul !== undefined}
+              isAtMin={effectiveHealth <= 0}
+              isAtMax={effectiveHealth >= 10}
             />
             <MetricIndicator
               icon={DollarSign}
               value={effectivePrice}
               format={(v) => `$${v.toFixed(2)}`}
-              isEditing={isExpanded && priceUnit === 'serving'}
-              onIncrement={() => handlePriceChange(0.5)}
-              onDecrement={() => handlePriceChange(-0.5)}
-              isOverridden={overrides.price !== undefined}
-              isAtMin={effectivePrice <= 0.1}
+              isEditing={isExpanded}
+              onIncrement={() => handlePriceChangePct(stepPct)}
+              onDecrement={() => handlePriceChangePct(-stepPct)}
+              onEditEnd={commitNow}
+              isOverridden={draftOverrides.price !== undefined || draftOverrides.priceMul !== undefined}
+              isAtMin={effectiveBasePriceServing <= 0.01}
             />
             <MetricIndicator
               icon={Clock}
               value={effectiveTime}
-              format={formatTime}
+              format={(v) => (isExpanded ? `${v.toFixed(1)}m` : formatTime(Math.round(v)))}
               isEditing={isExpanded}
-              onIncrement={() => handleTimeChange(5)}
-              onDecrement={() => handleTimeChange(-5)}
-              isOverridden={overrides.time !== undefined}
+              onIncrement={() => handleTimeChangePct(stepPct)}
+              onDecrement={() => handleTimeChangePct(-stepPct)}
+              onEditEnd={commitNow}
+              isOverridden={draftOverrides.time !== undefined || draftOverrides.timeMul !== undefined}
               isAtMin={effectiveTime <= 1}
             />
             <MetricIndicator
               icon={Flame}
               value={kcalPer100g}
               format={(v) => `${v.toFixed(0)}kcal/100g`}
+              isEditing={isExpanded}
+              onIncrement={() => handleCaloriesChangePct(stepPct)}
+              onDecrement={() => handleCaloriesChangePct(-stepPct)}
+              onEditEnd={commitNow}
+              isOverridden={draftOverrides.calories !== undefined || draftOverrides.caloriesMul !== undefined}
+              isAtMin={effectiveCalories <= 0}
             />
             <MetricIndicator
               icon={Leaf}
-              value={dish.ethics}
+              value={effectiveEthics}
               format={(v) => v.toFixed(1)}
+              isEditing={isExpanded}
+              onIncrement={() => handleEthicsChangePct(stepPct)}
+              onDecrement={() => handleEthicsChangePct(-stepPct)}
+              onEditEnd={commitNow}
+              isOverridden={draftOverrides.ethics !== undefined || draftOverrides.ethicsMul !== undefined}
+              isAtMin={effectiveEthics <= 0}
+              isAtMax={effectiveEthics >= 10}
             />
           </div>
         </div>
@@ -236,7 +468,10 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
                 unavailableIngredients={unavailableIngredients}
                 missingIngredients={missingIngredients}
                 missingPrices={missingPrices}
+                isOptimized={isOptimized}
                 liteMotion={true}
+                analysisVariants={analysisVariants}
+                priceUnit={priceUnit}
               />
             </div>
           </div>
@@ -255,7 +490,7 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
                 {/* Divider */}
                 <div className="h-px bg-surface-300 dark:bg-surface-700 mb-4" />
 
-                {/* Info Slider (Overview / Index Map / Health / Ethics) */}
+                {/* Info Slider (Overview / Index Map / Time / Health / Ethics) */}
                 <InfoSlider 
                   dish={dish}
                   dishName={dish.name}
@@ -267,7 +502,10 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
                   unavailableIngredients={unavailableIngredients}
                   missingIngredients={missingIngredients}
                   missingPrices={missingPrices}
+                  isOptimized={isOptimized}
                   liteMotion={false}
+                  analysisVariants={analysisVariants}
+                  priceUnit={priceUnit}
                 />
               </div>
             </motion.div>

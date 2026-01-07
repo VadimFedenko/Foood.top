@@ -61,14 +61,6 @@ function StatsBar({
           />
         </div>
       </div>
-      {allPrioritiesZero && (
-        <div className="px-1 py-1.5 rounded-lg bg-surface-200/50 dark:bg-surface-800/50 border border-surface-300/30 dark:border-surface-700/30">
-          <p className="text-xs text-surface-500 dark:text-surface-400 text-center">
-            ⚠️ All priorities are set to 0. Dishes are ranked neutrally. 
-            Adjust priorities above to see personalized rankings.
-          </p>
-        </div>
-      )}
     </div>
   );
 }
@@ -113,8 +105,10 @@ export default function DishList({
   priceUnit = 'serving',
   onPriceUnitChange,
   priorities = {},
+  isOptimized = false,
   expandedDish,
-  onExpandedDishChange
+  onExpandedDishChange,
+  analysisVariants = null
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const reduceMotion = useReducedMotion();
@@ -187,13 +181,15 @@ export default function DishList({
                       ingredientIndex={ingredientIndex}
                       priceUnit={priceUnit}
                       priorities={priorities}
+                      isOptimized={isOptimized}
+                      analysisVariants={analysisVariants}
                     />
                   </div>
                 ))}
               </div>
             ) : (
               <motion.div className="space-y-3">
-                <AnimatePresence mode="popLayout">
+                <AnimatePresence mode="sync">
                   {visibleDishes.map((dish) => (
                     <motion.div
                       key={dish.name}
@@ -210,6 +206,8 @@ export default function DishList({
                         ingredientIndex={ingredientIndex}
                         priceUnit={priceUnit}
                         priorities={priorities}
+                        isOptimized={isOptimized}
+                        analysisVariants={analysisVariants}
                       />
                     </motion.div>
                   ))}

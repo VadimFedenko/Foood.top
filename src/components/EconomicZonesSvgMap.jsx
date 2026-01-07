@@ -4,32 +4,32 @@ import { useSvgMap } from '../lib/useSvgMap';
 import { centeredScaleTransform } from '../lib/svgMapUtils';
 
 function getZoneFillDefault(zoneId, selectedZone, isHovered) {
-  // При наведении - показываем более светлый цвет зоны
+  // On hover - show lighter zone color
   if (isHovered) {
     const baseColor = ECONOMIC_ZONES[zoneId]?.color || '#6b7280';
-    // Делаем цвет более светлым, добавляя белого
+    // Lighten the color by adding white
     return lightenColor(baseColor, 0.4);
   }
-  // Если зона выделена - показываем её цвет, иначе серый
+  // If zone is selected - show its color, otherwise gray
   if (selectedZone && selectedZone === zoneId) {
     return ECONOMIC_ZONES[zoneId]?.color || '#6b7280';
   }
-  return '#6b7280'; // Серый для всех невыделенных зон
+  return '#6b7280'; // Gray for all unselected zones
 }
 
-// Функция для осветления цвета
+// Function to lighten a color
 function lightenColor(hex, amount) {
-  // Удаляем # если есть
+  // Remove # if present
   hex = hex.replace('#', '');
-  // Конвертируем в RGB
+  // Convert to RGB
   const r = parseInt(hex.substring(0, 2), 16);
   const g = parseInt(hex.substring(2, 4), 16);
   const b = parseInt(hex.substring(4, 6), 16);
-  // Осветляем, смешивая с белым
+  // Lighten by mixing with white
   const newR = Math.round(r + (255 - r) * amount);
   const newG = Math.round(g + (255 - g) * amount);
   const newB = Math.round(b + (255 - b) * amount);
-  // Возвращаем в hex формате
+  // Return in hex format
   return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
 }
 

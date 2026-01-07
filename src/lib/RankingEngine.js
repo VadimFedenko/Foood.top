@@ -15,17 +15,17 @@ export * from './ranking/engine.js';
 
 // Economic zones available in the system (must match ingredients.json keys)
 export const ECONOMIC_ZONES = {
-  east_euro_agrarian: { name: 'Eastern Europe', emoji: '🌾', color: '#4ade80' }, // Яркий зеленый для аграрного региона
-  west_eu_industrial: { name: 'Western Europe', emoji: '🏭', color: '#3b82f6' }, // Синий для индустриального региона
-  northern_import: { name: 'Northern Import', emoji: '❄️', color: '#a78bfa' }, // Фиолетовый для северных регионов
-  mediterranean: { name: 'Mediterranean', emoji: '🌊', color: '#06b6d4' }, // Бирюзовый для средиземноморья
-  north_american: { name: 'North America', emoji: '🗽', color: '#f59e0b' }, // Оранжевый для Северной Америки
-  latam_agrarian: { name: 'Latin America', emoji: '🌿', color: '#22c55e' }, // Зеленый для Латинской Америки (отличается от Восточной Европы)
-  asian_rice_labor: { name: 'Asia (Rice Belt)', emoji: '🍚', color: '#ef4444' }, // Красный для рисового пояса Азии
-  developed_asia: { name: 'Developed Asia', emoji: '🏯', color: '#ec4899' }, // Розовый для развитой Азии
-  mena_arid: { name: 'MENA Region', emoji: '🏜️', color: '#f97316' }, // Оранжево-коричневый для засушливого региона
-  oceanic: { name: 'Oceania', emoji: '🦘', color: '#14b8a6' }, // Бирюзовый для Океании (отличается от Средиземноморья)
-  subsaharan_subsistence: { name: 'Sub-Saharan Africa', emoji: '🌍', color: '#eab308' }, // Желтый для Африки
+  east_euro_agrarian: { name: 'Eastern Europe', emoji: '🌾', color: '#4ade80' }, // Bright green for agrarian region
+  west_eu_industrial: { name: 'Western Europe', emoji: '🏭', color: '#3b82f6' }, // Blue for industrial region
+  northern_import: { name: 'Northern Import', emoji: '❄️', color: '#a78bfa' }, // Purple for northern regions
+  mediterranean: { name: 'Mediterranean', emoji: '🌊', color: '#06b6d4' }, // Cyan for Mediterranean
+  north_american: { name: 'North America', emoji: '🗽', color: '#f59e0b' }, // Orange for North America
+  latam_agrarian: { name: 'Latin America', emoji: '🌿', color: '#22c55e' }, // Green for Latin America (differs from Eastern Europe)
+  asian_rice_labor: { name: 'Asia (Rice Belt)', emoji: '🍚', color: '#ef4444' }, // Red for Asian rice belt
+  developed_asia: { name: 'Developed Asia', emoji: '🏯', color: '#ec4899' }, // Pink for developed Asia
+  mena_arid: { name: 'MENA Region', emoji: '🏜️', color: '#f97316' }, // Orange-brown for arid region
+  oceanic: { name: 'Oceania', emoji: '🦘', color: '#14b8a6' }, // Cyan for Oceania (differs from Mediterranean)
+  subsaharan_subsistence: { name: 'Sub-Saharan Africa', emoji: '🌍', color: '#eab308' }, // Yellow for Africa
 };
 
 // Default fallback zone when specific zone price is missing

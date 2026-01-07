@@ -19,17 +19,17 @@ import cookingStatesData from '/states.json';
 
 // Economic zones available in the system (must match ingredients.json keys)
 export const ECONOMIC_ZONES = {
-  east_euro_agrarian: { name: 'Eastern Europe', emoji: '🌾', color: '#4ade80' }, // Яркий зеленый для аграрного региона
-  west_eu_industrial: { name: 'Western Europe', emoji: '🏭', color: '#3b82f6' }, // Синий для индустриального региона
-  northern_import: { name: 'Northern Import', emoji: '❄️', color: '#a78bfa' }, // Фиолетовый для северных регионов
-  mediterranean: { name: 'Mediterranean', emoji: '🌊', color: '#06b6d4' }, // Бирюзовый для средиземноморья
-  north_american: { name: 'North America', emoji: '🗽', color: '#f59e0b' }, // Оранжевый для Северной Америки
-  latam_agrarian: { name: 'Latin America', emoji: '🌿', color: '#22c55e' }, // Зеленый для Латинской Америки (отличается от Восточной Европы)
-  asian_rice_labor: { name: 'Asia (Rice Belt)', emoji: '🍚', color: '#ef4444' }, // Красный для рисового пояса Азии
-  developed_asia: { name: 'Developed Asia', emoji: '🏯', color: '#ec4899' }, // Розовый для развитой Азии
-  mena_arid: { name: 'MENA Region', emoji: '🏜️', color: '#f97316' }, // Оранжево-коричневый для засушливого региона
-  oceanic: { name: 'Oceania', emoji: '🦘', color: '#14b8a6' }, // Бирюзовый для Океании (отличается от Средиземноморья)
-  subsaharan_subsistence: { name: 'Sub-Saharan Africa', emoji: '🌍', color: '#eab308' }, // Желтый для Африки
+  east_euro_agrarian: { name: 'Eastern Europe', emoji: '🌾', color: '#4ade80' }, // Bright green for agrarian region
+  west_eu_industrial: { name: 'Western Europe', emoji: '🏭', color: '#3b82f6' }, // Blue for industrial region
+  northern_import: { name: 'Northern Import', emoji: '❄️', color: '#a78bfa' }, // Purple for northern regions
+  mediterranean: { name: 'Mediterranean', emoji: '🌊', color: '#06b6d4' }, // Cyan for Mediterranean
+  north_american: { name: 'North America', emoji: '🗽', color: '#f59e0b' }, // Orange for North America
+  latam_agrarian: { name: 'Latin America', emoji: '🌿', color: '#22c55e' }, // Green for Latin America (differs from Eastern Europe)
+  asian_rice_labor: { name: 'Asia (Rice Belt)', emoji: '🍚', color: '#ef4444' }, // Red for Asian rice belt
+  developed_asia: { name: 'Developed Asia', emoji: '🏯', color: '#ec4899' }, // Pink for developed Asia
+  mena_arid: { name: 'MENA Region', emoji: '🏜️', color: '#f97316' }, // Orange-brown for arid region
+  oceanic: { name: 'Oceania', emoji: '🦘', color: '#14b8a6' }, // Cyan for Oceania (differs from Mediterranean)
+  subsaharan_subsistence: { name: 'Sub-Saharan Africa', emoji: '🌍', color: '#eab308' }, // Yellow for Africa
 };
 
 // Default fallback zone when specific zone price is missing
@@ -348,7 +348,7 @@ function calculateDishWeight(dish) {
 /**
  * Available price display units
  */
-const PRICE_UNITS = {
+export const PRICE_UNITS = {
   serving: { id: 'serving', label: 'Serving', shortLabel: 'srv' },
   per1kg: { id: 'per1kg', label: '1kg', shortLabel: '1kg' },
   per1000kcal: { id: 'per1000kcal', label: '1000kcal', shortLabel: 'kcal' },
@@ -449,6 +449,30 @@ function calculateDishTime(dish, useOptimized = false) {
 // COMPLETE DISH ANALYSIS
 // ============================================================================
 
+function roundTo(n, digits = 4) {
+  if (!isFiniteNumber(n)) return n;
+  const p = 10 ** digits;
+  return Math.round(n * p) / p;
+}
+
+function getLegacyOrMul({ base, overrides, absKey, mulKey, clampMin, clampMax, defaultMul = 1 }) {
+  const abs = overrides?.[absKey];
+  if (isFiniteNumber(abs)) {
+    const clamped = clamp(abs, clampMin, clampMax);
+    return { value: clamped, mode: 'abs', mul: null };
+  }
+
+  const mul = overrides?.[mulKey];
+  if (isFiniteNumber(mul)) {
+    const safeMul = mul === 0 ? 0 : mul;
+    const v = clamp(base * safeMul, clampMin, clampMax);
+    return { value: v, mode: 'mul', mul: safeMul };
+  }
+
+  const v = clamp(base * defaultMul, clampMin, clampMax);
+  return { value: v, mode: 'none', mul: defaultMul };
+}
+
 /**
  * Analyze a dish and return all computed metrics.
  * This is the main entry point for getting complete dish data.
@@ -461,81 +485,194 @@ function calculateDishTime(dish, useOptimized = false) {
  * @param {string} priceUnit - Price unit for ranking ('serving', 'per1kg', 'per1000kcal')
  * @returns {Object} Complete dish analysis with all metrics
  */
-function analyzeDish(dish, zoneId, ingredientsDb, useOptimizedTime = false, overrides = {}, priceUnit = 'serving') {
+function analyzeDishStatic(dish, zoneId, ingredientsDb, overrides = {}) {
   const costResult = calculateDishCost(dish, zoneId, ingredientsDb);
-  const health = calculateDishHealth(dish, ingredientsDb);
-  const calories = calculateDishCalories(dish, ingredientsDb);
+  const baseHealth = calculateDishHealth(dish, ingredientsDb);
+  const baseCalories = calculateDishCalories(dish, ingredientsDb);
   const weight = calculateDishWeight(dish);
+  const baseKcalPer100g = (isFiniteNumber(baseCalories) && baseCalories > 0 && isFiniteNumber(weight) && weight > 0)
+    ? (baseCalories / weight) * 100
+    : 0;
+  const baseEthics = calculateDishEthics(dish, ingredientsDb);
+
+  const baseTaste = clamp(isFiniteNumber(dish.taste_score) ? dish.taste_score : 5, 0, 10);
+  const baseSatiety = dish.satiety_index ?? 5;
+
+  const baseTimeNormal = calculateDishTime(dish, false);
+  const baseTimeOptimized = calculateDishTime(dish, true);
+
+  // Base cost (per serving, before overrides)
+  const basePriceServing = isFiniteNumber(costResult.totalCost) ? Math.max(0, costResult.totalCost) : 0;
+
+  // Apply overrides (supports legacy absolute + new multipliers)
+  const tasteResult = getLegacyOrMul({
+    base: baseTaste,
+    overrides,
+    absKey: 'taste',
+    mulKey: 'tasteMul',
+    clampMin: 0,
+    clampMax: 10,
+    defaultMul: 1,
+  });
+
+  const healthResult = getLegacyOrMul({
+    base: baseHealth,
+    overrides,
+    absKey: 'health',
+    mulKey: 'healthMul',
+    clampMin: 0,
+    clampMax: 10,
+    defaultMul: 1,
+  });
+
+  const ethicsResult = getLegacyOrMul({
+    base: baseEthics,
+    overrides,
+    absKey: 'ethics',
+    mulKey: 'ethicsMul',
+    clampMin: 0,
+    clampMax: 10,
+    defaultMul: 1,
+  });
+
+  const priceResult = getLegacyOrMul({
+    base: basePriceServing,
+    overrides,
+    absKey: 'price',
+    mulKey: 'priceMul',
+    clampMin: 0.01,
+    clampMax: Number.POSITIVE_INFINITY,
+    defaultMul: 1,
+  });
+
+  const caloriesResult = getLegacyOrMul({
+    base: baseCalories,
+    overrides,
+    absKey: 'calories',
+    mulKey: 'caloriesMul',
+    clampMin: 0,
+    clampMax: Number.POSITIVE_INFINITY,
+    defaultMul: 1,
+  });
+
+  const satietyResult = getLegacyOrMul({
+    base: baseSatiety,
+    overrides,
+    absKey: 'satiety',
+    mulKey: 'satietyMul',
+    clampMin: 0,
+    clampMax: Number.POSITIVE_INFINITY,
+    defaultMul: 1,
+  });
+
+  const calories = Math.round(caloriesResult.value);
+
+  // time: legacy absolute overrides both modes, multiplier scales both
+  let timeNormal = baseTimeNormal;
+  let timeOptimized = baseTimeOptimized;
+  let timeOverrideMode = 'none';
+  if (isFiniteNumber(overrides?.time)) {
+    timeOverrideMode = 'abs';
+    const t = Math.max(1, overrides.time);
+    timeNormal = t;
+    timeOptimized = t;
+  } else if (isFiniteNumber(overrides?.timeMul)) {
+    timeOverrideMode = 'mul';
+    const m = overrides.timeMul;
+    timeNormal = Math.max(1, baseTimeNormal * m);
+    timeOptimized = Math.max(1, baseTimeOptimized * m);
+  }
+
+  const costPerServing = priceResult.value;
+  const costPer1kg = convertPriceToUnit(costPerServing, weight, calories, 'per1kg');
+  const costPer1000kcal = convertPriceToUnit(costPerServing, weight, calories, 'per1000kcal');
+
   const kcalPer100g = (isFiniteNumber(calories) && calories > 0 && isFiniteNumber(weight) && weight > 0)
     ? (calories / weight) * 100
     : 0;
-  const ethics = calculateDishEthics(dish, ingredientsDb);
-  const time = calculateDishTime(dish, useOptimizedTime);
 
-  // Extract taste and satiety from dish (with overrides)
-  const taste = overrides.taste ?? dish.taste_score ?? 5;
-  const satiety = dish.satiety_index ?? 5;
-  
-  // Base cost (per serving)
-  const baseCost = overrides.price ?? costResult.totalCost;
-  
-  // Calculate per-unit prices (for display)
-  const costPerServing = baseCost;
-  const costPer1kg = convertPriceToUnit(baseCost, weight, calories, 'per1kg');
-  const costPer1000kcal = convertPriceToUnit(baseCost, weight, calories, 'per1000kcal');
-  
-  // The "cost" used for ranking depends on the selected price unit
-  const rankingCost = convertPriceToUnit(baseCost, weight, calories, priceUnit);
-  
-  const finalTime = overrides.time ?? time;
+  const hasOverrides = {
+    taste: tasteResult.mode !== 'none',
+    price: priceResult.mode !== 'none',
+    time: timeOverrideMode !== 'none',
+    health: healthResult.mode !== 'none',
+    ethics: ethicsResult.mode !== 'none',
+    calories: caloriesResult.mode !== 'none',
+    satiety: satietyResult.mode !== 'none',
+  };
 
   return {
     name: dish.dish || dish.name,
     description: dish.desc || '',
-    
-    // Raw metrics
-    cost: rankingCost, // Used for ranking - depends on selected unit
-    baseCost: costPerServing, // Original cost per serving
-    health,
+
+    // Static metrics
+    health: healthResult.value,
+    ethics: ethicsResult.value,
     calories,
-    weight, // Total weight in grams
-    kcalPer100g, // Calories density
-    ethics,
-    time: finalTime,
-    taste,
-    satiety,
-    
-    // Per-unit prices for display
+    weight,
+    kcalPer100g,
+    satiety: satietyResult.value,
+
+    // Effective metrics (after overrides)
+    taste: tasteResult.value,
+    timeNormal,
+    timeOptimized,
+
+    // Prices (after overrides)
     prices: {
       serving: costPerServing,
       per1kg: costPer1kg,
       per1000kcal: costPer1000kcal,
     },
-    
-    // Cost breakdown for detailed view
+
+    // Cost breakdown for detailed view (zone-specific)
     costBreakdown: costResult.breakdown,
     missingIngredients: costResult.missingIngredients,
     missingPrices: costResult.missingPrices,
     unavailableIngredients: costResult.unavailableIngredients,
-    
+
     // Original dish data for reference
     originalDish: dish,
-    
+
+    // Baselines (before overrides) — used for % adjustments in UI
+    baseTaste,
+    baseTimeNormal,
+    baseTimeOptimized,
+    basePriceServing,
+    baseHealth,
+    baseEthics,
+    baseCalories,
+    baseKcalPer100g,
+    baseSatiety,
+
     // Track which values have been overridden
-    hasOverrides: {
-      taste: overrides.taste !== undefined,
-      time: overrides.time !== undefined,
-      price: overrides.price !== undefined,
-    },
-    
-    // Time breakdown
-    prepTime: useOptimizedTime 
-      ? (dish.prep_t_optimized ?? dish.prep_t ?? 0)
-      : (dish.prep_t ?? 0),
-    cookTime: useOptimizedTime
-      ? (dish.cook_t_optimized ?? dish.cook_t ?? 0)
-      : (dish.cook_t ?? 0),
+    hasOverrides,
+
+    // Raw time breakdown (for UI hints)
+    prepTimeNormal: (dish.prep_t ?? 0),
+    cookTimeNormal: (dish.cook_t ?? 0),
+    prepTimeOptimized: (dish.prep_t_optimized ?? dish.prep_t ?? 0),
+    cookTimeOptimized: (dish.cook_t_optimized ?? dish.cook_t ?? 0),
+    passiveTimeHours: (dish.passive_t_hours ?? 0),
     optimizedComment: dish.comment || '',
+  };
+}
+
+function materializeVariant(staticDish, { useOptimizedTime, priceUnit }) {
+  const time = useOptimizedTime ? staticDish.timeOptimized : staticDish.timeNormal;
+  const cost = staticDish.prices?.[priceUnit] ?? 0;
+
+  return {
+    ...staticDish,
+
+    // For ranking in this variant
+    time,
+    cost,
+    baseCost: staticDish.prices?.serving ?? 0,
+
+    // Time breakdown for the selected mode
+    prepTime: useOptimizedTime ? staticDish.prepTimeOptimized : staticDish.prepTimeNormal,
+    cookTime: useOptimizedTime ? staticDish.cookTimeOptimized : staticDish.cookTimeNormal,
   };
 }
 
@@ -727,6 +864,28 @@ function normalizeTimeToSpeed(time, minTime, maxTime) {
   return clamp(score, 0, 10);
 }
 
+/**
+ * Calculate penalty for passive cooking time.
+ * Applied to speed score BEFORE final clamping to 0-10.
+ * 
+ * Penalty tiers:
+ * - 0.5-1 hour: -1 point
+ * - 1-4 hours: -1.5 points
+ * - 4-24 hours: -2 points
+ * - 24+ hours: -3 points
+ * 
+ * @param {number} passiveTimeHours - Passive cooking time in hours
+ * @returns {number} Penalty value (negative or 0)
+ */
+export function getPassiveTimePenalty(passiveTimeHours) {
+  if (!isFiniteNumber(passiveTimeHours) || passiveTimeHours < 0.5) return 0;
+  
+  if (passiveTimeHours < 1) return -1;      // 0.5-1 hour
+  if (passiveTimeHours < 4) return -1.5;    // 1-4 hours
+  if (passiveTimeHours < 24) return -2;     // 4-24 hours
+  return -3;                                 // 24+ hours
+}
+
 // ============================================================================
 // FINAL SCORING ENGINE
 // ============================================================================
@@ -906,6 +1065,125 @@ export function analyzeAllDishesBase(dishes, ingredients, zoneId, useOptimizedTi
   });
 
   return { analyzed: analyzedWithNorm, datasetStats };
+}
+
+/**
+ * Analyze all dishes ONCE, then materialize the 2x3 variants:
+ * - timeMode: normal | optimized
+ * - priceUnit: serving | per1kg | per1000kcal
+ *
+ * This avoids recomputing expensive dish metrics when the user only toggles
+ * time mode or price unit; those become O(1) switches between precomputed variants.
+ *
+ * Recompute is required only when the underlying values change:
+ * - selectedZone (prices)
+ * - overrides (taste/time/price)
+ * - dishes / ingredients dataset
+ */
+export function analyzeAllDishesVariants(dishes, ingredients, zoneId, allOverrides = {}) {
+  const ingredientIndex = ingredients instanceof Map
+    ? ingredients
+    : buildIngredientIndex(ingredients);
+
+  const staticAnalyzed = dishes.map((dish) => {
+    const dishName = dish.dish || dish.name;
+    const overrides = allOverrides[dishName] || {};
+    return analyzeDishStatic(dish, zoneId, ingredientIndex, overrides);
+  });
+
+  // Pre-compute normalization for independent metrics (same across all variants)
+  // These metrics don't depend on timeMode or priceUnit
+  const satietyVals = staticAnalyzed.map(d => d.satiety).filter(isFiniteNumber);
+  const kcalPer100gVals = staticAnalyzed.map(d => d.kcalPer100g).filter(v => isFiniteNumber(v) && v > 0);
+  
+  const satietyDist = buildPercentileScoreMap(satietyVals, { higherIsBetter: true });
+  const lowCalorieDist = buildPercentileScoreMap(kcalPer100gVals, { higherIsBetter: false });
+
+  // Add pre-computed normalized values for independent metrics to static analysis
+  const staticAnalyzedWithNorm = staticAnalyzed.map((d) => {
+    const normalizedBaseStatic = {
+      taste: normalizeRaw10(d.taste, 5),
+      health: normalizeRaw10(d.health, 5),
+      ethics: normalizeRaw10(d.ethics, 5),
+      satiety: clamp(isFiniteNumber(d.satiety) ? satietyDist.scoreForValue(d.satiety) : 5, 0, 10),
+      lowCalorie: clamp(isFiniteNumber(d.kcalPer100g) ? lowCalorieDist.scoreForValue(d.kcalPer100g) : 5, 0, 10),
+    };
+    return { ...d, normalizedBaseStatic };
+  });
+
+  const variants = {};
+
+  const timeModes = [
+    { id: 'normal', useOptimizedTime: false },
+    { id: 'optimized', useOptimizedTime: true },
+  ];
+
+  const priceUnits = ['serving', 'per1kg', 'per1000kcal'];
+
+  for (const tm of timeModes) {
+    for (const pu of priceUnits) {
+      const key = `${tm.id}:${pu}`;
+      const analyzed = staticAnalyzedWithNorm.map((d) => materializeVariant(d, { useOptimizedTime: tm.useOptimizedTime, priceUnit: pu }));
+
+      // Variant-dependent ranges (only cost and time vary by variant)
+      const costs = analyzed.map(d => d.cost).filter(c => isFiniteNumber(c) && c > 0);
+      const times = analyzed.map(d => d.time).filter(t => isFiniteNumber(t) && t > 0);
+
+      const datasetStats = {
+        minCost: costs.length ? Math.min(...costs) : 1,
+        maxCost: costs.length ? Math.max(...costs) : 100,
+        minTime: times.length ? Math.min(...times) : 1,
+        maxTime: times.length ? Math.max(...times) : 120,
+        // These are the same across all variants, but kept for compatibility
+        minCalories: staticAnalyzed.length ? Math.min(...staticAnalyzed.map(d => d.calories).filter(c => isFiniteNumber(c) && c > 0)) : 100,
+        maxCalories: staticAnalyzed.length ? Math.max(...staticAnalyzed.map(d => d.calories).filter(c => isFiniteNumber(c) && c > 0)) : 2000,
+        minKcalPer100g: kcalPer100gVals.length ? Math.min(...kcalPer100gVals) : 10,
+        maxKcalPer100g: kcalPer100gVals.length ? Math.max(...kcalPer100gVals) : 600,
+      };
+
+      // Only normalize variant-dependent metrics (cost and time)
+      const speedDist = buildPercentileScoreMap(times, { higherIsBetter: false });
+
+      const analyzedWithNorm = analyzed.map((d) => {
+        // Calculate base speed score from active cooking time percentile
+        const baseSpeedScore = isFiniteNumber(d.time) ? speedDist.scoreForValue(d.time) : 5;
+        
+        // Calculate the percentile (0-100) for display purposes
+        // speedDist.scoreForValue returns 0-10 where 10 = fastest
+        // So percentile = score * 10 (e.g., score 9/10 means faster than 90% of dishes)
+        const speedPercentile = Math.round(baseSpeedScore * 10);
+        
+        // Apply passive time penalty (before clamping to 0-10)
+        const passivePenalty = getPassiveTimePenalty(d.passiveTimeHours);
+        const speedWithPenalty = baseSpeedScore + passivePenalty;
+        
+        const normalizedBase = {
+          // Use pre-computed values for independent metrics
+          taste: d.normalizedBaseStatic.taste,
+          health: d.normalizedBaseStatic.health,
+          ethics: d.normalizedBaseStatic.ethics,
+          satiety: d.normalizedBaseStatic.satiety,
+          lowCalorie: d.normalizedBaseStatic.lowCalorie,
+          // Compute variant-dependent metrics
+          cheapness: normalizeCostToCheapness(d.cost, datasetStats.minCost, datasetStats.maxCost),
+          speed: clamp(speedWithPenalty, 0, 10),
+        };
+        
+        // Store additional speed calculation details for UI
+        return { 
+          ...d, 
+          normalizedBase,
+          speedScoreBeforePenalty: clamp(baseSpeedScore, 0, 10),
+          speedPenalty: passivePenalty,
+          speedPercentile, // 0-100, higher = faster than more dishes
+        };
+      });
+
+      variants[key] = { analyzed: analyzedWithNorm, datasetStats };
+    }
+  }
+
+  return { variants };
 }
 
 /**

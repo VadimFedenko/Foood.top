@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {
   ChevronLeft,
   ChevronRight,
+  Clock,
   Frown,
   Heart,
   Info,
@@ -11,8 +12,11 @@ import {
   Skull,
   AlertTriangle,
   FileText,
+  ArrowDown,
+  Zap,
+  Timer,
 } from 'lucide-react';
-import { ECONOMIC_ZONES, calculateDishCost, getCookingCoef, normalizeIngredientName } from '../../lib/RankingEngine';
+import { ECONOMIC_ZONES, calculateDishCost, getCookingCoef, normalizeIngredientName, getPassiveTimePenalty } from '../../lib/RankingEngine';
 import EconomicZonesSvgMap from '../EconomicZonesSvgMap';
 import { getCookingEffect, getCookingLabel, getEthicsColor, getHealthColor, getPriceColor } from '../dishCardUtils';
 
@@ -20,9 +24,9 @@ import { getCookingEffect, getCookingLabel, getEthicsColor, getHealthColor, getP
  * Get ethics icon based on index (0-10)
  */
 function getEthicsIcon(index) {
-  if (index < 2) return Skull; // Red - череп
-  if (index < 4) return Frown; // Orange - грустный смайлик
-  return Leaf; // Green/Lime/Amber - листочек
+  if (index < 2) return Skull; // Red - skull
+  if (index < 4) return Frown; // Orange - sad face
+  return Leaf; // Green/Lime/Amber - leaf
 }
 
 /**
@@ -176,7 +180,6 @@ function OverviewSlide({
               { key: 'health', label: 'Health', color: 'bg-red-500' },
               { key: 'cheapness', label: 'Budget', color: 'bg-emerald-400' },
               { key: 'speed', label: 'Speed', color: 'bg-cyan-500' },
-              { key: 'satiety', label: 'Satiety', color: 'bg-amber-500' },
               { key: 'lowCalorie', label: 'Low-Cal', color: 'bg-purple-500' },
               { key: 'ethics', label: 'Ethics', color: 'bg-lime-500' },
             ];
@@ -531,6 +534,7 @@ function IndexMapSlide({ dish, ingredientIndex, liteMotion = false }) {
   const [hoveredZone, setHoveredZone] = useState(null);
 
   // Calculate prices and breakdowns for all zones
+  // Lazy computation: only calculate when component is mounted (i.e., slide is active)
   const { zonePrices, zoneBreakdowns } = useMemo(() => {
     if (!dish?.originalDish || !ingredientIndex) return { zonePrices: {}, zoneBreakdowns: {} };
 
@@ -616,12 +620,14 @@ function IndexMapSlide({ dish, ingredientIndex, liteMotion = false }) {
 
   // Sort breakdown by cost (descending) and limit to show top contributors
   const sortedBreakdown = useMemo(() => {
-    if (!currentBreakdown) return [];
+    if (!currentBreakdown || currentBreakdown.length === 0) return [];
     return [...currentBreakdown].filter((item) => item.cost > 0).sort((a, b) => b.cost - a.cost);
   }, [currentBreakdown]);
 
   // Calculate totals for percentage
-  const totalCost = sortedBreakdown.reduce((sum, item) => sum + item.cost, 0);
+  const totalCost = useMemo(() => {
+    return sortedBreakdown.reduce((sum, item) => sum + item.cost, 0);
+  }, [sortedBreakdown]);
 
   return (
     <div className="flex gap-3 min-h-[220px]">
@@ -848,6 +854,318 @@ function IndexMapSlide({ dish, ingredientIndex, liteMotion = false }) {
 }
 
 /**
+ * Helper: Get time speed description based on percentile
+ */
+function getTimeDescription(percentile) {
+  if (percentile >= 90) return 'extremely fast';
+  if (percentile >= 70) return 'quite fast';
+  if (percentile >= 40) return 'typical for dishes';
+  if (percentile >= 20) return 'moderately long';
+  return 'quite lengthy';
+}
+
+/**
+ * Helper: Format passive time for display
+ */
+function formatPassiveTime(hours) {
+  if (hours < 1) {
+    return `${Math.round(hours * 60)} minutes`;
+  }
+  if (hours === 1) {
+    return '1 hour';
+  }
+  return `${hours} hours`;
+}
+
+/**
+ * Time Slide - Detailed cooking time breakdown and analysis
+ */
+function TimeSlide({ dish, isOptimized = false, liteMotion = false, analysisVariants = null, priceUnit = 'serving' }) {
+  const dishName = dish?.name || 'This dish';
+  
+  // Normal cooking times
+  const prepTimeNormal = dish?.prepTimeNormal ?? 0;
+  const cookTimeNormal = dish?.cookTimeNormal ?? 0;
+  const totalTimeNormal = prepTimeNormal + cookTimeNormal;
+  
+  // Optimized cooking times
+  const prepTimeOptimized = dish?.prepTimeOptimized ?? prepTimeNormal;
+  const cookTimeOptimized = dish?.cookTimeOptimized ?? cookTimeNormal;
+  const totalTimeOptimized = prepTimeOptimized + cookTimeOptimized;
+  
+  // Passive time (same for both modes)
+  const passiveTimeHours = dish?.passiveTimeHours ?? 0;
+  const passivePenalty = getPassiveTimePenalty(passiveTimeHours);
+  
+  // Speed scores and percentiles
+  const speedScoreBeforePenalty = dish?.speedScoreBeforePenalty ?? 5;
+  const speedPercentile = dish?.speedPercentile ?? 50;
+  const finalSpeedScore = dish?.normalizedBase?.speed ?? 5;
+  
+  // Calculate prep/cook changes for optimized mode
+  const prepReduction = prepTimeNormal - prepTimeOptimized;
+  const cookReduction = cookTimeNormal - cookTimeOptimized;
+  const prepChanged = prepReduction !== 0;
+  const cookChanged = cookReduction !== 0;
+  
+  // Comment for optimization
+  const optimizedComment = dish?.optimizedComment || '';
+  
+  // Determine if optimization is beneficial
+  // Compare normal percentile among normal dishes vs optimized percentile among optimized dishes
+  // For now we use the current percentile as a proxy
+  const timeReduction = totalTimeNormal - totalTimeOptimized;
+  const percentReduction = totalTimeNormal > 0 ? Math.round((timeReduction / totalTimeNormal) * 100) : 0;
+  const isGoodForOptimization = percentReduction >= 30;
+  
+  const timeDescription = getTimeDescription(speedPercentile);
+
+  // Calculate scores for both modes
+  // Get score from the appropriate variant
+  let standardCookingScore = finalSpeedScore;
+  let timeOptimizedScore = finalSpeedScore;
+  
+  if (analysisVariants?.variants) {
+    // Get normal mode score
+    const normalKey = `normal:${priceUnit}`;
+    const normalVariant = analysisVariants.variants[normalKey];
+    if (normalVariant?.analyzed) {
+      const normalDish = normalVariant.analyzed.find(d => d.name === dishName);
+      if (normalDish?.normalizedBase?.speed !== undefined) {
+        standardCookingScore = normalDish.normalizedBase.speed;
+      }
+    }
+    
+    // Get optimized mode score
+    const optimizedKey = `optimized:${priceUnit}`;
+    const optimizedVariant = analysisVariants.variants[optimizedKey];
+    if (optimizedVariant?.analyzed) {
+      const optimizedDish = optimizedVariant.analyzed.find(d => d.name === dishName);
+      if (optimizedDish?.normalizedBase?.speed !== undefined) {
+        timeOptimizedScore = optimizedDish.normalizedBase.speed;
+      }
+    }
+  } else {
+    // Fallback: if we don't have variants, use current score
+    // Standard Cooking: if we're in normal mode, use current score; otherwise estimate
+    standardCookingScore = isOptimized
+      ? Math.max(0, Math.min(10, speedScoreBeforePenalty + passivePenalty))
+      : finalSpeedScore;
+    
+    // Time-Optimized: if we're in optimized mode, use current score; otherwise estimate
+    timeOptimizedScore = isOptimized
+      ? finalSpeedScore
+      : Math.max(0, Math.min(10, speedScoreBeforePenalty + passivePenalty));
+  }
+
+  return (
+    <div className="space-y-4">
+      {/* Standard Cooking Section */}
+      <div className="bg-surface-200/40 dark:bg-surface-700/40 rounded-lg p-3 border border-surface-300/30 dark:border-surface-600/30">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <Timer size={14} className="text-surface-600 dark:text-surface-300" />
+            <span className="text-xs font-semibold text-surface-700 dark:text-surface-200 uppercase tracking-wide">
+              Standard Cooking
+            </span>
+          </div>
+          <div className="px-2.5 py-1 rounded-lg text-xs font-bold bg-cyan-500/15 text-cyan-600 dark:text-cyan-400">
+            Score: {standardCookingScore.toFixed(1)}/10
+          </div>
+        </div>
+        
+        <p className="text-sm text-surface-600 dark:text-surface-300 leading-relaxed mb-3">
+          <span className="font-semibold text-surface-800 dark:text-surface-100">{dishName}</span> requires{' '}
+          <span className="font-mono font-semibold text-cyan-600 dark:text-cyan-400">{prepTimeNormal} min</span> of active preparation
+          {cookTimeNormal > 0 ? (
+            <>
+              , and another{' '}
+              <span className="font-mono font-semibold text-cyan-600 dark:text-cyan-400">{cookTimeNormal} min</span> of active cooking
+            </>
+          ) : (
+            <>, but requires no active cooking/heat treatment</>
+          )}.
+        </p>
+
+        <p className="text-sm text-surface-600 dark:text-surface-300 leading-relaxed mb-3">
+          Total active time is{' '}
+          <span className="font-mono font-semibold text-surface-800 dark:text-surface-100">{totalTimeNormal} min</span>, which is{' '}
+          <span className={`font-semibold ${speedPercentile >= 50 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}`}>
+            {timeDescription}
+          </span>.
+        </p>
+
+        {/* Percentile visualization */}
+        <div className="bg-surface-100/80 dark:bg-surface-800/80 rounded-lg p-2.5 mb-3">
+          <div className="flex items-center justify-between text-xs text-surface-500 dark:text-surface-400 mb-1.5">
+            <span>Slowest</span>
+            <span>Active Time Percentile</span>
+            <span>Fastest</span>
+          </div>
+          <div className="relative h-2 bg-surface-300/60 dark:bg-surface-700/60 rounded-full overflow-hidden">
+            <motion.div
+              className="absolute top-0 left-0 h-full bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-full"
+              initial={{ width: 0 }}
+              animate={{ width: `${speedPercentile}%` }}
+              transition={{ duration: liteMotion ? 0.2 : 0.6, ease: 'easeOut' }}
+            />
+          </div>
+          <div className="flex items-center justify-center mt-1.5">
+            <span className="text-xs font-mono font-semibold text-cyan-600 dark:text-cyan-400">
+              {speedPercentile}th percentile — faster than {speedPercentile}% of dishes
+            </span>
+          </div>
+        </div>
+
+        <p className="text-sm text-surface-600 dark:text-surface-300 leading-relaxed">
+          Based on this, the dish receives an active speed score of{' '}
+          <span className="font-mono font-semibold text-cyan-600 dark:text-cyan-400">≈{speedScoreBeforePenalty.toFixed(1)}/10</span>.
+        </p>
+
+        {/* Passive time penalty section */}
+        {passiveTimeHours > 0 && (
+          <div className="mt-3 pt-3 border-t border-surface-300/30 dark:border-surface-600/30">
+            <p className="text-sm text-surface-600 dark:text-surface-300 leading-relaxed">
+              However, this dish also requires{' '}
+              <span className="font-mono font-semibold text-amber-600 dark:text-amber-400">
+                {formatPassiveTime(passiveTimeHours)}
+              </span>{' '}
+              of passive cooking time (e.g., marinating, rising, slow cooking), which applies a{' '}
+              <span className="font-mono font-semibold text-rose-600 dark:text-rose-400">
+                {passivePenalty} point
+              </span>{' '}
+              penalty.
+            </p>
+            <div className="mt-2 flex items-center gap-2">
+              <span className="text-sm text-surface-500 dark:text-surface-400">Final speed score:</span>
+              <span className="font-mono font-bold text-lg text-cyan-600 dark:text-cyan-400">
+                {finalSpeedScore.toFixed(1)}/10
+              </span>
+              <span className="text-xs text-surface-400 dark:text-surface-500">
+                ({speedScoreBeforePenalty.toFixed(1)} {passivePenalty} = {finalSpeedScore.toFixed(1)})
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Optimized Cooking Section */}
+      {(prepChanged || cookChanged) && (
+        <div className="bg-emerald-500/10 dark:bg-emerald-500/10 rounded-lg p-3 border border-emerald-500/20">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Zap size={14} className="text-emerald-500 dark:text-emerald-400" />
+              <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-300 uppercase tracking-wide">
+                Time-Optimized Approach
+              </span>
+            </div>
+            <div className="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+              Score: {timeOptimizedScore.toFixed(1)}/10
+            </div>
+          </div>
+
+          <p className="text-sm text-surface-600 dark:text-surface-300 leading-relaxed mb-3">
+            Time can be reduced by adapting restaurant/café practices and batch preparation. Here's an idea for{' '}
+            <span className="text-surface-600 dark:text-surface-300">{dishName}</span>:
+          </p>
+
+          {/* Optimization comment */}
+          {optimizedComment && (
+            <div className="bg-surface-100/80 dark:bg-surface-800/80 rounded-lg p-2.5 mb-3 border-l-2 border-emerald-500">
+              <p className="text-xs text-surface-600 dark:text-surface-300 italic">
+                "{optimizedComment}"
+              </p>
+            </div>
+          )}
+
+          {/* Time comparison */}
+          <div className="grid grid-cols-2 gap-3 mb-3">
+            {/* Prep time */}
+            <div className="bg-surface-100/80 dark:bg-surface-800/80 rounded-lg p-2.5">
+              <div className="text-[10px] text-surface-500 dark:text-surface-400 mb-1">Preparation</div>
+              {prepChanged ? (
+                <div className="flex items-center gap-2">
+                  <span className="font-mono font-bold text-surface-800 dark:text-surface-100">
+                    {prepTimeOptimized} min
+                  </span>
+                  <span className="flex items-center text-emerald-500 dark:text-emerald-400 text-xs">
+                    <ArrowDown size={12} />
+                    {prepReduction} min
+                  </span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <span className="font-mono font-bold text-surface-800 dark:text-surface-100">
+                    {prepTimeOptimized} min
+                  </span>
+                  <span className="text-xs text-surface-400 dark:text-surface-500">unchanged</span>
+                </div>
+              )}
+            </div>
+
+            {/* Cook time */}
+            <div className="bg-surface-100/80 dark:bg-surface-800/80 rounded-lg p-2.5">
+              <div className="text-[10px] text-surface-500 dark:text-surface-400 mb-1">Cooking</div>
+              {cookChanged ? (
+                <div className="flex items-center gap-2">
+                  <span className="font-mono font-bold text-surface-800 dark:text-surface-100">
+                    {cookTimeOptimized} min
+                  </span>
+                  <span className="flex items-center text-emerald-500 dark:text-emerald-400 text-xs">
+                    <ArrowDown size={12} />
+                    {cookReduction} min
+                  </span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <span className="font-mono font-bold text-surface-800 dark:text-surface-100">
+                    {cookTimeOptimized} min
+                  </span>
+                  <span className="text-xs text-surface-400 dark:text-surface-500">unchanged</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Optimization effectiveness assessment */}
+          <div className={`rounded-lg p-2.5 ${isGoodForOptimization ? 'bg-emerald-500/10' : 'bg-amber-500/10'}`}>
+            {isGoodForOptimization ? (
+              <p className="text-xs text-emerald-700 dark:text-emerald-300 leading-relaxed">
+                <span className="font-semibold">Great for optimization!</span> This dish benefits significantly from batch preparation, 
+                with a <span className="font-mono font-semibold">{percentReduction}%</span> time reduction 
+                ({totalTimeNormal} min → {totalTimeOptimized} min).
+              </p>
+            ) : (
+              <p className="text-xs text-amber-700 dark:text-amber-300 leading-relaxed">
+                <span className="font-semibold">Limited optimization potential.</span> While some time can be saved, 
+                this dish doesn't benefit as much from batch preparation 
+                ({percentReduction > 0 ? `only ${percentReduction}% reduction` : 'no significant change'}).
+              </p>
+            )}
+          </div>
+
+        </div>
+      )}
+
+      {/* No optimization available message */}
+      {!prepChanged && !cookChanged && (
+        <div className="bg-surface-200/40 dark:bg-surface-700/40 rounded-lg p-3 border border-surface-300/30 dark:border-surface-600/30">
+          <div className="flex items-center gap-2 mb-2">
+            <Info size={14} className="text-surface-500 dark:text-surface-400" />
+            <span className="text-xs font-semibold text-surface-600 dark:text-surface-300">
+              Optimization Note
+            </span>
+          </div>
+          <p className="text-xs text-surface-500 dark:text-surface-400">
+            This dish doesn't have significant time optimization opportunities — the standard cooking method is already efficient.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/**
  * Carousel/Slider for dish info slides
  */
 export default function InfoSlider({ 
@@ -861,13 +1179,17 @@ export default function InfoSlider({
   unavailableIngredients = [],
   missingIngredients = [],
   missingPrices = [],
+  isOptimized = false,
   liteMotion = false,
+  analysisVariants = null,
+  priceUnit = 'serving',
 }) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const slides = [
     { id: 'overview', label: 'Overview', icon: FileText },
     { id: 'index-map', label: 'Index Map', icon: Map },
+    { id: 'time', label: 'Time', icon: Clock },
     { id: 'health', label: 'Health', icon: Heart },
     { id: 'ethics', label: 'Ethics', icon: Leaf },
   ];
@@ -965,7 +1287,8 @@ export default function InfoSlider({
               />
             )}
             {currentSlide === 1 && <IndexMapSlide dish={dish} ingredientIndex={ingredientIndex} liteMotion={true} />}
-            {currentSlide === 2 && (
+            {currentSlide === 2 && <TimeSlide dish={dish} isOptimized={isOptimized} liteMotion={true} analysisVariants={analysisVariants} priceUnit={priceUnit} />}
+            {currentSlide === 3 && (
               <HealthBreakdownSlide
                 dishName={dishName}
                 dishHealth={dishHealth}
@@ -974,7 +1297,7 @@ export default function InfoSlider({
                 liteMotion={true}
               />
             )}
-            {currentSlide === 3 && (
+            {currentSlide === 4 && (
               <EthicsBreakdownSlide
                 dishName={dishName}
                 dishEthics={dishEthics}
@@ -1003,7 +1326,8 @@ export default function InfoSlider({
                 />
               )}
               {currentSlide === 1 && <IndexMapSlide dish={dish} ingredientIndex={ingredientIndex} liteMotion={false} />}
-              {currentSlide === 2 && (
+              {currentSlide === 2 && <TimeSlide dish={dish} isOptimized={isOptimized} liteMotion={false} analysisVariants={analysisVariants} priceUnit={priceUnit} />}
+              {currentSlide === 3 && (
                 <HealthBreakdownSlide
                   dishName={dishName}
                   dishHealth={dishHealth}
@@ -1012,7 +1336,7 @@ export default function InfoSlider({
                   liteMotion={false}
                 />
               )}
-              {currentSlide === 3 && (
+              {currentSlide === 4 && (
                 <EthicsBreakdownSlide
                   dishName={dishName}
                   dishEthics={dishEthics}

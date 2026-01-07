@@ -8,7 +8,6 @@ import {
   Heart, 
   DollarSign, 
   Clock, 
-  Beef, 
   Flame, 
   Leaf 
 } from 'lucide-react';
@@ -54,14 +53,6 @@ const PRIORITY_CONFIG = [
     description: 'Quick to make'
   },
   { 
-    key: 'satiety', 
-    label: 'Satiety', 
-    icon: Beef, 
-    color: 'from-amber-400 to-orange-500',
-    iconColor: 'text-amber-400',
-    description: 'Filling & satisfying'
-  },
-  { 
     key: 'lowCalorie', 
     label: 'Low-Cal', 
     icon: Flame, 
@@ -78,6 +69,10 @@ const PRIORITY_CONFIG = [
     description: 'Ethical sourcing'
   },
 ];
+
+// Small delay before committing priorities to parent (which triggers ranking/sorting).
+// This lets the slider's last framer-motion tween finish without being interrupted by heavy computation.
+const COMMIT_DELAY_MS = 150;
 
 /**
  * Single vertical slider component styled like audio mixer fader
@@ -278,12 +273,24 @@ export default function PrioritiesPanel({
   const [draft, setDraft] = useState(priorities);
   const [isDragging, setIsDragging] = useState(false);
   const draftRef = useRef(draft);
+  const commitTimeoutRef = useRef(null);
+  const isPendingCommitRef = useRef(false);
   const lastExpandedAtRef = useRef(0);
   
   useEffect(() => { draftRef.current = draft; }, [draft]);
+
+  useEffect(() => {
+    return () => {
+      if (commitTimeoutRef.current) {
+        clearTimeout(commitTimeoutRef.current);
+        commitTimeoutRef.current = null;
+      }
+    };
+  }, []);
   
   useEffect(() => {
-    if (!isDragging) {
+    // Don't sync draft with priorities if there's a pending commit or dragging
+    if (!isDragging && !isPendingCommitRef.current) {
       setDraft(priorities);
     }
   }, [priorities, isDragging]);
@@ -293,7 +300,17 @@ export default function PrioritiesPanel({
     
     const handlePointerUp = () => {
       setIsDragging(false);
-      onPrioritiesChange(draftRef.current);
+      if (commitTimeoutRef.current) {
+        clearTimeout(commitTimeoutRef.current);
+        commitTimeoutRef.current = null;
+      }
+      const commitValue = { ...draftRef.current };
+      isPendingCommitRef.current = true;
+      commitTimeoutRef.current = setTimeout(() => {
+        onPrioritiesChange(commitValue);
+        commitTimeoutRef.current = null;
+        isPendingCommitRef.current = false;
+      }, COMMIT_DELAY_MS);
     };
     
     window.addEventListener('pointerup', handlePointerUp, { once: true });
@@ -400,6 +417,11 @@ export default function PrioritiesPanel({
   const allPrioritiesZero = Object.values(displayed).every(v => v === 0);
 
   const handleDragStart = () => {
+    if (commitTimeoutRef.current) {
+      clearTimeout(commitTimeoutRef.current);
+      commitTimeoutRef.current = null;
+    }
+    isPendingCommitRef.current = false;
     if (!isDragging) setIsDragging(true);
   };
 
@@ -412,6 +434,12 @@ export default function PrioritiesPanel({
     PRIORITY_CONFIG.forEach(config => {
       resetPriorities[config.key] = 0;
     });
+    if (commitTimeoutRef.current) {
+      clearTimeout(commitTimeoutRef.current);
+      commitTimeoutRef.current = null;
+    }
+    isPendingCommitRef.current = false;
+    setIsDragging(false);
     setDraft(resetPriorities);
     onPrioritiesChange(resetPriorities);
   };
