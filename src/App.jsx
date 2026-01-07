@@ -212,10 +212,10 @@ export default function App() {
   return (
     <div className="min-h-screen bg-surface-100 dark:bg-surface-900 pattern-grid transition-colors duration-300">
       {/* Centered container - max width for desktop, full width on mobile */}
-      <div className="mx-auto max-w-md sm:max-w-lg md:max-w-[960px] flex flex-col h-screen 
-                      sm:border-x sm:border-surface-300/50 dark:sm:border-surface-700/50 
-                      sm:shadow-2xl sm:shadow-black/10 dark:sm:shadow-black/30 
-                      bg-white dark:bg-surface-900 sm:bg-white/50 sm:dark:bg-transparent transition-colors duration-300">
+      <div className="mx-auto w-full max-w-[960px] flex flex-col h-screen 
+                      border-x border-surface-300/50 dark:border-surface-700/50 
+                      shadow-2xl shadow-black/10 dark:shadow-black/30 
+                      bg-white dark:bg-surface-900 lg:bg-white/50 lg:dark:bg-transparent transition-colors duration-300">
         {/* Sticky Header - highest z-index for dropdowns */}
         <div className="sticky top-0 z-50">
           <Header

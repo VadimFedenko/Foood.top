@@ -7,6 +7,9 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
+      screens: {
+        'xs': '340px',
+      },
       fontFamily: {
         'display': ['Unbounded', 'system-ui', 'sans-serif'],
         'body': ['DM Sans', 'system-ui', 'sans-serif'],

@@ -13,7 +13,7 @@ export default function Header({
   onThemeToggle
 }) {
   return (
-    <header className="glass border-b border-surface-700/50 dark:border-surface-700/50">
+    <header className="bg-white dark:bg-surface-800 border-b border-surface-700/50 dark:border-surface-700/50">
       <div className="px-4 py-3 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center gap-3">

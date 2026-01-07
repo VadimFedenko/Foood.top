@@ -200,48 +200,65 @@ function VerticalSlider({ config, value, onChange, onDragStart }) {
 }
 
 /**
- * Chip showing active priority in collapsed state
+ * Compact priority icon for collapsed state on mobile
+ * Shows icon with small value indicator - similar to expanded panel style
  */
-function PriorityChip({ config, value }) {
+function CompactPriorityIcon({ config, value }) {
   const Icon = config.icon;
   const isPositive = value > 0;
+  const isMax = value === 10 || value === -10;
 
   return (
-    <motion.div
-      initial={{ scale: 0.8, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      exit={{ scale: 0.8, opacity: 0 }}
-      className={`
-        inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full
-        text-xs font-semibold
-        ${isPositive 
-          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' 
-          : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
-        }
-      `}
-    >
-      <Icon size={12} />
-      <span>{config.label}</span>
-      <span className="font-mono">{value === 10 ? 'max' : value === -10 ? 'min' : (value > 0 ? '+' : '') + value}</span>
-    </motion.div>
+    <div className="flex flex-col items-center gap-0.5">
+      <div 
+        className={`
+          relative w-8 h-8 rounded-lg flex items-center justify-center
+          ${isPositive 
+            ? 'bg-emerald-500/20 border border-emerald-500/40' 
+            : 'bg-rose-500/20 border border-rose-500/40'
+          }
+        `}
+      >
+        <Icon size={16} className={config.iconColor} />
+        {/* Small value badge */}
+        <div 
+          className={`
+            absolute -top-1 -right-1 min-w-[14px] h-3.5 px-0.5
+            rounded text-[9px] font-bold flex items-center justify-center
+            ${(value === 10 || value === -10) ? 'min-w-[24px]' : ''}
+            ${isPositive 
+              ? 'bg-emerald-500 text-white' 
+              : 'bg-rose-500 text-white'
+            }
+          `}
+        >
+          {value === 10 ? 'max↑' : value === -10 ? 'min↓' : (isPositive ? '+' : '') + value}
+        </div>
+      </div>
+      <span className="text-[9px] text-surface-400 font-medium truncate max-w-[40px]">
+        {config.label}
+      </span>
+    </div>
   );
 }
 
 /**
- * Chip showing selected economic zone in collapsed state
+ * Compact zone indicator for collapsed state on mobile
  */
-function ZoneChip({ zoneId }) {
+function CompactZoneIcon({ zoneId }) {
   const zone = ECONOMIC_ZONES[zoneId];
   return (
-    <motion.div
-      initial={{ scale: 0.8, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      exit={{ scale: 0.8, opacity: 0 }}
-      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30"
-    >
-      <span className="text-sm">{zone.emoji}</span>
-      <span>{zone.name}</span>
-    </motion.div>
+    <div className="flex flex-col items-center gap-0.5">
+      <div 
+        className="w-8 h-8 rounded-lg flex items-center justify-center
+          bg-blue-500/20 border border-blue-500/40"
+      >
+        <span className="text-base">{zone.emoji}</span>
+      </div>
+      <span className="text-[9px] text-surface-400 font-medium truncate max-w-[40px]">
+        {zone.name}
+      </span>
+    </div>
   );
 }
 
@@ -445,7 +462,7 @@ export default function PrioritiesPanel({
   };
 
   return (
-    <div className="glass border-b border-surface-300/50 dark:border-surface-700/50">
+    <div className="bg-white dark:bg-surface-800 border-b border-surface-300/50 dark:border-surface-700/50">
       {/* Header - always visible */}
       <div className="px-4 py-3">
         {isExpanded ? (
@@ -469,8 +486,8 @@ export default function PrioritiesPanel({
               </motion.button>
             </div>
 
-            {/* Right header: map */}
-            <div className="flex items-center justify-between">
+            {/* Right header: map - скрываем на узких экранах */}
+            <div className="hidden md:flex items-center justify-between">
               <h2 className="font-display font-semibold text-lg text-surface-800 dark:text-surface-100">
                 Economic Zone
               </h2>
@@ -482,78 +499,55 @@ export default function PrioritiesPanel({
                 <ChevronUp size={20} className="text-surface-500 dark:text-surface-300" />
               </button>
             </div>
+            
+            {/* Кнопка сворачивания для узких экранов */}
+            <div className="md:hidden flex items-center justify-end">
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="p-2 rounded-lg hover:bg-surface-200/50 dark:hover:bg-surface-700/50 transition-colors"
+                aria-label="Collapse panels"
+              >
+                <ChevronUp size={20} className="text-surface-500 dark:text-surface-300" />
+              </button>
+            </div>
           </div>
         ) : (
-          <div className="flex items-center justify-between gap-3">
-            <button
-              onClick={() => {
-                setIsExpanded(true);
-                if (onCollapseExpandedDish) {
-                  onCollapseExpandedDish();
-                }
-              }}
-              className="flex items-center gap-3 min-w-0 hover:opacity-80 transition-opacity"
-            >
-              <h2 className="font-display font-semibold text-lg text-surface-800 dark:text-surface-100 whitespace-nowrap">
-                My Priorities
-              </h2>
-              {(activePriorities.length > 0 || selectedZone) && (
-                <div className="flex flex-wrap gap-1.5 min-w-0">
-                  {lite ? (
-                    <>
-                      {activePriorities.map(config => (
-                        <div
-                          key={config.key}
-                          className={`
-                            inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full
-                            text-xs font-semibold
-                            ${displayed[config.key] > 0
-                              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                              : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
-                            }
-                          `}
-                        >
-                          <config.icon size={12} />
-                          <span>{config.label}</span>
-                          <span className="font-mono">
-                            {displayed[config.key] === 10 ? 'max' : displayed[config.key] === -10 ? 'min' : (displayed[config.key] > 0 ? '+' : '') + displayed[config.key]}
-                          </span>
-                        </div>
-                      ))}
-                      {selectedZone && (
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
-                          <span className="text-sm">{ECONOMIC_ZONES[selectedZone]?.emoji}</span>
-                          <span>{ECONOMIC_ZONES[selectedZone]?.name}</span>
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    <AnimatePresence mode="popLayout">
-                      {activePriorities.map(config => (
-                        <PriorityChip
+          <>
+            {/* Collapsed view - compact icon grid for all screens */}
+            <div>
+              <button
+                onClick={() => {
+                  setIsExpanded(true);
+                  if (onCollapseExpandedDish) {
+                    onCollapseExpandedDish();
+                  }
+                }}
+                className="w-full flex items-center justify-between gap-3 hover:opacity-80 transition-opacity"
+              >
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <h2 className="hidden min-[480px]:block font-display font-semibold text-lg text-surface-800 dark:text-surface-100 whitespace-nowrap">
+                    My Priorities
+                  </h2>
+                  {/* Compact icons row */}
+                  <div className="flex items-center gap-1.5 overflow-x-auto py-1 hide-scrollbar">
+                    {activePriorities.length > 0 ? (
+                      activePriorities.map(config => (
+                        <CompactPriorityIcon
                           key={config.key}
                           config={config}
                           value={displayed[config.key]}
                         />
-                      ))}
-                      {selectedZone && <ZoneChip key="zone" zoneId={selectedZone} />}
-                    </AnimatePresence>
-                  )}
+                      ))
+                    ) : (
+                      <span className="text-xs text-surface-400 italic">No priorities set</span>
+                    )}
+                    {selectedZone && <CompactZoneIcon zoneId={selectedZone} />}
+                  </div>
                 </div>
-              )}
-            </button>
-            <button
-              onClick={() => {
-                setIsExpanded(true);
-                if (onCollapseExpandedDish) {
-                  onCollapseExpandedDish();
-                }
-              }}
-              className="p-2 rounded-lg hover:bg-surface-200/50 dark:hover:bg-surface-700/50 transition-colors"
-            >
-              <ChevronDown size={20} className="text-surface-500 dark:text-surface-300" />
-            </button>
-          </div>
+                <ChevronDown size={20} className="text-surface-500 dark:text-surface-300 flex-shrink-0" />
+              </button>
+            </div>
+          </>
         )}
       </div>
 
@@ -567,15 +561,6 @@ export default function PrioritiesPanel({
                 <div className="flex-1 bg-white/60 dark:bg-surface-800/80 rounded-xl p-4 border border-surface-300/50 dark:border-surface-700/50 shadow-sm dark:shadow-none">
                   {/* Scale markers on the side */}
                   <div className="flex">
-                    {/* Left scale */}
-                    <div className="hidden sm:flex flex-col justify-between h-[140px] pr-3 py-1 text-[10px] text-surface-500 dark:text-surface-500 font-mono">
-                      <span>+10</span>
-                      <span>+5</span>
-                      <span>0</span>
-                      <span>-5</span>
-                      <span>-10</span>
-                    </div>
-
                     {/* Sliders grid */}
                     <div className="flex-1 flex justify-around items-start gap-1 sm:gap-4 overflow-x-auto pb-2">
                       {PRIORITY_CONFIG.map(config => (
@@ -607,8 +592,8 @@ export default function PrioritiesPanel({
                   )}
                 </div>
 
-                {/* Right: economic zone (square) */}
-                <div className="md:w-[260px] bg-white/60 dark:bg-surface-800/80 rounded-xl p-3 border border-surface-300/50 dark:border-surface-700/50 shadow-sm dark:shadow-none">
+                {/* Right: economic zone (square) - скрываем карту на узких экранах */}
+                <div className="hidden md:block md:w-[260px] bg-white/60 dark:bg-surface-800/80 rounded-xl p-3 border border-surface-300/50 dark:border-surface-700/50 shadow-sm dark:shadow-none">
                   <div className="w-full" style={{ height: '180px' }}>
                     <WorldMapWidget
                       variant="square"
@@ -618,6 +603,27 @@ export default function PrioritiesPanel({
                   </div>
 
                   <div className="mt-2 relative">
+                    <button
+                      ref={zoneButtonRefLite}
+                      onClick={handleZoneButtonClick}
+                      className="flex items-center gap-2 text-sm font-medium text-surface-700 dark:text-surface-200 hover:opacity-80 transition-opacity w-full text-left"
+                    >
+                      <span className="text-lg">{ECONOMIC_ZONES[selectedZone]?.emoji}</span>
+                      <span className="truncate flex-1">{ECONOMIC_ZONES[selectedZone]?.name}</span>
+                      <ChevronDown 
+                        size={16} 
+                        className={`text-surface-500 dark:text-surface-400 transition-transform ${isZoneDropdownOpen ? 'rotate-180' : ''}`}
+                      />
+                    </button>
+                  </div>
+                  <div className="mt-1 text-[11px] text-surface-500 dark:text-surface-400 leading-snug">
+                    Select an economic zone to calculate local prices
+                  </div>
+                </div>
+                
+                {/* Выпадающее меню для узких экранов - показываем только когда карта скрыта */}
+                <div className="md:hidden bg-white/60 dark:bg-surface-800/80 rounded-xl p-3 border border-surface-300/50 dark:border-surface-700/50 shadow-sm dark:shadow-none">
+                  <div className="relative">
                     <button
                       ref={zoneButtonRefLite}
                       onClick={handleZoneButtonClick}
@@ -655,15 +661,6 @@ export default function PrioritiesPanel({
                   <div className="flex-1 bg-white/60 dark:bg-surface-800/80 rounded-xl p-4 border border-surface-300/50 dark:border-surface-700/50 shadow-sm dark:shadow-none">
                     {/* Scale markers on the side */}
                     <div className="flex">
-                      {/* Left scale */}
-                      <div className="hidden sm:flex flex-col justify-between h-[140px] pr-3 py-1 text-[10px] text-surface-500 dark:text-surface-500 font-mono">
-                        <span>+10</span>
-                        <span>+5</span>
-                        <span>0</span>
-                        <span>-5</span>
-                        <span>-10</span>
-                      </div>
-
                       {/* Sliders grid */}
                       <div className="flex-1 flex justify-around items-start gap-1 sm:gap-4 overflow-x-auto pb-2">
                         {PRIORITY_CONFIG.map(config => (
@@ -699,8 +696,8 @@ export default function PrioritiesPanel({
                     )}
                   </div>
 
-                  {/* Right: economic zone (square) */}
-                  <div className="md:w-[260px] bg-white/60 dark:bg-surface-800/80 rounded-xl p-3 border border-surface-300/50 dark:border-surface-700/50 shadow-sm dark:shadow-none">
+                  {/* Right: economic zone (square) - скрываем карту на узких экранах */}
+                  <div className="hidden md:block md:w-[260px] bg-white/60 dark:bg-surface-800/80 rounded-xl p-3 border border-surface-300/50 dark:border-surface-700/50 shadow-sm dark:shadow-none">
                     <div className="w-full" style={{ height: '180px' }}>
                       <WorldMapWidget
                         variant="square"
@@ -710,6 +707,27 @@ export default function PrioritiesPanel({
                     </div>
 
                     <div className="mt-2 relative">
+                      <button
+                        ref={zoneButtonRef}
+                        onClick={handleZoneButtonClick}
+                        className="flex items-center gap-2 text-sm font-medium text-surface-700 dark:text-surface-200 hover:opacity-80 transition-opacity w-full text-left"
+                      >
+                        <span className="text-lg">{ECONOMIC_ZONES[selectedZone]?.emoji}</span>
+                        <span className="truncate flex-1">{ECONOMIC_ZONES[selectedZone]?.name}</span>
+                        <ChevronDown 
+                          size={16} 
+                          className={`text-surface-500 dark:text-surface-400 transition-transform ${isZoneDropdownOpen ? 'rotate-180' : ''}`}
+                        />
+                      </button>
+                    </div>
+                    <div className="mt-1 text-[11px] text-surface-500 dark:text-surface-400 leading-snug">
+                      Select an economic zone to calculate local prices
+                    </div>
+                  </div>
+                  
+                  {/* Выпадающее меню для узких экранов */}
+                  <div className="md:hidden bg-white/60 dark:bg-surface-800/80 rounded-xl p-3 border border-surface-300/50 dark:border-surface-700/50 shadow-sm dark:shadow-none">
+                    <div className="relative">
                       <button
                         ref={zoneButtonRef}
                         onClick={handleZoneButtonClick}

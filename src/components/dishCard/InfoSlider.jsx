@@ -399,28 +399,33 @@ function HealthBreakdownSlide({ dishName, dishHealth, ingredients, ingredientInd
         )}
       </div>
 
-      {/* Health legend */}
-      <div className="flex items-center justify-between text-[10px] text-surface-500 dark:text-surface-500 px-1 mb-2">
-        <div className="flex items-center gap-3">
-          <span className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-emerald-500" />
-            Excellent
+      {/* Health legend - compact on mobile */}
+      <div className="flex items-center justify-center text-[9px] sm:text-[10px] text-surface-500 dark:text-surface-500 px-1 mb-2 overflow-x-auto hide-scrollbar">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <span className="flex items-center gap-0.5 sm:gap-1 whitespace-nowrap">
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500" />
+            <span className="hidden sm:inline">Excellent</span>
+            <span className="sm:hidden">9-10</span>
           </span>
-          <span className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-lime-500" />
-            Good
+          <span className="flex items-center gap-0.5 sm:gap-1 whitespace-nowrap">
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-lime-500" />
+            <span className="hidden sm:inline">Good</span>
+            <span className="sm:hidden">7-8</span>
           </span>
-          <span className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-amber-500" />
-            Moderate
+          <span className="flex items-center gap-0.5 sm:gap-1 whitespace-nowrap">
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-500" />
+            <span className="hidden sm:inline">Moderate</span>
+            <span className="sm:hidden">5-6</span>
           </span>
-          <span className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-orange-500" />
-            Low
+          <span className="flex items-center gap-0.5 sm:gap-1 whitespace-nowrap">
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-orange-500" />
+            <span className="hidden sm:inline">Low</span>
+            <span className="sm:hidden">3-4</span>
           </span>
-          <span className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-red-500" />
-            Very Low
+          <span className="flex items-center gap-0.5 sm:gap-1 whitespace-nowrap">
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-red-500" />
+            <span className="hidden sm:inline">Very Low</span>
+            <span className="sm:hidden">0-2</span>
           </span>
         </div>
       </div>
@@ -510,15 +515,15 @@ function HealthBreakdownSlide({ dishName, dishHealth, ingredients, ingredientInd
 
       {/* Footer: cooking impact legend */}
       <div className="pt-2 border-t border-surface-300/30 dark:border-surface-700/30">
-        <div className="flex items-center justify-center gap-4 text-[9px] text-surface-500 dark:text-surface-500">
-          <span>Cooking impact:</span>
-          <span className="flex items-center gap-1">
+        <div className="flex items-center justify-center gap-2 sm:gap-4 text-[8px] sm:text-[9px] text-surface-500 dark:text-surface-500 flex-wrap">
+          <span className="hidden sm:inline">Cooking impact:</span>
+          <span className="flex items-center gap-0.5 sm:gap-1">
             <span className="text-emerald-500 dark:text-emerald-400">+</span> Enhances
           </span>
-          <span className="flex items-center gap-1">
+          <span className="flex items-center gap-0.5 sm:gap-1">
             <span className="text-teal-500 dark:text-teal-400">≈</span> Preserves
           </span>
-          <span className="flex items-center gap-1">
+          <span className="flex items-center gap-0.5 sm:gap-1">
             <span className="text-amber-500 dark:text-amber-400">−</span> Reduces
           </span>
         </div>
@@ -630,9 +635,9 @@ function IndexMapSlide({ dish, ingredientIndex, liteMotion = false }) {
   }, [sortedBreakdown]);
 
   return (
-    <div className="flex gap-3 min-h-[220px]">
+    <div className="flex flex-col sm:flex-row gap-3 min-h-[220px]">
       {/* Left: Map */}
-      <div className="flex-shrink-0 w-[380px] relative">
+      <div className="w-full sm:flex-shrink-0 sm:w-[380px] relative">
         {/* Map container */}
         <div className="rounded-md overflow-hidden">
           <EconomicZonesSvgMap
@@ -1224,20 +1229,20 @@ export default function InfoSlider({
   return (
     <div className="bg-surface-100/80 dark:bg-surface-800/80 rounded-lg overflow-hidden">
       {/* Header with tabs */}
-      <div className="flex items-center justify-between px-3 py-2 border-b border-surface-300/50 dark:border-surface-700/50">
+      <div className="flex items-center justify-between px-2 sm:px-3 py-2 border-b border-surface-300/50 dark:border-surface-700/50">
         {/* Left arrow */}
         <button
           onClick={(e) => {
             e.stopPropagation();
             goPrev();
           }}
-          className="p-1.5 rounded-lg text-surface-500 dark:text-surface-400 hover:text-surface-700 dark:hover:text-surface-200 hover:bg-surface-200/50 dark:hover:bg-surface-700/50 transition-colors"
+          className="p-1 sm:p-1.5 rounded-lg text-surface-500 dark:text-surface-400 hover:text-surface-700 dark:hover:text-surface-200 hover:bg-surface-200/50 dark:hover:bg-surface-700/50 transition-colors flex-shrink-0"
         >
-          <ChevronLeft size={18} />
+          <ChevronLeft size={16} className="sm:w-[18px] sm:h-[18px]" />
         </button>
 
         {/* Tab indicators */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1 sm:gap-3 overflow-x-auto hide-scrollbar">
           {slides.map((slide, idx) => {
             const Icon = slide.icon;
             const isActive = idx === currentSlide;
@@ -1249,9 +1254,12 @@ export default function InfoSlider({
                   goToSlide(idx);
                 }}
                 className={`
-                  flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium
-                  transition-all duration-200
-                  ${isActive ? 'bg-food-500/20 text-food-600 dark:text-food-400 border border-food-500/30' : 'text-surface-500 dark:text-surface-400 hover:text-surface-700 dark:hover:text-surface-200 hover:bg-surface-200/30 dark:hover:bg-surface-700/30'}
+                  flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-xs font-medium
+                  transition-all duration-200 flex-shrink-0
+                  ${isActive 
+                    ? 'bg-food-500/20 text-food-600 dark:text-food-400 border border-food-500/30' 
+                    : 'text-surface-500 dark:text-surface-400 hover:text-surface-700 dark:hover:text-surface-200 hover:bg-surface-200/30 dark:hover:bg-surface-700/30'
+                  }
                 `}
               >
                 <Icon size={14} />
@@ -1267,9 +1275,9 @@ export default function InfoSlider({
             e.stopPropagation();
             goNext();
           }}
-          className="p-1.5 rounded-lg text-surface-500 dark:text-surface-400 hover:text-surface-700 dark:hover:text-surface-200 hover:bg-surface-200/50 dark:hover:bg-surface-700/50 transition-colors"
+          className="p-1 sm:p-1.5 rounded-lg text-surface-500 dark:text-surface-400 hover:text-surface-700 dark:hover:text-surface-200 hover:bg-surface-200/50 dark:hover:bg-surface-700/50 transition-colors flex-shrink-0"
         >
-          <ChevronRight size={18} />
+          <ChevronRight size={16} className="sm:w-[18px] sm:h-[18px]" />
         </button>
       </div>
 

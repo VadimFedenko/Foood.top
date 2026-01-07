@@ -19,22 +19,22 @@ function StatsBar({
 }) {
   return (
     <div className="space-y-2">
-      <div className="grid grid-cols-[1fr_auto] items-center gap-3 px-1 text-sm text-surface-500 dark:text-surface-400 min-h-[28px]">
+      <div className="flex flex-col xs:flex-row xs:items-center gap-2 xs:gap-3 px-1 text-sm text-surface-500 dark:text-surface-400 min-h-[28px]">
         {/* Search bar */}
-        <div className="relative min-w-0">
+        <div className="relative flex-1 min-w-0">
           <Search 
-            size={18} 
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-surface-400" 
+            size={16} 
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-surface-400 sm:w-[18px] sm:h-[18px]" 
           />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search dishes..."
-            className="w-full pl-10 pr-10 py-2.5 rounded-xl
+            className="w-full pl-9 sm:pl-10 pr-8 sm:pr-10 py-2 sm:py-2.5 rounded-xl
                        bg-white/80 dark:bg-surface-800/80 
                        border border-surface-300/50 dark:border-surface-700/50
-                       text-surface-800 dark:text-surface-100 
+                       text-sm text-surface-800 dark:text-surface-100 
                        placeholder:text-surface-400 dark:placeholder:text-surface-500
                        focus:outline-none focus:border-food-500/50
                        transition-colors shadow-sm dark:shadow-none"
@@ -45,14 +45,14 @@ function StatsBar({
               className="absolute right-3 top-1/2 -translate-y-1/2 
                          text-surface-400 hover:text-surface-600 dark:hover:text-surface-200"
             >
-              <X size={16} />
+              <X size={14} className="sm:w-4 sm:h-4" />
             </button>
           )}
         </div>
         
         {/* Right: Price per */}
-        <div className="flex items-center gap-2 whitespace-nowrap">
-          <span className="hidden sm:inline text-xs font-semibold text-surface-500 dark:text-surface-400">
+        <div className="flex items-center justify-between xs:justify-end gap-2 whitespace-nowrap">
+          <span className="text-xs font-semibold text-surface-500 dark:text-surface-400">
             Price per
           </span>
           <PriceUnitToggle 

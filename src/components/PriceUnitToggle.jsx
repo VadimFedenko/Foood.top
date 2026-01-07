@@ -37,22 +37,8 @@ const PRICE_UNIT_OPTIONS = [
  * A beautiful segmented control for switching price display units
  */
 export default function PriceUnitToggle({ priceUnit, onPriceUnitChange }) {
-  const selectedIndex = PRICE_UNIT_OPTIONS.findIndex(opt => opt.id === priceUnit);
-
   return (
     <div className="relative flex items-center bg-surface-100/80 dark:bg-surface-800/80 rounded-lg p-0.5 border border-surface-300/50 dark:border-surface-700/50">
-      {/* Animated background indicator */}
-      <motion.div
-        className="absolute inset-y-0.5 rounded-md bg-gradient-to-r from-food-500/30 to-food-600/30 border border-food-500/40"
-        initial={false}
-        animate={{
-          x: selectedIndex * 88 + 2,
-          width: 86,
-        }}
-        transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-        style={{ left: 0 }}
-      />
-
       {/* Options */}
       {PRICE_UNIT_OPTIONS.map((option) => {
         const Icon = option.icon;
@@ -63,8 +49,8 @@ export default function PriceUnitToggle({ priceUnit, onPriceUnitChange }) {
             key={option.id}
             onClick={() => onPriceUnitChange(option.id)}
             className={`
-              relative z-10 flex items-center justify-center gap-1
-              w-[88px] py-1 px-2 rounded-md
+              relative flex items-center justify-center gap-1
+              w-10 sm:w-[88px] py-1 px-0 sm:px-2 rounded-md
               text-xs font-semibold
               transition-colors duration-200
               ${isSelected 
@@ -73,13 +59,25 @@ export default function PriceUnitToggle({ priceUnit, onPriceUnitChange }) {
               }
             `}
             title={option.description}
+            aria-label={option.description}
           >
+            {/* Animated background indicator (auto-sizes to the selected button) */}
+            {isSelected && (
+              <motion.div
+                layoutId="price-unit-indicator"
+                className="absolute inset-0 rounded-md bg-gradient-to-r from-food-500/30 to-food-600/30 border border-food-500/40"
+                transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+              />
+            )}
+
+            <span className="relative z-10 flex items-center justify-center gap-1">
             <Icon 
-              size={12} 
+              size={12}
               className={`transition-transform duration-200 ${isSelected ? 'scale-110' : ''}`} 
             />
             <span className="hidden sm:inline">{option.label}</span>
-            <span className="sm:hidden">{option.shortLabel}</span>
+            <span className="sm:hidden sr-only">{option.label}</span>
+            </span>
           </button>
         );
       })}

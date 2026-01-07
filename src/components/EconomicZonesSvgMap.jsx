@@ -160,7 +160,7 @@ const EconomicZonesSvgMap = memo(function EconomicZonesSvgMap({
       
       {/* Hover tooltip */}
       {showTooltip && tooltipContent && (
-        <div className="absolute top-1.5 left-1.5 bg-surface-800/95 backdrop-blur-sm rounded-md px-2 py-1.5 border border-surface-600/50 shadow-lg z-10">
+        <div className="absolute top-1.5 left-1.5 bg-surface-800 rounded-md px-2 py-1.5 border border-surface-600/50 shadow-lg z-10">
           <div className="flex items-center gap-1.5">
             <span className="text-sm">{tooltipContent.emoji}</span>
             <span className="text-xs font-medium text-surface-100">{tooltipContent.name}</span>

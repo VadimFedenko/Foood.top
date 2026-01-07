@@ -19,6 +19,33 @@ import {
 } from './dishCardUtils';
 
 /**
+ * Hook to check if window width is less than 340px
+ */
+function useIsNarrow() {
+  const [isNarrow, setIsNarrow] = useState(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return false;
+    return window.matchMedia('(max-width: 339px)').matches;
+  });
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+
+    const mq = window.matchMedia('(max-width: 339px)');
+    const onChange = () => setIsNarrow(mq.matches);
+
+    if (mq.addEventListener) {
+      mq.addEventListener('change', onChange);
+      return () => mq.removeEventListener('change', onChange);
+    }
+
+    mq.addListener(onChange);
+    return () => mq.removeListener(onChange);
+  }, []);
+
+  return isNarrow;
+}
+
+/**
  * Main Dish Card Component
  * Compact view with expandable details
  */
@@ -27,6 +54,7 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
   const scoreColors = getScoreColor(dish.score);
   const reduceMotion = useReducedMotion();
   const isMobile = useIsMobile();
+  const isNarrow = useIsNarrow();
   const lite = isMobile || reduceMotion;
 
   const [draftOverrides, setDraftOverrides] = useState(overrides);
@@ -205,8 +233,8 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
     return dish.calories ?? 0;
   })();
 
-  const kcalPer100g = (dish?.weight ?? 0) > 0 && (dish?.calories ?? 0) > 0
-    ? ((effectiveCalories / dish.weight) * 100)
+  const calPerG = (dish?.weight ?? 0) > 0 && (dish?.calories ?? 0) > 0
+    ? ((effectiveCalories / dish.weight) * 1000 / 100) // Convert kcal to cal and divide by 100 to get per gram
     : 0;
 
   const handleResetOverrides = () => {
@@ -351,8 +379,15 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
             )}
           </div>
           
-          {/* Metric indicators row */}
-          <div className="flex items-center mt-1.5 gap-6 flex-wrap">
+          {/* Metric indicators - responsive grid */}
+          {/* Mobile: 2 rows x 3 cols, Desktop: single row */}
+          <div className={`
+            mt-1.5 
+            ${isExpanded 
+              ? 'grid grid-cols-3 sm:flex sm:flex-wrap gap-x-3 gap-y-1.5 sm:gap-4' 
+              : 'grid grid-cols-3 sm:flex gap-x-4 gap-y-1 sm:gap-6'
+            }
+          `}>
             <MetricIndicator
               icon={Utensils}
               value={effectiveTaste}
@@ -364,6 +399,7 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
               isOverridden={draftOverrides.taste !== undefined || draftOverrides.tasteMul !== undefined}
               isAtMin={effectiveTaste <= 0}
               isAtMax={effectiveTaste >= 10}
+              compact={!isExpanded && isMobile}
             />
             <MetricIndicator
               icon={Heart}
@@ -376,17 +412,19 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
               isOverridden={draftOverrides.health !== undefined || draftOverrides.healthMul !== undefined}
               isAtMin={effectiveHealth <= 0}
               isAtMax={effectiveHealth >= 10}
+              compact={!isExpanded && isMobile}
             />
             <MetricIndicator
               icon={DollarSign}
               value={effectivePrice}
-              format={(v) => `$${v.toFixed(2)}`}
+              format={(v) => v.toFixed(2)}
               isEditing={isExpanded}
               onIncrement={() => handlePriceChangePct(stepPct)}
               onDecrement={() => handlePriceChangePct(-stepPct)}
               onEditEnd={commitNow}
               isOverridden={draftOverrides.price !== undefined || draftOverrides.priceMul !== undefined}
               isAtMin={effectiveBasePriceServing <= 0.01}
+              compact={!isExpanded && isMobile}
             />
             <MetricIndicator
               icon={Clock}
@@ -398,17 +436,19 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
               onEditEnd={commitNow}
               isOverridden={draftOverrides.time !== undefined || draftOverrides.timeMul !== undefined}
               isAtMin={effectiveTime <= 1}
+              compact={!isExpanded && isMobile}
             />
             <MetricIndicator
               icon={Flame}
-              value={kcalPer100g}
-              format={(v) => `${v.toFixed(0)}kcal/100g`}
+              value={calPerG}
+              format={(v) => isNarrow ? `${Math.round(v)}` : `${Math.round(v)}cal/g`}
               isEditing={isExpanded}
               onIncrement={() => handleCaloriesChangePct(stepPct)}
               onDecrement={() => handleCaloriesChangePct(-stepPct)}
               onEditEnd={commitNow}
               isOverridden={draftOverrides.calories !== undefined || draftOverrides.caloriesMul !== undefined}
               isAtMin={effectiveCalories <= 0}
+              compact={!isExpanded && isMobile}
             />
             <MetricIndicator
               icon={Leaf}
@@ -421,6 +461,7 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
               isOverridden={draftOverrides.ethics !== undefined || draftOverrides.ethicsMul !== undefined}
               isAtMin={effectiveEthics <= 0}
               isAtMax={effectiveEthics >= 10}
+              compact={!isExpanded && isMobile}
             />
           </div>
         </div>
