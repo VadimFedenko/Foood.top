@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Clock,
@@ -16,6 +17,33 @@ import {
   Zap,
   Timer,
 } from 'lucide-react';
+
+/**
+ * Hook to check if screen is narrow (< 420px)
+ */
+function useIsCompactScreen() {
+  const [isCompact, setIsCompact] = useState(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return false;
+    return window.matchMedia('(max-width: 419px)').matches;
+  });
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+
+    const mq = window.matchMedia('(max-width: 419px)');
+    const onChange = () => setIsCompact(mq.matches);
+
+    if (mq.addEventListener) {
+      mq.addEventListener('change', onChange);
+      return () => mq.removeEventListener('change', onChange);
+    }
+
+    mq.addListener(onChange);
+    return () => mq.removeListener(onChange);
+  }, []);
+
+  return isCompact;
+}
 import { ECONOMIC_ZONES, calculateDishCost, getCookingCoef, normalizeIngredientName, getPassiveTimePenalty } from '../../lib/RankingEngine';
 import EconomicZonesSvgMap from '../EconomicZonesSvgMap';
 import { getCookingEffect, getCookingLabel, getEthicsColor, getHealthColor, getPriceColor } from '../dishCardUtils';
@@ -56,7 +84,7 @@ function ScoreBar({ label, value, maxValue = 10, color }) {
 /**
  * Ingredients list in two columns
  */
-function IngredientsList({ ingredients }) {
+function IngredientsList({ ingredients, isCompact = false }) {
   if (!ingredients || ingredients.length === 0) return null;
   
   // Split into two columns
@@ -65,12 +93,12 @@ function IngredientsList({ ingredients }) {
   const rightColumn = ingredients.slice(midpoint);
   
   return (
-    <div className="bg-surface-100/80 dark:bg-surface-800/80 rounded-lg p-3">
-      <h4 className="text-sm font-semibold text-surface-700 dark:text-surface-200 mb-2">
+    <div className={`bg-surface-100/80 dark:bg-surface-800/80 rounded-lg ${isCompact ? 'p-2' : 'p-3'}`}>
+      <h4 className={`text-sm font-semibold text-surface-700 dark:text-surface-200 ${isCompact ? 'mb-1.5' : 'mb-2'}`}>
         Ingredients
       </h4>
-      <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-        <div className="space-y-1">
+      <div className={`grid grid-cols-2 ${isCompact ? 'gap-x-2 gap-y-0.5' : 'gap-x-4 gap-y-1'}`}>
+        <div className={isCompact ? 'space-y-0.5' : 'space-y-1'}>
           {leftColumn.map((ing, idx) => (
             <div key={idx} className="text-xs text-surface-600 dark:text-surface-300 flex justify-between">
               <span className="truncate pr-2">{ing.name}</span>
@@ -78,7 +106,7 @@ function IngredientsList({ ingredients }) {
             </div>
           ))}
         </div>
-        <div className="space-y-1">
+        <div className={isCompact ? 'space-y-0.5' : 'space-y-1'}>
           {rightColumn.map((ing, idx) => (
             <div key={idx} className="text-xs text-surface-600 dark:text-surface-300 flex justify-between">
               <span className="truncate pr-2">{ing.name}</span>
@@ -87,6 +115,55 @@ function IngredientsList({ ingredients }) {
           ))}
         </div>
       </div>
+    </div>
+  );
+}
+
+/**
+ * Collapsible description component
+ */
+function CollapsibleDescription({ description, isCompact }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  
+  if (!description) return null;
+  
+  // Get first sentence or first line for collapsed view
+  const firstPart = description.split(/[.!?]\s/)[0] + (description.includes('.') ? '.' : '');
+  const hasMore = description.length > firstPart.length + 10;
+  
+  if (!isCompact || !hasMore) {
+    // Show full description on larger screens
+    return (
+      <div className="bg-surface-100/80 dark:bg-surface-800/80 rounded-lg p-2 sm:p-3">
+        <p className="text-xs sm:text-sm text-surface-600 dark:text-surface-300 leading-relaxed">
+          {description}
+        </p>
+      </div>
+    );
+  }
+  
+  return (
+    <div className="bg-surface-100/80 dark:bg-surface-800/80 rounded-lg p-2">
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsExpanded(!isExpanded);
+        }}
+        className="w-full text-left"
+      >
+        <p className="text-xs text-surface-600 dark:text-surface-300 leading-relaxed inline-flex items-start gap-1">
+          <span>
+            {isExpanded ? description : firstPart}
+            {!isExpanded && hasMore && <span className="text-surface-500">:</span>}
+          </span>
+          {!isExpanded && hasMore && (
+            <ChevronDown 
+              size={14} 
+              className={`flex-shrink-0 mt-0.5 text-surface-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} 
+            />
+          )}
+        </p>
+      </button>
     </div>
   );
 }
@@ -104,13 +181,14 @@ function OverviewSlide({
   const hasUnavailableIngredients = unavailableIngredients && unavailableIngredients.length > 0;
   const hasDataWarnings = (missingIngredients && missingIngredients.length > 0) || (missingPrices && missingPrices.length > 0);
   const ingredients = dish?.originalDish?.ingredients || [];
+  const isCompact = useIsCompactScreen();
 
   return (
-    <div className="space-y-4">
+    <div className={`${isCompact ? 'space-y-2' : 'space-y-4'}`}>
       {/* Unavailable ingredients notification */}
       {hasUnavailableIngredients && (
-        <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
-          <div className="flex items-center gap-2 text-blue-300 mb-2">
+        <div className={`bg-blue-500/10 border border-blue-500/30 rounded-lg ${isCompact ? 'p-2' : 'p-3'}`}>
+          <div className="flex items-center gap-2 text-blue-300 mb-1.5 sm:mb-2">
             <Info size={14} />
             <span className="text-xs font-semibold">Dish cannot be prepared in your region</span>
           </div>
@@ -127,8 +205,8 @@ function OverviewSlide({
 
       {/* Data warnings */}
       {hasDataWarnings && (
-        <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3">
-          <div className="flex items-center gap-2 text-amber-300 mb-2">
+        <div className={`bg-amber-500/10 border border-amber-500/30 rounded-lg ${isCompact ? 'p-2' : 'p-3'}`}>
+          <div className="flex items-center gap-2 text-amber-300 mb-1.5 sm:mb-2">
             <AlertTriangle size={14} />
             <span className="text-xs font-semibold">Data warnings</span>
           </div>
@@ -152,24 +230,18 @@ function OverviewSlide({
         </div>
       )}
 
-      {/* Description */}
-      {dish?.description && (
-        <div className="bg-surface-100/80 dark:bg-surface-800/80 rounded-lg p-3">
-          <p className="text-sm text-surface-600 dark:text-surface-300 leading-relaxed">
-            {dish.description}
-          </p>
-        </div>
-      )}
+      {/* Collapsible Description */}
+      <CollapsibleDescription description={dish?.description} isCompact={isCompact} />
 
       {/* Ingredients List */}
-      <IngredientsList ingredients={ingredients} />
+      <IngredientsList ingredients={ingredients} isCompact={isCompact} />
 
       {/* Score Breakdown */}
       <div>
-        <h4 className="text-sm font-semibold text-surface-700 dark:text-surface-200 mb-3">
+        <h4 className={`text-sm font-semibold text-surface-700 dark:text-surface-200 ${isCompact ? 'mb-2' : 'mb-3'}`}>
           Score Breakdown
         </h4>
-        <div className="space-y-2 bg-surface-100/80 dark:bg-surface-800/80 rounded-lg p-3">
+        <div className={`space-y-2 bg-surface-100/80 dark:bg-surface-800/80 rounded-lg ${isCompact ? 'p-2' : 'p-3'}`}>
           {(() => {
             // Get normalized values from normalizedMetrics
             const normalized = dish?.normalizedMetrics || {};
@@ -226,9 +298,9 @@ function OverviewSlide({
 
       {/* Optimized cooking comment */}
       {dish?.optimizedComment && (
-        <div className="bg-surface-100/80 dark:bg-surface-800/80 rounded-lg p-3 border-l-2 border-food-500">
+        <div className={`bg-surface-100/80 dark:bg-surface-800/80 rounded-lg ${isCompact ? 'p-2' : 'p-3'} border-l-2 border-food-500`}>
           <p className="text-xs text-surface-500 dark:text-surface-400 mb-1 font-medium">Optimization Tip</p>
-          <p className="text-sm text-surface-600 dark:text-surface-300">
+          <p className="text-xs sm:text-sm text-surface-600 dark:text-surface-300">
             {dish.optimizedComment}
           </p>
         </div>
@@ -1282,7 +1354,7 @@ export default function InfoSlider({
       </div>
 
       {/* Slide content */}
-      <div className="p-4 relative overflow-hidden" onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
+      <div className="p-2 sm:p-4 relative overflow-hidden" onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
         {liteMotion ? (
           <div>
             {currentSlide === 0 && (

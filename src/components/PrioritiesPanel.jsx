@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { 
@@ -7,68 +7,128 @@ import {
   Utensils, 
   Heart, 
   DollarSign, 
-  Clock, 
+  Timer, 
   Flame, 
-  Leaf 
+  Leaf,
+  Cookie,
+  Skull,
+  Banknote,
+  Hourglass,
+  Zap,
+  AlertTriangle
 } from 'lucide-react';
 import WorldMapWidget from './WorldMapWidget';
 import { ECONOMIC_ZONES } from '../lib/RankingEngine';
-import { useIsMobile } from '../lib/useIsMobile';
 
 /**
  * Priority slider configuration
- * Each slider ranges from -10 to +10
+ * Each slider ranges from 0 to 10 visually, with reversed mode for negative values
  */
 const PRIORITY_CONFIG = [
   { 
     key: 'taste', 
-    label: 'Taste', 
-    icon: Utensils, 
-    color: 'from-orange-400 to-amber-500',
+    positiveLabel: 'Tasty',
+    negativeLabel: 'Niche',
+    positiveIcon: Utensils, 
+    negativeIcon: Cookie,
+    color: 'from-orange-300 to-orange-500',
+    colorDark: 'from-orange-500 to-orange-400',
+    negativeColor: 'from-rose-300 to-rose-500',
+    negativeColorDark: 'from-rose-500 to-rose-400',
     iconColor: 'text-orange-400',
+    negativeIconColor: 'text-rose-400',
     description: 'Flavor & enjoyment'
   },
   { 
     key: 'health', 
-    label: 'Health', 
-    icon: Heart, 
-    color: 'from-red-400 to-red-500',
+    positiveLabel: 'Healthy',
+    negativeLabel: 'Junky',
+    positiveIcon: Heart, 
+    negativeIcon: Skull,
+    color: 'from-red-300 to-red-500',
+    colorDark: 'from-red-500 to-red-400',
+    negativeColor: 'from-purple-300 to-purple-500',
+    negativeColorDark: 'from-purple-500 to-purple-400',
     iconColor: 'text-red-400',
+    negativeIconColor: 'text-purple-400',
     description: 'Nutritional value'
   },
   { 
     key: 'cheapness', 
-    label: 'Budget', 
-    icon: DollarSign, 
-    color: 'from-emerald-400 to-teal-500',
+    positiveLabel: 'Cheap',
+    negativeLabel: 'Costly',
+    positiveIcon: DollarSign, 
+    negativeIcon: Banknote,
+    color: 'from-emerald-300 to-emerald-500',
+    colorDark: 'from-emerald-500 to-emerald-400',
+    negativeColor: 'from-amber-300 to-amber-500',
+    negativeColorDark: 'from-amber-500 to-amber-400',
     iconColor: 'text-emerald-400',
+    negativeIconColor: 'text-amber-400',
     description: 'Lower cost'
   },
   { 
     key: 'speed', 
-    label: 'Speed', 
-    icon: Clock, 
-    color: 'from-blue-400 to-cyan-500',
+    positiveLabel: 'Speedy',
+    negativeLabel: 'Timey',
+    positiveIcon: Timer, 
+    negativeIcon: Hourglass,
+    color: 'from-blue-300 to-blue-500',
+    colorDark: 'from-blue-500 to-blue-400',
+    negativeColor: 'from-indigo-300 to-indigo-500',
+    negativeColorDark: 'from-indigo-500 to-indigo-400',
     iconColor: 'text-blue-400',
+    negativeIconColor: 'text-indigo-400',
     description: 'Quick to make'
   },
   { 
     key: 'lowCalorie', 
-    label: 'Low-Cal', 
-    icon: Flame, 
-    color: 'from-purple-400 to-purple-500',
+    positiveLabel: 'Low-Cal',
+    negativeLabel: 'High-Cal',
+    positiveIcon: Flame, 
+    negativeIcon: Zap,
+    color: 'from-purple-300 to-purple-500',
+    colorDark: 'from-purple-500 to-purple-400',
+    negativeColor: 'from-orange-300 to-red-500',
+    negativeColorDark: 'from-orange-500 to-red-400',
     iconColor: 'text-purple-400',
+    negativeIconColor: 'text-orange-400',
     description: 'Lower kcal/100g'
   },
   { 
     key: 'ethics', 
-    label: 'Ethics', 
-    icon: Leaf, 
-    color: 'from-lime-400 to-green-500',
+    positiveLabel: 'Ethical',
+    negativeLabel: 'Unethical',
+    positiveIcon: Leaf, 
+    negativeIcon: AlertTriangle,
+    color: 'from-lime-300 to-green-500',
+    colorDark: 'from-lime-500 to-green-400',
+    negativeColor: 'from-red-300 to-red-600',
+    negativeColorDark: 'from-red-600 to-red-500',
     iconColor: 'text-lime-400',
+    negativeIconColor: 'text-red-400',
     description: 'Ethical sourcing'
   },
 ];
+
+/**
+ * Calculate percentage contribution of each priority
+ */
+function calculatePercentages(priorities) {
+  const total = PRIORITY_CONFIG.reduce((sum, config) => {
+    return sum + Math.abs(priorities[config.key] || 0);
+  }, 0);
+  
+  if (total === 0) return {};
+  
+  const percentages = {};
+  PRIORITY_CONFIG.forEach(config => {
+    const absValue = Math.abs(priorities[config.key] || 0);
+    percentages[config.key] = Math.round((absValue / total) * 100);
+  });
+  
+  return percentages;
+}
 
 // Small delay before committing priorities to parent (which triggers ranking/sorting).
 // This lets the slider's last framer-motion tween finish without being interrupted by heavy computation.
@@ -76,86 +136,102 @@ const COMMIT_DELAY_MS = 150;
 
 /**
  * Single vertical slider component styled like audio mixer fader
+ * Now with 0-10 range and reversible labels
  */
-function VerticalSlider({ config, value, onChange, onDragStart }) {
-  const Icon = config.icon;
-  const isActive = value !== 0;
-  const isPositive = value > 0;
+function VerticalSlider({ config, value, percentage, onChange, onDragStart, onToggleReverse }) {
+  const isReversed = value < 0;
+  const absValue = Math.abs(value);
+  const isActive = absValue !== 0;
+  
+  // Check if dark theme is active
+  const [isDark, setIsDark] = useState(false);
+  
+  useEffect(() => {
+    const checkTheme = () => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    };
+    
+    checkTheme();
+    
+    // Watch for theme changes
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+    
+    return () => observer.disconnect();
+  }, []);
+  
+  // Select icon and label based on reversed state
+  const Icon = isReversed ? config.negativeIcon : config.positiveIcon;
+  const label = isReversed ? config.negativeLabel : config.positiveLabel;
+  
+  // Select gradient color based on theme and reversed state
+  const gradientColor = isReversed 
+    ? (isDark ? config.negativeColorDark : config.negativeColor)
+    : (isDark ? config.colorDark : config.color);
+  
+  const currentIconColor = isReversed ? config.negativeIconColor : config.iconColor;
+
+  // Format display value
+  const displayValue = isActive 
+    ? (percentage !== undefined ? `${percentage}%` : absValue)
+    : 'Off';
 
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className="flex flex-col items-center gap-1 sm:gap-1.5">
       {/* Value indicator at top */}
       <div 
         className={`
-          font-mono text-sm font-semibold min-w-[40px] text-center
+          font-mono text-sm font-medium min-w-[40px] text-center
           transition-colors duration-200
           ${isActive 
-            ? isPositive 
-              ? 'text-emerald-400' 
-              : 'text-rose-400' 
-            : 'text-surface-400'
+            ? 'text-surface-600 dark:text-surface-400'
+            : 'text-surface-400 dark:text-surface-500'
           }
         `}
       >
-        {value === 10 ? 'max' : value === -10 ? 'min' : (value > 0 ? '+' : '') + value}
+        {displayValue}
       </div>
 
-      {/* Slider track container */}
-      <div className="relative h-[140px] w-10 flex items-center justify-center">
+      {/* Slider track container - responsive height */}
+      <div className="relative h-[100px] sm:h-[110px] md:h-[120px] w-10 flex items-center justify-center">
         {/* Track background with gradient */}
         <div className="absolute inset-x-0 mx-auto w-2 h-full rounded-full bg-surface-300 dark:bg-surface-700 overflow-hidden">
-          {/* Active fill - positive values (grow upward from center) */}
-          {value >= 0 && (
-            <motion.div
-              className={`absolute left-0 right-0 bottom-1/2 bg-gradient-to-t ${config.color}`}
-              initial={false}
-              animate={{
-                height: `${value * 5}%`,
-              }}
-              transition={{ type: 'tween', duration: 0.15, ease: 'easeOut' }}
-            />
-          )}
-          {/* Active fill - negative values (grow downward from center) */}
-          {value < 0 && (
-            <motion.div
-              className={`absolute left-0 right-0 top-1/2 bg-gradient-to-b ${config.color}`}
-              initial={false}
-              animate={{
-                height: `${Math.abs(value) * 5}%`,
-              }}
-              transition={{ type: 'tween', duration: 0.15, ease: 'easeOut' }}
-            />
-          )}
-          {/* Zero line marker */}
-          <div className="absolute left-0 right-0 top-1/2 h-0.5 bg-surface-400 dark:bg-surface-500 -translate-y-0.5" />
+          {/* Active fill - grows from bottom */}
+          <motion.div
+            className={`absolute left-0 right-0 bottom-0 bg-gradient-to-t ${isActive ? gradientColor : 'from-surface-400 to-surface-500'}`}
+            initial={false}
+            animate={{
+              height: `${absValue * 10}%`,
+              opacity: isActive ? 1 : 0.3,
+            }}
+            transition={{ type: 'tween', duration: 0.15, ease: 'easeOut' }}
+          />
         </div>
 
-        {/* The actual range input */}
+        {/* The actual range input - 0 to 10 */}
         <input
           type="range"
-          min="-10"
+          min="0"
           max="10"
           step="0.1"
-          value={value}
+          value={absValue}
           onPointerDown={onDragStart}
           onChange={(e) => {
             const val = parseFloat(e.target.value);
-            if (val >= -1.5 && val < -1.2) {
-              onChange(-1);
-            } else if (val > 1.2 && val <= 1.5) {
-              onChange(1);
-            } else if (val >= -1.2 && val <= 1.2) {
-              onChange(0);
-            } else {
-              onChange(Math.round(val));
-            }
+            const roundedVal = Math.round(val);
+            // Preserve the sign (reversed state)
+            const newValue = isReversed ? -roundedVal : roundedVal;
+            onChange(newValue);
           }}
           className="vertical-slider absolute opacity-0 cursor-pointer z-10"
           style={{ 
             writingMode: 'vertical-lr',
             direction: 'rtl',
             width: '40px',
-            height: '140px',
+            height: '100%',
           }}
         />
 
@@ -163,80 +239,97 @@ function VerticalSlider({ config, value, onChange, onDragStart }) {
         <motion.div
           className={`
             absolute left-1/2 -translate-x-1/2 w-8 h-4 rounded-md
-            bg-gradient-to-b ${config.color}
             shadow-lg cursor-pointer pointer-events-none
-            border-2 border-white/90
+            border-2
+            ${isActive 
+              ? `bg-gradient-to-b ${gradientColor} border-white/90` 
+              : 'bg-surface-500 border-surface-400/50'
+            }
           `}
           initial={false}
           animate={{
-            top: `${50 - (value * 5)}%`,
+            bottom: `${absValue * 10}%`,
+            opacity: isActive ? 1 : 0.6,
           }}
           transition={{ type: 'tween', duration: 0.15, ease: 'easeOut' }}
-          style={{ marginTop: '-8px' }}
+          style={{ marginBottom: '-8px' }}
         >
           {/* Grip lines */}
           <div className="absolute inset-x-2 top-1/2 -translate-y-1/2 flex flex-col gap-0.5">
-            <div className="h-0.5 bg-white/40 rounded-full" />
-            <div className="h-0.5 bg-white/40 rounded-full" />
+            <div className={`h-0.5 rounded-full ${isActive ? 'bg-white/40' : 'bg-white/20'}`} />
+            <div className={`h-0.5 rounded-full ${isActive ? 'bg-white/40' : 'bg-white/20'}`} />
           </div>
         </motion.div>
       </div>
 
-      {/* Label and icon */}
-      <div className="flex flex-col items-center gap-1">
-        <Icon 
-          size={18} 
-          className={`transition-colors ${isActive ? config.iconColor : 'text-surface-400'}`} 
-        />
+      {/* Label and icon - clickable to toggle reverse */}
+      <button
+        onClick={onToggleReverse}
+        className={`
+          relative flex flex-col items-center gap-0.5 p-0.5 rounded-lg mt-0.5
+          transition-all duration-200 hover:bg-surface-200/50 dark:hover:bg-surface-700/50
+          active:scale-95 cursor-pointer select-none
+        `}
+        title={`Click to switch to ${isReversed ? config.positiveLabel : config.negativeLabel}`}
+      >
+        <div className="relative">
+          <Icon 
+            size={18} 
+            className={`transition-colors ${isActive ? currentIconColor : 'text-surface-400'}`} 
+          />
+          {isReversed && (
+            <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-rose-500 dark:bg-rose-400" />
+          )}
+        </div>
         <span className={`
-          text-xs font-medium transition-colors
+          text-[10px] sm:text-xs font-medium transition-colors whitespace-nowrap
           ${isActive ? 'text-surface-800 dark:text-surface-100' : 'text-surface-500 dark:text-surface-400'}
         `}>
-          {config.label}
+          {label}
         </span>
-      </div>
+      </button>
     </div>
   );
 }
 
 /**
  * Compact priority icon for collapsed state on mobile
- * Shows icon with small value indicator - similar to expanded panel style
+ * Shows icon with percentage indicator and reversed state support
  */
-function CompactPriorityIcon({ config, value }) {
-  const Icon = config.icon;
-  const isPositive = value > 0;
-  const isMax = value === 10 || value === -10;
+function CompactPriorityIcon({ config, value, percentage }) {
+  const isReversed = value < 0;
+  const Icon = isReversed ? config.negativeIcon : config.positiveIcon;
+  const label = isReversed ? config.negativeLabel : config.positiveLabel;
+  const currentIconColor = isReversed ? config.negativeIconColor : config.iconColor;
 
   return (
     <div className="flex flex-col items-center gap-0.5">
       <div 
         className={`
           relative w-8 h-8 rounded-lg flex items-center justify-center
-          ${isPositive 
-            ? 'bg-emerald-500/20 border border-emerald-500/40' 
-            : 'bg-rose-500/20 border border-rose-500/40'
+          ${isReversed 
+            ? 'bg-rose-500/20 border border-rose-500/40' 
+            : 'bg-emerald-500/20 border border-emerald-500/40'
           }
         `}
       >
-        <Icon size={16} className={config.iconColor} />
-        {/* Small value badge */}
+        <Icon size={16} className={currentIconColor} />
+        {/* Small percentage badge */}
         <div 
           className={`
-            absolute -top-1 -right-1 min-w-[14px] h-3.5 px-0.5
+            absolute -top-1 -right-1 min-w-[18px] h-3.5 px-1
             rounded text-[9px] font-bold flex items-center justify-center
-            ${(value === 10 || value === -10) ? 'min-w-[24px]' : ''}
-            ${isPositive 
-              ? 'bg-emerald-500 text-white' 
-              : 'bg-rose-500 text-white'
+            ${isReversed 
+              ? 'bg-rose-500 text-white' 
+              : 'bg-emerald-500 text-white'
             }
           `}
         >
-          {value === 10 ? 'max↑' : value === -10 ? 'min↓' : (isPositive ? '+' : '') + value}
+          {percentage !== undefined ? `${percentage}%` : Math.abs(value)}
         </div>
       </div>
-      <span className="text-[9px] text-surface-400 font-medium truncate max-w-[40px]">
-        {config.label}
+      <span className="text-[9px] text-surface-400 font-medium truncate max-w-[44px]">
+        {label}
       </span>
     </div>
   );
@@ -281,10 +374,8 @@ export default function PrioritiesPanel({
   const [isZoneDropdownOpen, setIsZoneDropdownOpen] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState(null);
   const reduceMotion = useReducedMotion();
-  const isMobile = useIsMobile();
-  const lite = isMobile || reduceMotion;
-  const zoneButtonRefLite = useRef(null);
-  const zoneButtonRef = useRef(null);
+  const lite = reduceMotion;
+  const zoneButtonElementRef = useRef(null);
   const zoneDropdownRef = useRef(null);
   
   const [draft, setDraft] = useState(priorities);
@@ -293,6 +384,8 @@ export default function PrioritiesPanel({
   const commitTimeoutRef = useRef(null);
   const isPendingCommitRef = useRef(false);
   const lastExpandedAtRef = useRef(0);
+  const lastScrollYRef = useRef(0);
+  const scrollUpDistanceRef = useRef(0);
   
   useEffect(() => { draftRef.current = draft; }, [draft]);
 
@@ -343,20 +436,51 @@ export default function PrioritiesPanel({
 
     const handleScroll = () => {
       const currentScrollY = scrollable.scrollTop;
+      const previousScrollY = lastScrollYRef.current;
+      const scrollDelta = currentScrollY - previousScrollY;
       const timeSinceExpansion = Date.now() - lastExpandedAtRef.current;
       const justExpanded = expandedDish && timeSinceExpansion < 600;
 
-      if (currentScrollY <= 10) {
+      // Track scroll direction and distance
+      const isScrollingUp = scrollDelta < 0;
+      const isScrollingDown = scrollDelta > 0;
+      const isAtTop = currentScrollY <= 10;
+      
+      // Reset scroll up distance when scrolling down or when not at top
+      if (isScrollingDown || !isAtTop) {
+        scrollUpDistanceRef.current = 0;
+      } else if (isScrollingUp && isAtTop) {
+        // Accumulate scroll up distance when at top and scrolling up
+        scrollUpDistanceRef.current += Math.abs(scrollDelta);
+      }
+
+      // Update last scroll position
+      lastScrollYRef.current = currentScrollY;
+
+      // Only expand if:
+      // 1. We're at the top (within 10px)
+      // 2. We're actively scrolling up (not just stationary at top)
+      // 3. We've scrolled up at least 20px while at the top (pull-down gesture)
+      const hasPulledDown = scrollUpDistanceRef.current >= 20;
+      const shouldExpand = isAtTop && isScrollingUp && hasPulledDown;
+
+      if (shouldExpand) {
         if (expandedDish && !justExpanded) {
           onCollapseExpandedDish?.();
           setIsExpanded(true);
+          scrollUpDistanceRef.current = 0; // Reset after expanding
         } else if (!isExpanded && !expandedDish) {
           setIsExpanded(true);
+          scrollUpDistanceRef.current = 0; // Reset after expanding
         }
       } else if (isExpanded && currentScrollY > 30 && !expandedDish) {
         setIsExpanded(false);
+        scrollUpDistanceRef.current = 0; // Reset when collapsing
       }
     };
+
+    // Initialize scroll position
+    lastScrollYRef.current = scrollable.scrollTop;
 
     scrollable.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
@@ -374,27 +498,33 @@ export default function PrioritiesPanel({
   const closeDropdown = () => {
     setIsZoneDropdownOpen(false);
     setDropdownPosition(null);
+    zoneButtonElementRef.current = null;
   };
-
-  const handleZoneButtonClick = () => {
-    if (!isZoneDropdownOpen) {
-      const buttonRef = lite ? zoneButtonRefLite.current : zoneButtonRef.current;
-      if (buttonRef) {
-        const rect = buttonRef.getBoundingClientRect();
-        setDropdownPosition({
-          top: rect.bottom + 4,
-          left: rect.left,
-          width: rect.width,
-        });
-      }
+  
+  const handleZoneButtonClick = (event) => {
+    const buttonElement = event.currentTarget;
+    const previousButton = zoneButtonElementRef.current;
+    zoneButtonElementRef.current = buttonElement;
+  
+    if (buttonElement) {
+      const rect = buttonElement.getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom + 4,
+        left: rect.left,
+        width: rect.width,
+      });
     }
-    setIsZoneDropdownOpen(!isZoneDropdownOpen);
+  
+    // Клик по той же кнопке — закрываем, по другой — открываем/перепозиционируем
+    setIsZoneDropdownOpen((wasOpen) =>
+      wasOpen && previousButton === buttonElement ? false : true
+    );
   };
-
+  
   useEffect(() => {
     if (!isZoneDropdownOpen) return;
-
-    const buttonRef = lite ? zoneButtonRefLite.current : zoneButtonRef.current;
+  
+    const buttonRef = zoneButtonElementRef.current;
     
     const handleClickOutside = (event) => {
       if (
@@ -415,23 +545,26 @@ export default function PrioritiesPanel({
       }
       closeDropdown();
     };
-
+  
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('touchstart', handleClickOutside);
     window.addEventListener('scroll', handleScroll, true);
-
+  
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('touchstart', handleClickOutside);
       window.removeEventListener('scroll', handleScroll, true);
     };
-  }, [isZoneDropdownOpen, lite]);
+  }, [isZoneDropdownOpen]);
 
   const displayed = draft;
   const activePriorities = PRIORITY_CONFIG.filter(
     config => displayed[config.key] !== 0
   );
   const allPrioritiesZero = Object.values(displayed).every(v => v === 0);
+  
+  // Calculate percentages for display
+  const percentages = useMemo(() => calculatePercentages(displayed), [displayed]);
 
   const handleDragStart = () => {
     if (commitTimeoutRef.current) {
@@ -444,6 +577,31 @@ export default function PrioritiesPanel({
 
   const handleSliderChange = (key, value) => {
     setDraft(prev => ({ ...prev, [key]: value }));
+  };
+  
+  // Toggle between positive and negative (reversed) state
+  const handleToggleReverse = (key) => {
+    setDraft(prev => {
+      const currentValue = prev[key];
+      // If zero, set to a default value in the new direction
+      if (currentValue === 0) {
+        return { ...prev, [key]: -5 }; // Start reversed at 5
+      }
+      // Otherwise flip the sign
+      return { ...prev, [key]: -currentValue };
+    });
+    
+    // Commit the change after a short delay
+    if (commitTimeoutRef.current) {
+      clearTimeout(commitTimeoutRef.current);
+      commitTimeoutRef.current = null;
+    }
+    isPendingCommitRef.current = true;
+    commitTimeoutRef.current = setTimeout(() => {
+      onPrioritiesChange({ ...draftRef.current });
+      commitTimeoutRef.current = null;
+      isPendingCommitRef.current = false;
+    }, COMMIT_DELAY_MS);
   };
 
   const handleReset = () => {
@@ -464,46 +622,51 @@ export default function PrioritiesPanel({
   return (
     <div className="bg-white dark:bg-surface-800 border-b border-surface-300/50 dark:border-surface-700/50">
       {/* Header - always visible */}
-      <div className="px-4 py-3">
+      <div className="px-4 py-2">
         {isExpanded ? (
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_260px] gap-4 items-center">
-            {/* Left header: priorities */}
-            <div className="flex items-center justify-between">
-              <h2 className="font-display font-semibold text-lg text-surface-800 dark:text-surface-100">
+          <div className="grid grid-cols-1 sm:grid-cols-[1fr_260px] gap-4 items-center">
+            {/* Left header: priorities - на мобильных включает кнопку сворачивания */}
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="font-display font-semibold text-lg text-surface-800 dark:text-surface-100 whitespace-nowrap">
                 My Priorities
               </h2>
-              <motion.button
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={handleReset}
-                className="px-3 py-1.5 text-xs font-medium text-surface-500 dark:text-surface-400 
-                           hover:text-surface-700 dark:hover:text-surface-200 
-                           hover:bg-surface-200/50 dark:hover:bg-surface-700/50 
-                           rounded-lg transition-colors"
-              >
-                Reset All
-              </motion.button>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <motion.button
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={handleReset}
+                  className="px-3 py-1.5 text-xs font-medium text-surface-500 dark:text-surface-400 
+                             hover:text-surface-700 dark:hover:text-surface-200 
+                             hover:bg-surface-200/50 dark:hover:bg-surface-700/50 
+                             rounded-lg transition-colors whitespace-nowrap"
+                >
+                  Reset
+                </motion.button>
+                {/* Кнопка сворачивания для узких экранов - внутри того же flex контейнера */}
+                <button
+                  onClick={() => {
+                    setIsExpanded(!isExpanded);
+                    scrollUpDistanceRef.current = 0;
+                  }}
+                  className="sm:hidden p-2 rounded-lg hover:bg-surface-200/50 dark:hover:bg-surface-700/50 transition-colors flex-shrink-0"
+                  aria-label="Collapse panels"
+                >
+                  <ChevronUp size={20} className="text-surface-500 dark:text-surface-300" />
+                </button>
+              </div>
             </div>
 
             {/* Right header: map - скрываем на узких экранах */}
-            <div className="hidden md:flex items-center justify-between">
+            <div className="hidden sm:flex items-center justify-between">
               <h2 className="font-display font-semibold text-lg text-surface-800 dark:text-surface-100">
                 Economic Zone
               </h2>
               <button
-                onClick={() => setIsExpanded(!isExpanded)}
-                className="p-2 rounded-lg hover:bg-surface-200/50 dark:hover:bg-surface-700/50 transition-colors"
-                aria-label="Collapse panels"
-              >
-                <ChevronUp size={20} className="text-surface-500 dark:text-surface-300" />
-              </button>
-            </div>
-            
-            {/* Кнопка сворачивания для узких экранов */}
-            <div className="md:hidden flex items-center justify-end">
-              <button
-                onClick={() => setIsExpanded(!isExpanded)}
+                onClick={() => {
+                  setIsExpanded(!isExpanded);
+                  scrollUpDistanceRef.current = 0;
+                }}
                 className="p-2 rounded-lg hover:bg-surface-200/50 dark:hover:bg-surface-700/50 transition-colors"
                 aria-label="Collapse panels"
               >
@@ -518,6 +681,7 @@ export default function PrioritiesPanel({
               <button
                 onClick={() => {
                   setIsExpanded(true);
+                  scrollUpDistanceRef.current = 0;
                   if (onCollapseExpandedDish) {
                     onCollapseExpandedDish();
                   }
@@ -536,6 +700,7 @@ export default function PrioritiesPanel({
                           key={config.key}
                           config={config}
                           value={displayed[config.key]}
+                          percentage={percentages[config.key]}
                         />
                       ))
                     ) : (
@@ -555,36 +720,29 @@ export default function PrioritiesPanel({
       {lite ? (
         isExpanded ? (
           <div className="overflow-hidden">
-            <div className="px-4 pb-4">
-              <div className="flex flex-col md:flex-row gap-4">
+            <div className="px-4 pb-2.5">
+              <div className="flex flex-col sm:flex-row gap-3 items-stretch">
                 {/* Left: priorities board (wide) */}
-                <div className="flex-1 bg-white/60 dark:bg-surface-800/80 rounded-xl p-4 border border-surface-300/50 dark:border-surface-700/50 shadow-sm dark:shadow-none">
-                  {/* Scale markers on the side */}
-                  <div className="flex">
-                    {/* Sliders grid */}
-                    <div className="flex-1 flex justify-around items-start gap-1 sm:gap-4 overflow-x-auto pb-2">
-                      {PRIORITY_CONFIG.map(config => (
-                        <VerticalSlider
-                          key={config.key}
-                          config={config}
-                          value={displayed[config.key]}
-                          onChange={(val) => handleSliderChange(config.key, val)}
-                          onDragStart={handleDragStart}
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Helper text */}
-                  <div className="mt-3 pt-3 border-t border-surface-300/50 dark:border-surface-700/50 flex justify-between text-[11px] text-surface-500">
-                    <span>↑ Maximize / Prefer</span>
-                    <span>↓ Minimize / Avoid</span>
+                <div className="flex-1 bg-white/60 dark:bg-surface-800/80 rounded-xl p-1.5 sm:p-2 border border-surface-300/50 dark:border-surface-700/50 shadow-sm dark:shadow-none flex flex-col">
+                  {/* Sliders grid */}
+                  <div className="flex justify-around items-start gap-0.5 sm:gap-2 sm:gap-3 overflow-x-auto hide-scrollbar">
+                    {PRIORITY_CONFIG.map(config => (
+                      <VerticalSlider
+                        key={config.key}
+                        config={config}
+                        value={displayed[config.key]}
+                        percentage={percentages[config.key]}
+                        onChange={(val) => handleSliderChange(config.key, val)}
+                        onDragStart={handleDragStart}
+                        onToggleReverse={() => handleToggleReverse(config.key)}
+                      />
+                    ))}
                   </div>
                   
                   {/* Hint when all priorities are zero */}
                   {allPrioritiesZero && (
-                    <div className="mt-3 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
-                      <p className="text-xs text-amber-600 dark:text-amber-300/90 text-center">
+                    <div className="mt-1.5 sm:mt-2 p-1.5 sm:p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                      <p className="text-[10px] sm:text-[11px] text-amber-600 dark:text-amber-300/90 text-center">
                         💡 Adjust the sliders above to rank dishes by your preferences. 
                         All dishes currently show a neutral score (50).
                       </p>
@@ -593,18 +751,20 @@ export default function PrioritiesPanel({
                 </div>
 
                 {/* Right: economic zone (square) - скрываем карту на узких экранах */}
-                <div className="hidden md:block md:w-[260px] bg-white/60 dark:bg-surface-800/80 rounded-xl p-3 border border-surface-300/50 dark:border-surface-700/50 shadow-sm dark:shadow-none">
-                  <div className="w-full" style={{ height: '180px' }}>
+                <div className="hidden sm:block sm:w-[260px] bg-white/60 dark:bg-surface-800/80 rounded-xl p-2 sm:p-3 border border-surface-300/50 dark:border-surface-700/50 shadow-sm dark:shadow-none flex flex-col">
+                  <div className="w-full relative flex-shrink-0 flex-1" style={{ height: '140px' }}>
                     <WorldMapWidget
                       variant="square"
                       selectedZone={selectedZone}
                       onZoneSelect={onZoneChange}
                     />
+                    <div className="absolute -bottom-1 left-1 text-[9px] text-surface-500 dark:text-surface-400 leading-snug pointer-events-none z-10 whitespace-nowrap">
+                      Select an economic zone to calculate local prices
+                    </div>
                   </div>
 
-                  <div className="mt-2 relative">
+                  <div className="mt-auto pt-3 relative flex-shrink-0">
                     <button
-                      ref={zoneButtonRefLite}
                       onClick={handleZoneButtonClick}
                       className="flex items-center gap-2 text-sm font-medium text-surface-700 dark:text-surface-200 hover:opacity-80 transition-opacity w-full text-left"
                     >
@@ -615,30 +775,6 @@ export default function PrioritiesPanel({
                         className={`text-surface-500 dark:text-surface-400 transition-transform ${isZoneDropdownOpen ? 'rotate-180' : ''}`}
                       />
                     </button>
-                  </div>
-                  <div className="mt-1 text-[11px] text-surface-500 dark:text-surface-400 leading-snug">
-                    Select an economic zone to calculate local prices
-                  </div>
-                </div>
-                
-                {/* Выпадающее меню для узких экранов - показываем только когда карта скрыта */}
-                <div className="md:hidden bg-white/60 dark:bg-surface-800/80 rounded-xl p-3 border border-surface-300/50 dark:border-surface-700/50 shadow-sm dark:shadow-none">
-                  <div className="relative">
-                    <button
-                      ref={zoneButtonRefLite}
-                      onClick={handleZoneButtonClick}
-                      className="flex items-center gap-2 text-sm font-medium text-surface-700 dark:text-surface-200 hover:opacity-80 transition-opacity w-full text-left"
-                    >
-                      <span className="text-lg">{ECONOMIC_ZONES[selectedZone]?.emoji}</span>
-                      <span className="truncate flex-1">{ECONOMIC_ZONES[selectedZone]?.name}</span>
-                      <ChevronDown 
-                        size={16} 
-                        className={`text-surface-500 dark:text-surface-400 transition-transform ${isZoneDropdownOpen ? 'rotate-180' : ''}`}
-                      />
-                    </button>
-                  </div>
-                  <div className="mt-1 text-[11px] text-surface-500 dark:text-surface-400 leading-snug">
-                    Select an economic zone to calculate local prices
                   </div>
                 </div>
               </div>
@@ -655,30 +791,23 @@ export default function PrioritiesPanel({
               transition={{ duration: 0.25, ease: 'easeInOut' }}
               className="overflow-hidden"
             >
-              <div className="px-4 pb-4">
-                <div className="flex flex-col md:flex-row gap-4">
+              <div className="px-4 pb-2.5">
+                <div className="flex flex-col sm:flex-row gap-3 items-stretch">
                   {/* Left: priorities board (wide) */}
-                  <div className="flex-1 bg-white/60 dark:bg-surface-800/80 rounded-xl p-4 border border-surface-300/50 dark:border-surface-700/50 shadow-sm dark:shadow-none">
-                    {/* Scale markers on the side */}
-                    <div className="flex">
-                      {/* Sliders grid */}
-                      <div className="flex-1 flex justify-around items-start gap-1 sm:gap-4 overflow-x-auto pb-2">
-                        {PRIORITY_CONFIG.map(config => (
-                          <VerticalSlider
-                            key={config.key}
-                            config={config}
-                            value={displayed[config.key]}
-                            onChange={(val) => handleSliderChange(config.key, val)}
-                            onDragStart={handleDragStart}
-                          />
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Helper text */}
-                    <div className="mt-3 pt-3 border-t border-surface-300/50 dark:border-surface-700/50 flex justify-between text-[11px] text-surface-500">
-                      <span>↑ Maximize / Prefer</span>
-                      <span>↓ Minimize / Avoid</span>
+                  <div className="flex-1 bg-white/60 dark:bg-surface-800/80 rounded-xl p-1.5 sm:p-2 border border-surface-300/50 dark:border-surface-700/50 shadow-sm dark:shadow-none flex flex-col">
+                    {/* Sliders grid */}
+                    <div className="flex justify-around items-start gap-0.5 sm:gap-2 sm:gap-3 overflow-x-auto hide-scrollbar">
+                      {PRIORITY_CONFIG.map(config => (
+                        <VerticalSlider
+                          key={config.key}
+                          config={config}
+                          value={displayed[config.key]}
+                          percentage={percentages[config.key]}
+                          onChange={(val) => handleSliderChange(config.key, val)}
+                          onDragStart={handleDragStart}
+                          onToggleReverse={() => handleToggleReverse(config.key)}
+                        />
+                      ))}
                     </div>
                     
                     {/* Hint when all priorities are zero */}
@@ -686,29 +815,30 @@ export default function PrioritiesPanel({
                       <motion.div
                         initial={{ opacity: 0, y: -5 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="mt-3 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20"
+                        className="mt-1.5 sm:mt-2 p-1.5 sm:p-2 rounded-lg bg-amber-500/10 border border-amber-500/20"
                       >
-                        <p className="text-xs text-amber-600 dark:text-amber-300/90 text-center">
-                          💡 Adjust the sliders above to rank dishes by your preferences. 
-                          All dishes currently show a neutral score (50).
+                        <p className="text-[10px] sm:text-[11px] text-amber-600 dark:text-amber-300/90 text-center">
+                          Adjust the sliders above to rank dishes by your preferences.
                         </p>
                       </motion.div>
                     )}
                   </div>
 
                   {/* Right: economic zone (square) - скрываем карту на узких экранах */}
-                  <div className="hidden md:block md:w-[260px] bg-white/60 dark:bg-surface-800/80 rounded-xl p-3 border border-surface-300/50 dark:border-surface-700/50 shadow-sm dark:shadow-none">
-                    <div className="w-full" style={{ height: '180px' }}>
+                  <div className="hidden sm:block sm:w-[260px] bg-white/60 dark:bg-surface-800/80 rounded-xl p-2 sm:p-3 border border-surface-300/50 dark:border-surface-700/50 shadow-sm dark:shadow-none flex flex-col">
+                    <div className="w-full relative flex-shrink-0 flex-1" style={{ height: '140px' }}>
                       <WorldMapWidget
                         variant="square"
                         selectedZone={selectedZone}
                         onZoneSelect={onZoneChange}
                       />
+                      <div className="absolute -top-1 right-1 text-[9px] text-surface-500 dark:text-surface-400 leading-snug pointer-events-none z-10 whitespace-nowrap">
+                        Select a region to calculate prices
+                      </div>
                     </div>
 
-                    <div className="mt-2 relative">
+                    <div className="mt-auto pt-3 relative flex-shrink-0">
                       <button
-                        ref={zoneButtonRef}
                         onClick={handleZoneButtonClick}
                         className="flex items-center gap-2 text-sm font-medium text-surface-700 dark:text-surface-200 hover:opacity-80 transition-opacity w-full text-left"
                       >
@@ -719,30 +849,6 @@ export default function PrioritiesPanel({
                           className={`text-surface-500 dark:text-surface-400 transition-transform ${isZoneDropdownOpen ? 'rotate-180' : ''}`}
                         />
                       </button>
-                    </div>
-                    <div className="mt-1 text-[11px] text-surface-500 dark:text-surface-400 leading-snug">
-                      Select an economic zone to calculate local prices
-                    </div>
-                  </div>
-                  
-                  {/* Выпадающее меню для узких экранов */}
-                  <div className="md:hidden bg-white/60 dark:bg-surface-800/80 rounded-xl p-3 border border-surface-300/50 dark:border-surface-700/50 shadow-sm dark:shadow-none">
-                    <div className="relative">
-                      <button
-                        ref={zoneButtonRef}
-                        onClick={handleZoneButtonClick}
-                        className="flex items-center gap-2 text-sm font-medium text-surface-700 dark:text-surface-200 hover:opacity-80 transition-opacity w-full text-left"
-                      >
-                        <span className="text-lg">{ECONOMIC_ZONES[selectedZone]?.emoji}</span>
-                        <span className="truncate flex-1">{ECONOMIC_ZONES[selectedZone]?.name}</span>
-                        <ChevronDown 
-                          size={16} 
-                          className={`text-surface-500 dark:text-surface-400 transition-transform ${isZoneDropdownOpen ? 'rotate-180' : ''}`}
-                        />
-                      </button>
-                    </div>
-                    <div className="mt-1 text-[11px] text-surface-500 dark:text-surface-400 leading-snug">
-                      Select an economic zone to calculate local prices
                     </div>
                   </div>
                 </div>

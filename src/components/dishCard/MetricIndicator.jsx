@@ -105,79 +105,160 @@ export default function MetricIndicator({
     );
   }
 
-  // Mobile editing mode - vertical layout with stacked buttons
+  // Editing mode - responsive layout: vertical on mobile (<640px), horizontal on desktop
   if (isEditing) {
     return (
-      <div className="flex flex-col items-center gap-0.5 bg-surface-200/50 dark:bg-surface-700/50 rounded-lg px-1.5 py-1 min-w-[52px] sm:min-w-0 sm:flex-row sm:gap-1 sm:px-1 sm:py-0.5 sm:rounded-md">
-        {/* Decrement button */}
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-          onPointerDown={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            if (isAtMin) return;
-            try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* ignore */ }
-            startHold(onDecrement);
-          }}
-          disabled={isAtMin}
-          className={`
-            w-6 h-5 sm:w-5 sm:h-5 flex items-center justify-center rounded
-            transition-colors order-3 sm:order-1
-            ${
-              isAtMin
-                ? 'text-surface-400 dark:text-surface-600 cursor-not-allowed'
-                : 'text-surface-500 dark:text-surface-400 hover:text-surface-700 dark:hover:text-surface-200 hover:bg-surface-300 dark:hover:bg-surface-600 active:bg-surface-400 dark:active:bg-surface-500'
-            }
-          `}
-        >
-          <Minus size={14} className="sm:w-3 sm:h-3" />
-        </button>
+      <>
+        {/* Mobile/Tablet: vertical layout with stretchable buttons (<480px) */}
+        <div className="flex flex-col items-center gap-0.5 bg-surface-200/50 dark:bg-surface-700/50 rounded-lg px-1.5 py-1 min-w-[52px] mobile:hidden">
+          {/* Icon + Value - top row */}
+          <div className="flex items-center gap-1 w-full justify-center">
+            <Icon size={12} className={iconColor} />
+            <span className={`font-mono text-xs ${textColor} relative inline-flex flex-col items-center leading-none`}>
+              <span>{mainValue}</span>
+              {unit && (
+                <span className="text-[8px] leading-none opacity-70 -mt-0.5">
+                  {unit}
+                </span>
+              )}
+            </span>
+          </div>
 
-        {/* Icon + Value */}
-        <div className="flex items-center gap-1 order-1 sm:order-2">
-          <Icon size={12} className={iconColor} />
-          <span className={`font-mono text-xs ${textColor} relative inline-flex flex-col items-start leading-none`}>
-            <span>{mainValue}</span>
-            {unit && (
-              <span className="text-[8px] leading-none opacity-70 -mt-0.5">
-                {unit}
-              </span>
-            )}
-          </span>
+          {/* Buttons row - bottom, stretchable */}
+          <div className="flex items-center gap-1 w-full">
+            {/* Increment button - stretches to fill available space */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+              onPointerDown={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                if (isAtMax) return;
+                try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* ignore */ }
+                startHold(onIncrement);
+              }}
+              disabled={isAtMax}
+              className={`
+                flex-1 h-5 flex items-center justify-center rounded
+                transition-colors
+                ${
+                  isAtMax
+                    ? 'text-surface-400 dark:text-surface-600 cursor-not-allowed bg-transparent'
+                    : 'text-emerald-500 dark:text-emerald-400 bg-emerald-500/15 hover:bg-emerald-500/25 active:bg-emerald-500/35'
+                }
+              `}
+            >
+              <Plus size={12} />
+            </button>
+
+            {/* Divider */}
+            <div className="w-px h-4 bg-surface-300 dark:bg-surface-600" />
+
+            {/* Decrement button - stretches to fill available space */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+              onPointerDown={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                if (isAtMin) return;
+                try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* ignore */ }
+                startHold(onDecrement);
+              }}
+              disabled={isAtMin}
+              className={`
+                flex-1 h-5 flex items-center justify-center rounded
+                transition-colors
+                ${
+                  isAtMin
+                    ? 'text-surface-400 dark:text-surface-600 cursor-not-allowed bg-transparent'
+                    : 'text-rose-500 dark:text-rose-400 bg-rose-500/15 hover:bg-rose-500/25 active:bg-rose-500/35'
+                }
+              `}
+            >
+              <Minus size={12} />
+            </button>
+          </div>
         </div>
 
-        {/* Increment button */}
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-          onPointerDown={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            if (isAtMax) return;
-            try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* ignore */ }
-            startHold(onIncrement);
-          }}
-          disabled={isAtMax}
-          className={`
-            w-6 h-5 sm:w-5 sm:h-5 flex items-center justify-center rounded
-            transition-colors order-2 sm:order-3
-            ${
-              isAtMax
-                ? 'text-surface-400 dark:text-surface-600 cursor-not-allowed'
-                : 'text-surface-500 dark:text-surface-400 hover:text-surface-700 dark:hover:text-surface-200 hover:bg-surface-300 dark:hover:bg-surface-600 active:bg-surface-400 dark:active:bg-surface-500'
-            }
-          `}
-        >
-          <Plus size={14} className="sm:w-3 sm:h-3" />
-        </button>
-      </div>
+        {/* Desktop: horizontal layout (>=480px) */}
+        <div className="hidden mobile:flex flex-row items-center gap-0.5 sm:gap-1 bg-surface-200/50 dark:bg-surface-700/50 rounded-lg px-1 py-0.5 sm:rounded-md">
+          {/* Decrement button - left side */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            onPointerDown={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              if (isAtMin) return;
+              try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* ignore */ }
+              startHold(onDecrement);
+            }}
+            disabled={isAtMin}
+            className={`
+              w-5 h-5 flex items-center justify-center rounded
+              transition-colors
+              ${
+                isAtMin
+                  ? 'text-surface-400 dark:text-surface-600 cursor-not-allowed bg-transparent'
+                  : 'text-rose-500 dark:text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 active:bg-rose-500/30'
+              }
+            `}
+          >
+            <Minus size={14} className="w-3 h-3" />
+          </button>
+
+          {/* Icon + Value - center */}
+          <div className="flex items-center gap-1 px-1">
+            <Icon size={12} className={iconColor} />
+            <span className={`font-mono text-xs ${textColor} relative inline-flex flex-col items-start leading-none`}>
+              <span>{mainValue}</span>
+              {unit && (
+                <span className="text-[8px] leading-none opacity-70 -mt-0.5">
+                  {unit}
+                </span>
+              )}
+            </span>
+          </div>
+
+          {/* Increment button - right side */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            onPointerDown={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              if (isAtMax) return;
+              try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* ignore */ }
+              startHold(onIncrement);
+            }}
+            disabled={isAtMax}
+            className={`
+              w-5 h-5 flex items-center justify-center rounded
+              transition-colors
+              ${
+                isAtMax
+                  ? 'text-surface-400 dark:text-surface-600 cursor-not-allowed bg-transparent'
+                  : 'text-emerald-500 dark:text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 active:bg-emerald-500/30'
+              }
+            `}
+          >
+            <Plus size={14} className="w-3 h-3" />
+          </button>
+        </div>
+      </>
     );
   }
 

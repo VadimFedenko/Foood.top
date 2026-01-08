@@ -9,6 +9,7 @@ export default {
     extend: {
       screens: {
         'xs': '340px',
+        'mobile': '480px',
       },
       fontFamily: {
         'display': ['Unbounded', 'system-ui', 'sans-serif'],

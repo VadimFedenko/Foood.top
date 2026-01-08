@@ -19,19 +19,19 @@ import {
 } from './dishCardUtils';
 
 /**
- * Hook to check if window width is less than 340px
+ * Hook to check if window width is less than a given breakpoint
  */
-function useIsNarrow() {
-  const [isNarrow, setIsNarrow] = useState(() => {
+function useMediaQuery(maxWidth) {
+  const [matches, setMatches] = useState(() => {
     if (typeof window === 'undefined' || !window.matchMedia) return false;
-    return window.matchMedia('(max-width: 339px)').matches;
+    return window.matchMedia(`(max-width: ${maxWidth}px)`).matches;
   });
 
   useEffect(() => {
     if (typeof window === 'undefined' || !window.matchMedia) return;
 
-    const mq = window.matchMedia('(max-width: 339px)');
-    const onChange = () => setIsNarrow(mq.matches);
+    const mq = window.matchMedia(`(max-width: ${maxWidth}px)`);
+    const onChange = () => setMatches(mq.matches);
 
     if (mq.addEventListener) {
       mq.addEventListener('change', onChange);
@@ -40,9 +40,21 @@ function useIsNarrow() {
 
     mq.addListener(onChange);
     return () => mq.removeListener(onChange);
-  }, []);
+  }, [maxWidth]);
 
-  return isNarrow;
+  return matches;
+}
+
+function useIsNarrow() {
+  return useMediaQuery(339);
+}
+
+function useIsVeryNarrow() {
+  return useMediaQuery(379);
+}
+
+function useIsModerateNarrow() {
+  return useMediaQuery(419);
 }
 
 /**
@@ -55,6 +67,8 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
   const reduceMotion = useReducedMotion();
   const isMobile = useIsMobile();
   const isNarrow = useIsNarrow();
+  const isVeryNarrow = useIsVeryNarrow();
+  const isModerateNarrow = useIsModerateNarrow();
   const lite = isMobile || reduceMotion;
 
   const [draftOverrides, setDraftOverrides] = useState(overrides);
@@ -349,34 +363,71 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
       {/* Header (Always visible) */}
       <div
         onClick={onToggle}
-        className="w-full p-4 flex items-center gap-3 text-left cursor-pointer"
+        className="w-full p-3 sm:p-4 flex items-center gap-2 sm:gap-3 text-left cursor-pointer"
       >
-        {/* Score Badge */}
+        {/* Score Badge - shown on desktop or when collapsed on mobile */}
         <motion.div
           layout={lite ? false : 'position'}
           className={`
-            flex-shrink-0 w-12 h-12 rounded-xl
-            flex items-center justify-center
+            ${isExpanded ? 'hidden sm:flex' : 'flex'} flex-shrink-0 ${isVeryNarrow ? 'w-8 h-8' : 'w-10 h-10'} sm:w-12 sm:h-12 rounded-xl
+            items-center justify-center
             ${scoreColors.bg} ${scoreColors.glow}
           `}
         >
-          <span className="text-lg font-display font-bold text-white">
+          <span className={`${isVeryNarrow ? 'text-sm' : 'text-base'} sm:text-lg font-display font-bold text-white`}>
             {dish.score}
           </span>
         </motion.div>
 
         {/* Main content */}
         <div className="flex-1 min-w-0">
-          {/* Name and indicators row */}
-          <div className="flex items-center gap-2 flex-wrap">
-            <h3 className="font-display font-semibold text-surface-800 dark:text-surface-100 truncate">
+          {/* Name, Score badge (mobile only when expanded), Reset button, Modified indicator, and expand arrow - all on one line */}
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-nowrap">
+            {/* Score Badge - shown only on mobile (<640px) when expanded, inline with name */}
+            {isExpanded && (
+              <motion.div
+                layout={lite ? false : 'position'}
+                className={`
+                  flex sm:hidden flex-shrink-0 w-7 h-7 rounded-lg
+                  items-center justify-center
+                  ${scoreColors.bg} ${scoreColors.glow}
+                `}
+              >
+                <span className="text-xs font-display font-bold text-white">
+                  {dish.score}
+                </span>
+              </motion.div>
+            )}
+            <h3 className="font-display font-semibold text-surface-800 dark:text-surface-100 truncate text-sm sm:text-base flex-1 min-w-0">
               {dish.name}
             </h3>
+            {/* Reset button - always shown when has overrides, positioned before Modified text */}
             {hasAnyOverride && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleResetOverrides();
+                }}
+                className="flex-shrink-0 p-1 rounded-lg text-amber-500 hover:bg-amber-500/10 transition-colors"
+                title="Reset modifications"
+              >
+                <RotateCcw size={isVeryNarrow ? 12 : isModerateNarrow ? 14 : 16} />
+              </button>
+            )}
+            {/* Modified indicator - text on wider screens, hidden on narrow screens */}
+            {hasAnyOverride && !isModerateNarrow && (
               <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 font-medium flex-shrink-0">
                 Modified
               </span>
             )}
+            {/* Expand icon - moved here to be on same line */}
+            <ChevronDown 
+              size={isVeryNarrow ? 16 : 20} 
+              className={`
+                flex-shrink-0 text-surface-400 transition-transform
+                ${isExpanded ? 'rotate-180' : ''}
+              `}
+            />
           </div>
           
           {/* Metric indicators - responsive grid */}
@@ -384,8 +435,8 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
           <div className={`
             mt-1.5 
             ${isExpanded 
-              ? 'grid grid-cols-3 sm:flex sm:flex-wrap gap-x-3 gap-y-1.5 sm:gap-4' 
-              : 'grid grid-cols-3 sm:flex gap-x-4 gap-y-1 sm:gap-6'
+              ? 'grid grid-cols-3 mobile:flex mobile:flex-wrap gap-x-3 gap-y-1.5 mobile:gap-4' 
+              : 'grid grid-cols-3 mobile:flex gap-x-4 gap-y-1 mobile:gap-6'
             }
           `}>
             <MetricIndicator
@@ -466,28 +517,6 @@ export default function DishCard({ dish, isExpanded, onToggle, onOverrideChange,
           </div>
         </div>
 
-        {/* Reset button (when expanded and has overrides) */}
-        {isExpanded && hasAnyOverride && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleResetOverrides();
-            }}
-            className="flex-shrink-0 p-2 rounded-lg text-amber-400 hover:bg-amber-500/10 transition-colors"
-            title="Reset modifications"
-          >
-            <RotateCcw size={16} />
-          </button>
-        )}
-
-        {/* Expand icon */}
-        <ChevronDown 
-          size={20} 
-          className={`
-            flex-shrink-0 text-surface-400 transition-transform
-            ${isExpanded ? 'rotate-180' : ''}
-          `}
-        />
       </div>
 
       {/* Expanded Details */}

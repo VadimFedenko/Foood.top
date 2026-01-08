@@ -1,0 +1,256 @@
+Scrambled Eggs
+Omelette
+Fried Eggs
+Arugula Salad with Parmesan and Cherry Tomatoes
+Borscht
+Ramen
+Khao soi
+Pho
+Xiao Long Bao
+Miso Soup
+Chicken Soup
+Udon
+Tom Yum
+Tom Kha Gai
+Laksa
+Harira
+Shchi
+Okroshka
+Lagman
+Kharcho
+Šaltibarščiai
+Focaccia
+Minestrone
+French Onion Soup
+Gazpacho
+Tomato Soup
+Caldo Verde
+Fufu
+Egusi Soup
+Greek salad
+Gravlax
+Soba
+Hot Dog
+Burger
+Pizza Pepperoni
+Pizza Margherita
+Grilled Cheese
+Club Sandwich
+BLT
+California Sushi Roll
+Fajitas
+Burrito
+Quesadilla
+Pommes frites
+Kebab (Doner)
+Shawarma
+Gyros
+Pad Thai
+Pad Krapow
+Banh Mi
+Southern Fried Chicken
+Roast Chicken
+Fish and Chips
+Steak (Ribeye/Wagyu)
+Lasagna
+Chicken Parmesan
+Spaghetti Carbonara
+Spaghetti Bolognese
+Risotto
+Paella
+Har Gow (Shrimp Dumplings)
+Gyoza
+Wontons
+Fresh Spring Rolls
+Hot Pot
+Peking Duck
+Kung Pao Chicken
+Mapo Tofu
+Char Siu
+Tempura
+Sashimi
+Unagi Don
+Yakitori
+Tonkatsu
+Okonomiyaki
+Bibimbap
+Bulgogi
+Kimchi
+Tteokbokki
+Samgyeopsal
+Japchae
+Butter Chicken
+Tandoori Chicken
+Biryani
+Naan
+Samosa
+Pani Puri
+Masala Dosa
+Palak Paneer
+Som Tam
+Massaman Curry
+Green Curry
+Chicken Satay
+Fried Rice
+Nasi Goreng
+Rendang
+Goi Cuon
+Chili Crab
+Hainanese Chicken Rice
+Falafel
+Tabouleh
+Fattoush
+Shakshouka
+Couscous
+Tagine
+Baklava
+Pide
+Lahmacun
+Kofte
+Borek
+Lula Kebab
+Moussaka
+Souvlaki
+Spanakopita
+Schnitzel
+Currywurst
+Bratwurst
+Pretzel
+Sauerkraut
+Sauerbraten
+Käsespätzle
+Rouladen
+Goulash
+Pelmeni
+Olivier Salad
+Blini with Caviar
+Beef Stroganoff
+Varenyky
+Pierogi
+Bigos
+Stuffed Cabbage Rolls
+Potato Pancakes
+Salo
+Shashlik
+Plov
+Manti
+Dolma
+Khinkali
+Khachapuri
+Satsivi
+Cepelinai
+Kibinai
+Smorrebrod with Egg and Anchovies
+Italian Meatballs
+Cinnamon Buns
+Swiss Cheese Fondue
+Raclette
+Rosti
+Croissant
+Baguette
+Arancini
+Caprese Salad
+Bruschetta
+Polenta
+Ossobuco
+Gnocchi
+Ricotta Spinach Ravioli
+Fettuccine Alfredo
+Jamón Ibérico
+Prosciutto di Parma
+Escargots de Bourgogne
+Boeuf Bourguignon
+Cassoulet
+Coq au Vin
+Ratatouille
+Quiche Lorraine
+Mashed Potatoes
+Bouillabaisse
+Croque Monsieur
+Steak frites
+Moules-frites
+Spanish Tortilla
+Patatas Bravas
+Fabada
+Crepes
+Gelato
+Tiramisu
+Cheesecake
+American Pancakes
+French Toast
+Oatmeal
+Traditional Caesar Salad
+Cafe-Style Salad Caesar
+Cobb Salad
+Poutine
+Montreal Smoked Meat Sandwich
+Reuben sandwich
+Bagel with lox
+Lobster Roll
+Mac and Cheese
+Buffalo Wings
+BBQ Ribs
+Gumbo
+Jambalaya
+Clam Chowder
+Chili con Carne
+Nachos
+Tacos al Pastor
+Mole Poblano
+Chicken Enchilada
+Chiles en Nogada
+Tamales
+Chilaquiles
+Elote
+Pupusa
+Arepa
+Beef Empanada
+Ceviche
+Lomo saltado
+Cuy Chactado
+Bandeja Paisa
+Feijoada
+Churrasco
+Asado
+Moqueca
+Pão de queijo
+Pastel de nata
+Bacalhau à Brás
+Francesinha
+Sardinhas assadas
+Cornish Pasty
+Shepherd's Pie
+Yorkshire Pudding
+Sunday Roast
+Haggis
+Scones
+Jollof Rice
+Bunny Chow
+Bobotie
+Biltong
+Injera
+Doro Wat
+Chicken Muamba
+Poke
+Jamaican jerk chicken
+Cuban Sandwich
+Salade Niçoise
+Waldorf Salad
+Coleslaw
+Shopska Salad
+Gado-gado
+Chicken Larb
+Wakame Salad
+Shuba Salad
+Vinegret
+Potato Salad
+Tagliata con Rucola
+Ensalada Mixta
+Belgian Waffles
+Macarons
+Chicken Kiev
+Brownie
+Katsudon
+Churros
+Bryan Johnson's Nutty Pudding
+Bryan Johnson's Super Veggie

@@ -18,7 +18,7 @@ function StatsBar({
   onSearchChange
 }) {
   return (
-    <div className="space-y-2">
+      <div className="space-y-2">
       <div className="flex flex-col xs:flex-row xs:items-center gap-2 xs:gap-3 px-1 text-sm text-surface-500 dark:text-surface-400 min-h-[28px]">
         {/* Search bar */}
         <div className="relative flex-1 min-w-0">
@@ -31,7 +31,7 @@ function StatsBar({
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search dishes..."
-            className="w-full pl-9 sm:pl-10 pr-8 sm:pr-10 py-2 sm:py-2.5 rounded-xl
+            className="w-full pl-9 sm:pl-10 pr-8 sm:pr-10 py-2 sm:py-2.2 rounded-xl
                        bg-white/80 dark:bg-surface-800/80 
                        border border-surface-300/50 dark:border-surface-700/50
                        text-sm text-surface-800 dark:text-surface-100 
@@ -144,13 +144,13 @@ export default function DishList({
     onExpandedDishChange(expandedDish === dishName ? null : dishName);
   };
 
-  const useLiteList = isMobile || reduceMotion;
+  const useLiteList = reduceMotion;
   const remaining = Math.max(0, filteredDishes.length - visibleCount);
 
   return (
     <div className="flex flex-col h-full">
       {/* Search and stats */}
-      <div className="px-4 pt-3 pb-2 space-y-3 border-b border-surface-200/50 dark:border-surface-800/50">
+      <div className="px-4 pt-2.5 pb-1.5 space-y-2 border-b border-surface-200/50 dark:border-surface-800/50">
         <StatsBar 
           totalDishes={dishes.length} 
           filteredCount={filteredDishes.length}

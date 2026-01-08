@@ -50,6 +50,9 @@ export default function App() {
   // Track expanded dish cards to prevent re-ranking when cards are open
   const [expandedDish, setExpandedDish] = useState(null);
   
+  // Shady feature: Worst Food Ever mode
+  const [isWorstMode, setIsWorstMode] = useState(false);
+  
   // Store frozen ranked dishes when cards are expanded
   const frozenRankedDishesRef = useRef(null);
   
@@ -209,6 +212,29 @@ export default function App() {
     setTheme((t) => (t === 'light' ? 'dark' : 'light'));
   }, []);
 
+  // Shady feature: Toggle Worst Food Ever mode and set fixed priority values
+  const handleWorstModeToggle = useCallback(() => {
+    setIsWorstMode(prev => {
+      const newMode = !prev;
+      
+      // Set priorities to fixed values based on mode
+      setPriorities(currentPriorities => {
+        const updated = {};
+        Object.keys(currentPriorities).forEach(key => {
+          const value = currentPriorities[key];
+          const absValue = Math.abs(value);
+          // If switching to worst mode, set negative values (niche, junky, etc.)
+          // If switching to best mode, set positive values (tasty, healthy, etc.)
+          // Preserve absolute value, only change sign based on mode
+          updated[key] = value === 0 ? 0 : (newMode ? -absValue : absValue);
+        });
+        return updated;
+      });
+      
+      return newMode;
+    });
+  }, [setPriorities]);
+
   return (
     <div className="min-h-screen bg-surface-100 dark:bg-surface-900 pattern-grid transition-colors duration-300">
       {/* Centered container - max width for desktop, full width on mobile */}
@@ -223,6 +249,10 @@ export default function App() {
             onOptimizedToggle={handleOptimizedToggle}
             isDark={isDark}
             onThemeToggle={handleThemeToggle}
+            isWorstMode={isWorstMode}
+            onWorstModeToggle={handleWorstModeToggle}
+            selectedZone={selectedZone}
+            onZoneChange={handleZoneChange}
           />
         </div>
 

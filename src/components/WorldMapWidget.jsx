@@ -7,7 +7,7 @@ import EconomicZonesSvgMap from './EconomicZonesSvgMap';
  * - No country geometry in runtime
  */
 const WorldMapWidget = memo(function WorldMapWidget({ selectedZone, onZoneSelect, variant = 'wide' }) {
-  const zoom = variant === 'square' ? 1.21 : 1.3;
+  const zoom = variant === 'square' ? 1.5 : 1.3;
 
   return (
     <div className="relative w-full h-full min-h-[150px] rounded-lg overflow-hidden">
