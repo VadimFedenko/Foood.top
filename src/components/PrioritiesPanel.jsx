@@ -385,9 +385,15 @@ export default function PrioritiesPanel({
   const isPendingCommitRef = useRef(false);
   const lastExpandedAtRef = useRef(0);
   const lastScrollYRef = useRef(0);
-  const scrollUpDistanceRef = useRef(0);
+  const pullDownTimerRef = useRef(null);
+  const isPullingDownRef = useRef(false);
+  const touchStartYRef = useRef(null);
+  const isExpandedRef = useRef(isExpanded);
+  const expandedDishRef = useRef(expandedDish);
   
   useEffect(() => { draftRef.current = draft; }, [draft]);
+  useEffect(() => { isExpandedRef.current = isExpanded; }, [isExpanded]);
+  useEffect(() => { expandedDishRef.current = expandedDish; }, [expandedDish]);
 
   useEffect(() => {
     return () => {
@@ -427,55 +433,42 @@ export default function PrioritiesPanel({
     return () => window.removeEventListener('pointerup', handlePointerUp);
   }, [isDragging, onPrioritiesChange]);
 
-  useEffect(() => {
-    const scrollable =
-      document.querySelector('main .overflow-y-auto') ||
-      document.querySelector('.overflow-y-auto');
+  // Helper function to check if at top
+  const getScrollable = () => {
+    return document.querySelector('main .overflow-y-auto') ||
+           document.querySelector('.overflow-y-auto');
+  };
 
+  useEffect(() => {
+    const scrollable = getScrollable();
     if (!scrollable) return;
+
+    const cancelPullDownTimer = () => {
+      if (pullDownTimerRef.current) {
+        clearTimeout(pullDownTimerRef.current);
+        pullDownTimerRef.current = null;
+      }
+      isPullingDownRef.current = false;
+    };
 
     const handleScroll = () => {
       const currentScrollY = scrollable.scrollTop;
       const previousScrollY = lastScrollYRef.current;
       const scrollDelta = currentScrollY - previousScrollY;
-      const timeSinceExpansion = Date.now() - lastExpandedAtRef.current;
-      const justExpanded = expandedDish && timeSinceExpansion < 600;
-
-      // Track scroll direction and distance
-      const isScrollingUp = scrollDelta < 0;
       const isScrollingDown = scrollDelta > 0;
-      const isAtTop = currentScrollY <= 10;
-      
-      // Reset scroll up distance when scrolling down or when not at top
-      if (isScrollingDown || !isAtTop) {
-        scrollUpDistanceRef.current = 0;
-      } else if (isScrollingUp && isAtTop) {
-        // Accumulate scroll up distance when at top and scrolling up
-        scrollUpDistanceRef.current += Math.abs(scrollDelta);
-      }
 
       // Update last scroll position
       lastScrollYRef.current = currentScrollY;
 
-      // Only expand if:
-      // 1. We're at the top (within 10px)
-      // 2. We're actively scrolling up (not just stationary at top)
-      // 3. We've scrolled up at least 20px while at the top (pull-down gesture)
-      const hasPulledDown = scrollUpDistanceRef.current >= 20;
-      const shouldExpand = isAtTop && isScrollingUp && hasPulledDown;
+      // Cancel pull-down if scrolling down
+      if (isScrollingDown) {
+        cancelPullDownTimer();
+      }
 
-      if (shouldExpand) {
-        if (expandedDish && !justExpanded) {
-          onCollapseExpandedDish?.();
-          setIsExpanded(true);
-          scrollUpDistanceRef.current = 0; // Reset after expanding
-        } else if (!isExpanded && !expandedDish) {
-          setIsExpanded(true);
-          scrollUpDistanceRef.current = 0; // Reset after expanding
-        }
-      } else if (isExpanded && currentScrollY > 30 && !expandedDish) {
+      // Collapse when scrolling down past threshold
+      if (isExpandedRef.current && currentScrollY > 30 && !expandedDishRef.current) {
         setIsExpanded(false);
-        scrollUpDistanceRef.current = 0; // Reset when collapsing
+        cancelPullDownTimer();
       }
     };
 
@@ -485,8 +478,183 @@ export default function PrioritiesPanel({
     scrollable.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       scrollable.removeEventListener('scroll', handleScroll);
+      cancelPullDownTimer();
     };
-  }, [isExpanded, onCollapseExpandedDish, expandedDish]);
+  }, []);
+
+  // Handle wheel events (mouse wheel) for pull-down detection
+  useEffect(() => {
+    const scrollable = getScrollable();
+    if (!scrollable) return;
+
+    const cancelPullDownTimer = () => {
+      if (pullDownTimerRef.current) {
+        clearTimeout(pullDownTimerRef.current);
+        pullDownTimerRef.current = null;
+      }
+      isPullingDownRef.current = false;
+    };
+
+    const startPullDownTimer = () => {
+      // Don't start if already expanded
+      if (isExpandedRef.current) {
+        cancelPullDownTimer();
+        return;
+      }
+
+      cancelPullDownTimer();
+      isPullingDownRef.current = true;
+      pullDownTimerRef.current = setTimeout(() => {
+        // Check again before expanding
+        if (isExpandedRef.current) {
+          pullDownTimerRef.current = null;
+          isPullingDownRef.current = false;
+          return;
+        }
+
+        const timeSinceExpansion = Date.now() - lastExpandedAtRef.current;
+        const justExpanded = expandedDishRef.current && timeSinceExpansion < 600;
+        
+        if (expandedDishRef.current && !justExpanded) {
+          onCollapseExpandedDish?.();
+          setIsExpanded(true);
+        } else if (!expandedDishRef.current) {
+          setIsExpanded(true);
+        }
+        
+        pullDownTimerRef.current = null;
+        isPullingDownRef.current = false;
+      }, 300);
+    };
+
+    const isAtTop = () => {
+      return scrollable.scrollTop <= 10;
+    };
+
+    const handleWheel = (e) => {
+      // Don't handle if already expanded
+      if (isExpandedRef.current) {
+        cancelPullDownTimer();
+        return;
+      }
+
+      // Check if scrolling up (negative deltaY) and at top
+      if (e.deltaY < 0 && isAtTop()) {
+        startPullDownTimer();
+      } else {
+        cancelPullDownTimer();
+      }
+    };
+
+    scrollable.addEventListener('wheel', handleWheel, { passive: true });
+    return () => {
+      scrollable.removeEventListener('wheel', handleWheel);
+      cancelPullDownTimer();
+    };
+  }, [onCollapseExpandedDish]);
+
+  // Handle touch events for pull-down detection on mobile
+  useEffect(() => {
+    const scrollable = getScrollable();
+    if (!scrollable) return;
+
+    const cancelPullDownTimer = () => {
+      if (pullDownTimerRef.current) {
+        clearTimeout(pullDownTimerRef.current);
+        pullDownTimerRef.current = null;
+      }
+      isPullingDownRef.current = false;
+    };
+
+    const startPullDownTimer = () => {
+      // Don't start if already expanded
+      if (isExpandedRef.current) {
+        cancelPullDownTimer();
+        return;
+      }
+
+      cancelPullDownTimer();
+      isPullingDownRef.current = true;
+      pullDownTimerRef.current = setTimeout(() => {
+        // Check again before expanding
+        if (isExpandedRef.current) {
+          pullDownTimerRef.current = null;
+          isPullingDownRef.current = false;
+          return;
+        }
+
+        const timeSinceExpansion = Date.now() - lastExpandedAtRef.current;
+        const justExpanded = expandedDishRef.current && timeSinceExpansion < 600;
+        
+        if (expandedDishRef.current && !justExpanded) {
+          onCollapseExpandedDish?.();
+          setIsExpanded(true);
+        } else if (!expandedDishRef.current) {
+          setIsExpanded(true);
+        }
+        
+        pullDownTimerRef.current = null;
+        isPullingDownRef.current = false;
+      }, 300);
+    };
+
+    const isAtTop = () => {
+      return scrollable.scrollTop <= 10;
+    };
+
+    const handleTouchStart = (e) => {
+      // Don't handle if already expanded
+      if (isExpandedRef.current) {
+        touchStartYRef.current = null;
+        return;
+      }
+
+      if (isAtTop()) {
+        touchStartYRef.current = e.touches[0].clientY;
+      } else {
+        touchStartYRef.current = null;
+      }
+    };
+
+    const handleTouchMove = (e) => {
+      // Don't handle if already expanded
+      if (isExpandedRef.current) {
+        cancelPullDownTimer();
+        touchStartYRef.current = null;
+        return;
+      }
+
+      if (touchStartYRef.current === null) return;
+
+      const currentY = e.touches[0].clientY;
+      const deltaY = currentY - touchStartYRef.current;
+
+      // If user is pulling down (touch moving down, which means scrolling up)
+      if (deltaY > 0 && isAtTop()) {
+        startPullDownTimer();
+      } else {
+        cancelPullDownTimer();
+      }
+    };
+
+    const handleTouchEnd = () => {
+      touchStartYRef.current = null;
+      cancelPullDownTimer();
+    };
+
+    scrollable.addEventListener('touchstart', handleTouchStart, { passive: true });
+    scrollable.addEventListener('touchmove', handleTouchMove, { passive: true });
+    scrollable.addEventListener('touchend', handleTouchEnd, { passive: true });
+    scrollable.addEventListener('touchcancel', handleTouchEnd, { passive: true });
+
+    return () => {
+      scrollable.removeEventListener('touchstart', handleTouchStart);
+      scrollable.removeEventListener('touchmove', handleTouchMove);
+      scrollable.removeEventListener('touchend', handleTouchEnd);
+      scrollable.removeEventListener('touchcancel', handleTouchEnd);
+      cancelPullDownTimer();
+    };
+  }, [onCollapseExpandedDish]);
 
   useEffect(() => {
     if (expandedDish && isExpanded) {
@@ -647,7 +815,10 @@ export default function PrioritiesPanel({
                 <button
                   onClick={() => {
                     setIsExpanded(!isExpanded);
-                    scrollUpDistanceRef.current = 0;
+                    if (pullDownTimerRef.current) {
+                      clearTimeout(pullDownTimerRef.current);
+                      pullDownTimerRef.current = null;
+                    }
                   }}
                   className="sm:hidden p-2 rounded-lg hover:bg-surface-200/50 dark:hover:bg-surface-700/50 transition-colors flex-shrink-0"
                   aria-label="Collapse panels"
@@ -665,7 +836,10 @@ export default function PrioritiesPanel({
               <button
                 onClick={() => {
                   setIsExpanded(!isExpanded);
-                  scrollUpDistanceRef.current = 0;
+                  if (pullDownTimerRef.current) {
+                    clearTimeout(pullDownTimerRef.current);
+                    pullDownTimerRef.current = null;
+                  }
                 }}
                 className="p-2 rounded-lg hover:bg-surface-200/50 dark:hover:bg-surface-700/50 transition-colors"
                 aria-label="Collapse panels"
@@ -681,7 +855,10 @@ export default function PrioritiesPanel({
               <button
                 onClick={() => {
                   setIsExpanded(true);
-                  scrollUpDistanceRef.current = 0;
+                  if (pullDownTimerRef.current) {
+                    clearTimeout(pullDownTimerRef.current);
+                    pullDownTimerRef.current = null;
+                  }
                   if (onCollapseExpandedDish) {
                     onCollapseExpandedDish();
                   }
