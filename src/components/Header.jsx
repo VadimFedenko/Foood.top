@@ -17,12 +17,28 @@ export default function Header({
   isWorstMode,
   onWorstModeToggle,
   selectedZone,
-  onZoneChange
+  onZoneChange,
+  isPrioritiesExpanded
 }) {
   const [isZoneDropdownOpen, setIsZoneDropdownOpen] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState(null);
   const zoneButtonRef = useRef(null);
   const zoneDropdownRef = useRef(null);
+  const [isNarrowScreen, setIsNarrowScreen] = useState(false);
+
+  // Check if screen width is less than 480px
+  useEffect(() => {
+    const checkWidth = () => {
+      setIsNarrowScreen(window.innerWidth < 480);
+    };
+    
+    checkWidth();
+    window.addEventListener('resize', checkWidth);
+    return () => window.removeEventListener('resize', checkWidth);
+  }, []);
+
+  // Determine if header should be hidden
+  const shouldHideHeader = !isPrioritiesExpanded && isNarrowScreen;
 
   const handleZoneButtonClick = (event) => {
     const buttonElement = event.currentTarget;
@@ -98,6 +114,10 @@ export default function Header({
       window.removeEventListener('scroll', handleScroll, true);
     };
   }, [isZoneDropdownOpen]);
+
+  if (shouldHideHeader) {
+    return null;
+  }
 
   return (
     <header className="bg-white dark:bg-surface-800 border-b border-surface-700/50 dark:border-surface-700/50">

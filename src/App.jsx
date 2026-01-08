@@ -50,6 +50,12 @@ export default function App() {
   // Track expanded dish cards to prevent re-ranking when cards are open
   const [expandedDish, setExpandedDish] = useState(null);
   
+  // Track priorities panel expanded state
+  const [isPrioritiesExpanded, setIsPrioritiesExpanded] = useState(true);
+  
+  // Track screen width for responsive behavior
+  const [isNarrowScreen, setIsNarrowScreen] = useState(false);
+  
   // Shady feature: Worst Food Ever mode
   const [isWorstMode, setIsWorstMode] = useState(false);
   
@@ -65,6 +71,17 @@ export default function App() {
     if (isDark) document.documentElement.classList.add('dark');
     else document.documentElement.classList.remove('dark');
   }, [isDark]);
+
+  // Check if screen width is less than 480px
+  useEffect(() => {
+    const checkWidth = () => {
+      setIsNarrowScreen(window.innerWidth < 480);
+    };
+    
+    checkWidth();
+    window.addEventListener('resize', checkWidth);
+    return () => window.removeEventListener('resize', checkWidth);
+  }, []);
 
   // Check if all priorities are zero
   const allPrioritiesZero = useMemo(() => {
@@ -253,11 +270,12 @@ export default function App() {
             onWorstModeToggle={handleWorstModeToggle}
             selectedZone={selectedZone}
             onZoneChange={handleZoneChange}
+            isPrioritiesExpanded={isPrioritiesExpanded}
           />
         </div>
 
         {/* Sticky Priorities Panel - lower z-index, will stick below header when scrolling */}
-        <div className="sticky top-[73px] z-40">
+        <div className={`sticky z-40 ${!isPrioritiesExpanded && isNarrowScreen ? 'top-0' : 'top-[73px]'}`}>
           <PrioritiesPanel
             priorities={priorities}
             onPrioritiesChange={handlePrioritiesChange}
@@ -265,6 +283,7 @@ export default function App() {
             onZoneChange={handleZoneChange}
             expandedDish={expandedDish}
             onCollapseExpandedDish={() => setExpandedDish(null)}
+            onExpandedChange={setIsPrioritiesExpanded}
           />
         </div>
 

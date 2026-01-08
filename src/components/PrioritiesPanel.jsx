@@ -369,6 +369,7 @@ export default function PrioritiesPanel({
   onZoneChange,
   expandedDish,
   onCollapseExpandedDish,
+  onExpandedChange,
 }) {
   const [isExpanded, setIsExpanded] = useState(true);
   const [isZoneDropdownOpen, setIsZoneDropdownOpen] = useState(false);
@@ -524,7 +525,7 @@ export default function PrioritiesPanel({
         
         pullDownTimerRef.current = null;
         isPullingDownRef.current = false;
-      }, 300);
+      }, 30);
     };
 
     const isAtTop = () => {
@@ -595,7 +596,7 @@ export default function PrioritiesPanel({
         
         pullDownTimerRef.current = null;
         isPullingDownRef.current = false;
-      }, 300);
+      }, 30);
     };
 
     const isAtTop = () => {
@@ -662,6 +663,13 @@ export default function PrioritiesPanel({
       setIsExpanded(false);
     }
   }, [expandedDish, isExpanded]);
+
+  // Notify parent about expanded state changes
+  useEffect(() => {
+    if (onExpandedChange) {
+      onExpandedChange(isExpanded);
+    }
+  }, [isExpanded, onExpandedChange]);
 
   const closeDropdown = () => {
     setIsZoneDropdownOpen(false);
@@ -863,30 +871,49 @@ export default function PrioritiesPanel({
                     onCollapseExpandedDish();
                   }
                 }}
-                className="w-full flex items-center justify-between gap-3 hover:opacity-80 transition-opacity"
+                className="w-full flex flex-col min-[480px]:flex-row items-start min-[480px]:items-center justify-between gap-2 min-[480px]:gap-3 hover:opacity-80 transition-opacity"
               >
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <h2 className="hidden min-[480px]:block font-display font-semibold text-lg text-surface-800 dark:text-surface-100 whitespace-nowrap">
-                    My Priorities
-                  </h2>
-                  {/* Compact icons row */}
-                  <div className="flex items-center gap-1.5 overflow-x-auto py-1 hide-scrollbar">
-                    {activePriorities.length > 0 ? (
-                      activePriorities.map(config => (
-                        <CompactPriorityIcon
-                          key={config.key}
-                          config={config}
-                          value={displayed[config.key]}
-                          percentage={percentages[config.key]}
-                        />
-                      ))
-                    ) : (
-                      <span className="text-xs text-surface-400 italic">No priorities set</span>
-                    )}
-                    {selectedZone && <CompactZoneIcon zoneId={selectedZone} />}
+                {/* First row: "My Priorities" + chevron (always in one line) */}
+                <div className="flex items-center justify-between gap-3 w-full min-[480px]:w-auto min-[480px]:flex-1 min-[480px]:min-w-0">
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <h2 className="font-display font-semibold text-sm min-[480px]:text-lg text-surface-800 dark:text-surface-100 whitespace-nowrap">
+                      My Priorities
+                    </h2>
+                    {/* Compact icons row - показываем только на широких экранах, рядом с текстом */}
+                    <div className="hidden min-[480px]:flex items-center gap-1.5 overflow-x-auto py-1 hide-scrollbar">
+                      {activePriorities.length > 0 ? (
+                        activePriorities.map(config => (
+                          <CompactPriorityIcon
+                            key={config.key}
+                            config={config}
+                            value={displayed[config.key]}
+                            percentage={percentages[config.key]}
+                          />
+                        ))
+                      ) : (
+                        <span className="text-xs text-surface-400 italic">No priorities set</span>
+                      )}
+                      {selectedZone && <CompactZoneIcon zoneId={selectedZone} />}
+                    </div>
                   </div>
+                  <ChevronDown size={20} className="text-surface-500 dark:text-surface-300 flex-shrink-0" />
                 </div>
-                <ChevronDown size={20} className="text-surface-500 dark:text-surface-300 flex-shrink-0" />
+                {/* Compact icons row - показываем только на узких экранах, под текстом */}
+                <div className="flex min-[480px]:hidden items-center gap-1.5 overflow-x-auto py-1 hide-scrollbar w-full">
+                  {activePriorities.length > 0 ? (
+                    activePriorities.map(config => (
+                      <CompactPriorityIcon
+                        key={config.key}
+                        config={config}
+                        value={displayed[config.key]}
+                        percentage={percentages[config.key]}
+                      />
+                    ))
+                  ) : (
+                    <span className="text-xs text-surface-400 italic">No priorities set</span>
+                  )}
+                  {selectedZone && <CompactZoneIcon zoneId={selectedZone} />}
+                </div>
               </button>
             </div>
           </>

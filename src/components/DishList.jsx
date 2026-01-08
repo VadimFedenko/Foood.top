@@ -169,7 +169,7 @@ export default function DishList({
         ) : (
           <>
             {useLiteList ? (
-              <div className="space-y-3">
+              <div className="space-y-1.5">
                 {visibleDishes.map((dish) => (
                   <div key={dish.name}>
                     <DishCard
@@ -188,7 +188,7 @@ export default function DishList({
                 ))}
               </div>
             ) : (
-              <motion.div className="space-y-3">
+              <motion.div className="space-y-1.5">
                 <AnimatePresence mode="sync">
                   {visibleDishes.map((dish) => (
                     <motion.div
