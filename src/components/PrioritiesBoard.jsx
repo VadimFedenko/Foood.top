@@ -103,6 +103,8 @@ const PRIORITY_CONFIG = [
 
 /**
  * Priorities board content - sliders and hint
+ * Note: Inline callbacks are acceptable here since PrioritySlider uses local state
+ * during drag and only commits to store on pointerup, minimizing re-render impact
  */
 export default function PrioritiesBoard({ 
   priorityConfig,

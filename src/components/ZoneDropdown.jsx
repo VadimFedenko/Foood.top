@@ -1,7 +1,8 @@
-import { useMemo, useRef } from 'react';
+import { useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { ECONOMIC_ZONES } from '../lib/RankingEngine';
 import { useOnClickOutside } from '../hooks/useOnClickOutside';
+import ZoneIcon from './ZoneIcon';
 
 export default function ZoneDropdown({
   open,
@@ -16,8 +17,8 @@ export default function ZoneDropdown({
 }) {
   const dropdownRef = useRef(null);
 
-  const position = useMemo(() => {
-    if (!open || !anchorEl?.getBoundingClientRect) return null;
+  let position = null;
+  if (open && anchorEl?.getBoundingClientRect) {
     const r = anchorEl.getBoundingClientRect();
     const w = width ?? r.width;
 
@@ -32,8 +33,8 @@ export default function ZoneDropdown({
       }
     }
 
-    return { top: r.bottom + 4, left, width: w };
-  }, [open, anchorEl, width, narrow]);
+    position = { top: r.bottom + 4, left, width: w };
+  }
 
   useOnClickOutside({
     enabled: open && !!anchorEl,
@@ -75,7 +76,7 @@ export default function ZoneDropdown({
             }
           `}
         >
-          <span className="text-lg">{zone.emoji}</span>
+          <ZoneIcon zoneId={zoneId} size={18} />
           <span className="flex-1">{zone.name}</span>
           {selectedZone === zoneId && <span className="text-blue-500">✓</span>}
         </button>

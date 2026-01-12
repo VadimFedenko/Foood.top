@@ -1638,6 +1638,27 @@
         "ethics_reason": "Bonito fishing contributes to overfishing; kelp harvesting is low‑impact."
     },
     {
+        "ingredient": "Hondashi",
+        "cal_per_g": 2.5,
+        "prices": {
+            "east_euro_agrarian": 12,
+            "west_eu_industrial": 18,
+            "northern_import": 22,
+            "mediterranean": 15,
+            "north_american": 16,
+            "latam_agrarian": 10,
+            "asian_rice_labor": 8,
+            "developed_asia": 25,
+            "mena_arid": 16,
+            "oceanic": 20,
+            "subsaharan_subsistence": 12
+        },
+        "yield_ratio": 1,
+        "health_index": 9,
+        "ethics_index": 6,
+        "ethics_reason": "Processed dashi granules are more efficient than making stock from scratch, but still contain bonito which has overfishing concerns."
+    },
+    {
         "ingredient": "Dill",
         "cal_per_g": 0.6,
         "prices": {
@@ -4427,7 +4448,7 @@
         },
         "yield_ratio": 1,
         "health_index": 8,
-        "ethics_index": 10,
+        "ethics_index": null,
         "ethics_reason": "Pure water with negligible environmental impact."
     },
     {
@@ -6422,7 +6443,7 @@
         },
         "yield_ratio": 1,
         "health_index": null,
-        "ethics_index": 10,
+        "ethics_index": null,
         "ethics_reason": "Essential, non-sentient resource with minimal environmental impact when sourced sustainably."
     },
     {

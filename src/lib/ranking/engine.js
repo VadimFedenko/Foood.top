@@ -413,6 +413,9 @@ export function calculateDishEthics(dish, ingredientsDb) {
     
     if (!ingredient || weight <= 0) continue;
 
+    // Skip ingredients with null ethics_index (they should not be included in ethics calculation)
+    if (ingredient.ethics_index === null) continue;
+
     const ethics = ingredient.ethics_index ?? 5;
     weightedEthicsSum += ethics * weight;
     totalWeight += weight;
@@ -602,6 +605,7 @@ function analyzeDishStatic(dish, zoneId, ingredientsDb, overrides = {}) {
   };
 
   return {
+    id: dish.id,
     name: dish.dish || dish.name,
     description: dish.desc || '',
 
@@ -1017,8 +1021,8 @@ export function analyzeAllDishesVariants(dishes, ingredients, zoneId, allOverrid
 
   // Pre-compute static analysis (base metrics that don't depend on variant)
   const staticAnalyzed = dishes.map((dish) => {
-    const dishName = dish.dish || dish.name;
-    const overrides = allOverrides[dishName] || {};
+    const dishId = dish.id;
+    const overrides = allOverrides[dishId] || {};
     return analyzeDishStatic(dish, zoneId, ingredientIndex, overrides);
   });
 
@@ -1092,10 +1096,19 @@ export function analyzeAllDishesVariants(dishes, ingredients, zoneId, allOverrid
       };
     });
 
-    // Hot-path optimization for UI: O(1) dish lookup by name without rebuilding Maps in components
-    const byName = new Map(analyzedWithNorm.map(d => [d.name, d]));
+    // Hot-path optimization for UI: O(1) dish lookup by id without rebuilding Maps in components
+    const byId = new Map(analyzedWithNorm.map(d => [d.id, d]));
 
-    return { analyzed: analyzedWithNorm, datasetStats, byName };
+    return {
+      analyzed: analyzedWithNorm,
+      datasetStats,
+      byId,
+      // UI helper data (for inverting "score -> raw value" in edit mode).
+      dists: {
+        speedValuesSorted: speedDist.valuesSorted,
+        speedHigherIsBetter: false,
+      },
+    };
   };
 
   // Simple cache object with getter function
@@ -1135,6 +1148,13 @@ export function analyzeAllDishesVariants(dishes, ingredients, zoneId, allOverrid
   // For compatibility with object-style access (analysisVariants.variants['normal:serving'])
   // Use Proxy wrapper that delegates to the cache
   return {
+    meta: {
+      // UI helper data (variant-independent).
+      lowCalorieValuesSorted: lowCalorieDist.valuesSorted,
+      lowCalorieHigherIsBetter: false,
+      satietyValuesSorted: satietyDist.valuesSorted,
+      satietyHigherIsBetter: true,
+    },
     variants: new Proxy({}, {
       get(target, key) {
         if (key === 'get' || key === 'has') {

@@ -50,58 +50,37 @@ function MetricBadge({ icon: Icon, value, format, isOverridden = false, compact 
 export default function DishCardSimple({ 
   dish, 
   onClick, 
-  overrides = {}, 
   onResetOverrides,
   priceUnit = 'serving',
 }) {
   const scoreColors = getScoreColor(dish.score);
   const isMobile = useIsMobile();
   
-  // Check if any overrides exist for this dish
-  const hasAnyOverride = Object.keys(overrides || {}).length > 0;
-  
-  // Effective values with overrides applied
-  const effectiveValues = useMemo(() => {
-    const baseTaste = dish.baseTaste ?? dish.taste ?? 5;
-    const baseHealth = dish.baseHealth ?? dish.health ?? 5;
-    const baseEthics = dish.baseEthics ?? dish.ethics ?? 5;
-    const baseCalories = dish.baseCalories ?? dish.calories ?? 0;
-    
-    const effectiveTaste = overrides?.tasteMul !== undefined 
-      ? Math.min(10, Math.max(0, baseTaste * overrides.tasteMul))
-      : dish.taste;
-    
-    const effectiveHealth = overrides?.healthMul !== undefined
-      ? Math.min(10, Math.max(0, baseHealth * overrides.healthMul))
-      : dish.health;
-    
-    const effectiveEthics = overrides?.ethicsMul !== undefined
-      ? Math.min(10, Math.max(0, baseEthics * overrides.ethicsMul))
-      : dish.ethics;
-    
-    const effectiveCalories = overrides?.caloriesMul !== undefined
-      ? Math.max(0, Math.round(baseCalories * overrides.caloriesMul))
-      : dish.calories ?? 0;
-    
+  const hasAnyOverride = useMemo(() => {
+    const o = dish?.hasOverrides;
+    if (!o || typeof o !== 'object') return false;
+    return Object.values(o).some(Boolean);
+  }, [dish]);
+
+  const values = useMemo(() => {
+    const calories = dish?.calories ?? 0;
     const weight = dish?.weight ?? 0;
-    const calPerG = weight > 0 && effectiveCalories > 0
-      ? ((effectiveCalories / weight) * 1000 / 100)
+    const calPerG = weight > 0 && calories > 0
+      ? ((calories / weight) * 1000 / 100)
       : 0;
-    
     return {
-      taste: effectiveTaste,
-      health: effectiveHealth,
-      ethics: effectiveEthics,
-      calories: effectiveCalories,
+      taste: dish?.taste ?? 0,
+      health: dish?.health ?? 0,
+      ethics: dish?.ethics ?? 0,
+      time: dish?.time ?? 0,
+      price: dish?.prices?.[priceUnit] ?? dish?.cost ?? 0,
       calPerG,
-      time: dish.time,
-      price: dish.prices?.[priceUnit] ?? dish.cost ?? 0,
     };
-  }, [dish, overrides, priceUnit]);
+  }, [dish, priceUnit]);
   
   const handleResetClick = (e) => {
     e.stopPropagation();
-    onResetOverrides?.(dish.name);
+    onResetOverrides?.(dish.id);
   };
   
   return (
@@ -161,44 +140,44 @@ export default function DishCardSimple({
           <div className="grid grid-cols-3 mobile:flex gap-x-3 gap-y-1 mobile:gap-4">
             <MetricBadge
               icon={Utensils}
-              value={effectiveValues.taste}
+              value={values.taste}
               format={(v) => v.toFixed(1)}
-              isOverridden={overrides.tasteMul !== undefined}
+              isOverridden={!!dish?.hasOverrides?.taste}
               compact={isMobile}
             />
             <MetricBadge
               icon={Heart}
-              value={effectiveValues.health}
+              value={values.health}
               format={(v) => v.toFixed(1)}
-              isOverridden={overrides.healthMul !== undefined}
+              isOverridden={!!dish?.hasOverrides?.health}
               compact={isMobile}
             />
             <MetricBadge
               icon={DollarSign}
-              value={effectiveValues.price}
+              value={values.price}
               format={(v) => v.toFixed(2)}
-              isOverridden={overrides.priceMul !== undefined}
+              isOverridden={!!dish?.hasOverrides?.price}
               compact={isMobile}
             />
             <MetricBadge
               icon={Clock}
-              value={effectiveValues.time}
+              value={values.time}
               format={(v) => formatTime(Math.round(v))}
-              isOverridden={overrides.timeMul !== undefined}
+              isOverridden={!!dish?.hasOverrides?.time}
               compact={isMobile}
             />
             <MetricBadge
               icon={Flame}
-              value={effectiveValues.calPerG}
+              value={values.calPerG}
               format={(v) => `${Math.round(v)}cal/g`}
-              isOverridden={overrides.caloriesMul !== undefined}
+              isOverridden={!!dish?.hasOverrides?.calories}
               compact={isMobile}
             />
             <MetricBadge
               icon={Leaf}
-              value={effectiveValues.ethics}
+              value={values.ethics}
               format={(v) => v.toFixed(1)}
-              isOverridden={overrides.ethicsMul !== undefined}
+              isOverridden={!!dish?.hasOverrides?.ethics}
               compact={isMobile}
             />
           </div>

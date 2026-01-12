@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import { usePrefs, prefsActions } from '../store/prefsStore';
 import { ECONOMIC_ZONES } from '../lib/RankingEngine';
+import ZoneIcon from './ZoneIcon';
 
 function CookingModeOption({ value, isSelected, title, description, onSelect }) {
   return (
@@ -61,7 +62,7 @@ function ZoneOption({ zoneId, zone, isSelected, onSelect }) {
     >
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0 flex-1">
-          <span className="text-lg flex-shrink-0">{zone.emoji}</span>
+          <ZoneIcon zoneId={zoneId} size={18} />
           <span className="text-sm font-semibold truncate">{zone.name}</span>
         </div>
         <div

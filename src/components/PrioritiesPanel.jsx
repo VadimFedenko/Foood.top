@@ -1,4 +1,5 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useMemo, useState, useEffect, useLayoutEffect, useRef } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { ECONOMIC_ZONES } from '../lib/RankingEngine';
 import { PRIORITY_CONFIG } from './PrioritiesBoard';
@@ -7,6 +8,7 @@ import EconomicZoneWidget from './EconomicZoneWidget';
 import { usePrioritiesPanelAutoToggle } from '../hooks/usePrioritiesPanelAutoToggle';
 import { usePrefs, prefsActions } from '../store/prefsStore';
 import ZoneDropdown from './ZoneDropdown';
+import ZoneIcon from './ZoneIcon';
 
 /**
  * Calculate percentage contribution of each priority
@@ -35,48 +37,16 @@ function calculatePercentages(priorities) {
  * Compact priority icon for collapsed state
  * Responsive sizing: small at <340px, progressively larger at wider breakpoints
  */
-function CompactPriorityIcon({ config, value, percentage }) {
+function CompactPriorityIcon({ config, value }) {
   const isReversed = value < 0;
   const Icon = isReversed ? config.negativeIcon : config.positiveIcon;
-  const label = isReversed ? config.negativeLabel : config.positiveLabel;
   const currentIconColor = isReversed ? config.negativeIconColor : config.iconColor;
 
   return (
-    <div className="flex flex-col items-center gap-0 overflow-visible">
-      <div 
-        className={`
-          relative w-8 h-4 min-[340px]:w-9 min-[340px]:h-5 min-[480px]:w-10 min-[480px]:h-5
-          rounded-lg flex items-center justify-center overflow-visible
-          ${isReversed 
-            ? 'bg-rose-500/20 border border-rose-500/40' 
-            : 'bg-emerald-500/20 border border-emerald-500/40'
-          }
-        `}
-      >
-        <Icon 
-          size={12}
-          className={currentIconColor}
-        />
-        <div 
-          className={`
-            absolute -top-1.5 -right-0.5
-            min-w-[14px] h-2.5 min-[340px]:min-w-[16px] min-[340px]:h-3 min-[480px]:min-w-[18px]
-            px-0.5 min-[340px]:px-0.5 min-[480px]:px-1
-            rounded text-[7px] min-[340px]:text-[8px] min-[480px]:text-[9px]
-            font-bold flex items-center justify-center
-            ${isReversed 
-              ? 'bg-rose-500/30 text-white' 
-              : 'bg-emerald-500/50 text-white'
-            }
-          `}
-        >
-          {percentage !== undefined ? `${percentage}%` : Math.abs(value)}
-        </div>
-      </div>
-      <span className="text-[8px] min-[340px]:text-[9px] min-[480px]:text-[10px] text-white dark:text-white font-medium truncate max-w-[44px] min-[340px]:max-w-[48px] min-[480px]:max-w-[52px] leading-tight mt-0.5">
-        {label}
-      </span>
-    </div>
+    <Icon 
+      size={16}
+      className={currentIconColor}
+    />
   );
 }
 
@@ -85,26 +55,15 @@ function CompactPriorityIcon({ config, value, percentage }) {
  * Responsive sizing: width only, height stays fixed
  */
 function CompactZoneIcon({ zoneId }) {
-  const zone = ECONOMIC_ZONES[zoneId];
   return (
-    <div className="flex flex-col items-center gap-0">
-      <div 
-        className="w-8 h-4 min-[340px]:w-9 min-[340px]:h-5 min-[480px]:w-10 min-[480px]:h-5 rounded-lg flex items-center justify-center
-          bg-blue-500/20 border border-blue-500/40"
-      >
-        <span className="text-xs min-[340px]:text-[13px] min-[480px]:text-sm leading-none">{zone.emoji}</span>
-      </div>
-      <span className="text-[8px] min-[340px]:text-[9px] min-[480px]:text-[10px] text-white dark:text-white font-medium truncate max-w-[40px] min-[340px]:max-w-[44px] min-[480px]:max-w-[48px] leading-tight mt-0.5">
-        {zone.name}
-      </span>
-    </div>
+    <ZoneIcon zoneId={zoneId} size={14} className="min-[340px]:w-[14px] min-[340px]:h-[14px] min-[480px]:w-4 min-[480px]:h-4" />
   );
 }
 
 /**
  * Compact icons row - reusable component for collapsed view
  */
-function CompactIconsRow({ activePriorities, displayed, percentages, selectedZone, className = '' }) {
+function CompactIconsRow({ activePriorities, displayed, selectedZone, className = '' }) {
   return (
     <div className={`flex items-center gap-0.5 min-[340px]:gap-0.5 min-[480px]:gap-1 overflow-x-auto overflow-y-visible hide-scrollbar pt-2 ${className}`}>
       {activePriorities.length > 0 ? (
@@ -113,7 +72,6 @@ function CompactIconsRow({ activePriorities, displayed, percentages, selectedZon
             key={config.key}
             config={config}
             value={displayed[config.key]}
-            percentage={percentages[config.key]}
           />
         ))
       ) : (
@@ -130,29 +88,20 @@ function CompactIconsRow({ activePriorities, displayed, percentages, selectedZon
  */
 export default function PrioritiesPanel({ 
   onExpandedChange,
+  scrollableElement = null,
 }) {
   const displayed = usePrefs((s) => s.uiPriorities);
   const selectedZone = usePrefs((s) => s.prefs.selectedZone);
   const isDark = usePrefs((s) => s.prefs.theme) !== 'light';
   const viewMode = usePrefs((s) => s.prefs.viewMode);
 
+  const prefersReducedMotion = useReducedMotion();
   const [isExpanded, setIsExpanded] = useState(true);
   const [isZoneDropdownOpen, setIsZoneDropdownOpen] = useState(false);
   const [zoneAnchorEl, setZoneAnchorEl] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [scrollableElement, setScrollableElement] = useState(null);
-
-  // Find scrollable element - re-run when viewMode changes
-  useEffect(() => {
-    // Use a small delay to allow DOM to update after viewMode change
-    const timer = setTimeout(() => {
-      const element = document.querySelector('main .overflow-y-auto') ||
-                     document.querySelector('.overflow-y-auto');
-      if (element) setScrollableElement(element);
-    }, 100);
-    
-    return () => clearTimeout(timer);
-  }, [viewMode]);
+  const contentRef = useRef(null);
+  const [contentHeight, setContentHeight] = useState(0);
 
   // Handle pointer up for drag end - commit immediately
   useEffect(() => {
@@ -184,57 +133,100 @@ export default function PrioritiesPanel({
   });
 
   // Dropdown handlers
-  const closeDropdown = useCallback(() => {
+  const closeDropdown = () => {
     setIsZoneDropdownOpen(false);
     setZoneAnchorEl(null);
-  }, []);
+  };
   
-  const handleZoneButtonClick = useCallback((event) => {
+  const handleZoneButtonClick = (event) => {
     setZoneAnchorEl(event.currentTarget);
     setIsZoneDropdownOpen((wasOpen) => !wasOpen);
-  }, []);
+  };
 
-  const activePriorities = PRIORITY_CONFIG.filter(
-    config => displayed[config.key] !== 0
+  const activePriorities = useMemo(
+    () => PRIORITY_CONFIG.filter((config) => displayed[config.key] !== 0),
+    [displayed],
   );
-  const allPrioritiesZero = Object.values(displayed).every(v => v === 0);
-  
+  const allPrioritiesZero = useMemo(
+    () => Object.values(displayed).every((v) => v === 0),
+    [displayed],
+  );
   const percentages = useMemo(() => calculatePercentages(displayed), [displayed]);
 
   // Handlers
-  const handleDragStart = useCallback(() => {
+  const handleDragStart = () => {
     if (!isDragging) setIsDragging(true);
-  }, [isDragging]);
+  };
 
-  const handleSliderChange = useCallback((key, value) => {
+  const handleSliderChange = (key, value) => {
     prefsActions.updateUiPriorities((prev) => ({ ...(prev || {}), [key]: value }));
-  }, []);
+  };
   
-  const handleToggleReverse = useCallback((key) => {
+  const handleToggleReverse = (key) => {
     prefsActions.updateUiPriorities((prev) => {
       const currentValue = prev?.[key] ?? 0;
       const newValue = currentValue === 0 ? -5 : -currentValue;
       return { ...(prev || {}), [key]: newValue };
     });
     prefsActions.flushPriorities();
-  }, []);
+  };
 
-  const handleReset = useCallback(() => {
+  const handleReset = () => {
     const resetPriorities = Object.fromEntries(
       PRIORITY_CONFIG.map(config => [config.key, 0])
     );
     setIsDragging(false);
     prefsActions.setUiPriorities(resetPriorities);
     prefsActions.flushPriorities();
-  }, []);
+  };
 
-  const handleToggleExpanded = useCallback(() => {
+  const handleToggleExpanded = () => {
     setIsExpanded(prev => !prev);
-  }, []);
+  };
 
-  const handleExpand = useCallback(() => {
+  const handleExpand = () => {
     setIsExpanded(true);
-  }, []);
+  };
+
+  // Measure content height for animation (avoid `height: auto` issues under desktop CSS zoom).
+  // Measure only when expanded (element is visible) for accurate measurement.
+  useLayoutEffect(() => {
+    if (!isExpanded) {
+      // When collapsed, don't measure (keep previous height for animation)
+      return;
+    }
+    
+    const el = contentRef.current;
+    if (!el) return;
+
+    const measure = () => {
+      // Use offsetHeight which includes padding (matching what motion.div will animate)
+      const h = Math.max(0, Math.ceil(el.offsetHeight));
+      setContentHeight(h);
+    };
+
+    // Measure after layout
+    const timer = requestAnimationFrame(() => {
+      requestAnimationFrame(measure);
+    });
+
+    // Track size changes while expanded
+    let ro = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(measure);
+      ro.observe(el);
+    }
+
+    window.addEventListener('resize', measure, { passive: true });
+    return () => {
+      cancelAnimationFrame(timer);
+      window.removeEventListener('resize', measure);
+      if (ro) ro.disconnect();
+    };
+    // NOTE: we intentionally do NOT depend on `displayed` (slider values) here.
+    // Slider value updates are frequent during drag; the panel height doesn't
+    // normally change with values, so measuring each time is wasted work.
+  }, [isExpanded, viewMode]);
 
   return (
     <div className="bg-white dark:bg-surface-800 border-b border-surface-300/50 dark:border-surface-700/50">
@@ -293,7 +285,6 @@ export default function PrioritiesPanel({
                 <CompactIconsRow
                   activePriorities={activePriorities}
                   displayed={displayed}
-                  percentages={percentages}
                   selectedZone={selectedZone}
                   className="flex"
                 />
@@ -310,7 +301,6 @@ export default function PrioritiesPanel({
               <CompactIconsRow
                 activePriorities={activePriorities}
                 displayed={displayed}
-                percentages={percentages}
                 selectedZone={selectedZone}
                 className="flex"
               />
@@ -335,38 +325,42 @@ export default function PrioritiesPanel({
         </button>
       </div>
 
-      {/* Main content - Smooth grid-based animation */}
-      <div
-        className="grid overflow-hidden"
-        style={{
-          gridTemplateRows: isExpanded ? '1fr' : '0fr',
-          opacity: isExpanded ? 1 : 0,
-          transition: 'grid-template-rows 350ms cubic-bezier(0.25, 0.1, 0.25, 1), opacity 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+      {/* Main content - height animation (0 <-> auto) */}
+      <motion.div
+        className="overflow-hidden"
+        initial={false}
+        animate={isExpanded ? { height: contentHeight, opacity: 1 } : { height: 0, opacity: 0 }}
+        transition={{
+          height: prefersReducedMotion ? { duration: 0 } : { duration: 0.35, ease: [0.25, 0.1, 0.25, 1] },
+          opacity: prefersReducedMotion ? { duration: 0 } : { duration: 0.25, ease: [0.4, 0, 0.2, 1] },
         }}
+        style={{
+          willChange: 'height, opacity',
+          pointerEvents: isExpanded ? 'auto' : 'none',
+        }}
+        aria-hidden={!isExpanded}
       >
-        <div className="min-h-0">
-          <div className="px-4 pb-2.5">
-            <div className="flex flex-col sm:flex-row gap-3 items-stretch">
-              <PrioritiesBoard
-                priorityConfig={PRIORITY_CONFIG}
-                displayed={displayed}
-                percentages={percentages}
-                allPrioritiesZero={allPrioritiesZero}
-                handleSliderChange={handleSliderChange}
-                handleDragStart={handleDragStart}
-                handleToggleReverse={handleToggleReverse}
-                isDark={isDark}
-              />
-              <EconomicZoneWidget
-                selectedZone={selectedZone}
-                onZoneChange={(zoneId) => prefsActions.setPref({ selectedZone: zoneId })}
-                handleZoneButtonClick={handleZoneButtonClick}
-                isZoneDropdownOpen={isZoneDropdownOpen}
-              />
-            </div>
+        <div ref={contentRef} className="px-4 pb-2.5">
+          <div className="flex flex-col sm:flex-row gap-3 items-stretch">
+            <PrioritiesBoard
+              priorityConfig={PRIORITY_CONFIG}
+              displayed={displayed}
+              percentages={percentages}
+              allPrioritiesZero={allPrioritiesZero}
+              handleSliderChange={handleSliderChange}
+              handleDragStart={handleDragStart}
+              handleToggleReverse={handleToggleReverse}
+              isDark={isDark}
+            />
+            <EconomicZoneWidget
+              selectedZone={selectedZone}
+              onZoneChange={(zoneId) => prefsActions.setPref({ selectedZone: zoneId })}
+              handleZoneButtonClick={handleZoneButtonClick}
+              isZoneDropdownOpen={isZoneDropdownOpen}
+            />
           </div>
         </div>
-      </div>
+      </motion.div>
 
       <ZoneDropdown
         open={isZoneDropdownOpen}

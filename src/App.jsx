@@ -1,20 +1,10 @@
-import { useEffect, useMemo, useCallback, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import Header from './components/Header';
 import PrioritiesPanel from './components/PrioritiesPanel';
 import DishList from './components/DishList';
 import DishGrid from './components/DishGrid';
-import { 
-  buildIngredientIndex,
-  analyzeAllDishesVariants,
-  scoreAndSortDishes,
-} from './lib/RankingEngine';
 import { usePrefs, prefsActions } from './store/prefsStore';
-
-// Import the JSON data
-// Note: Vite handles JSON imports natively
-import dishesData from '../dishes.json';
-import ingredientsData from '../ingredients.json';
 
 /**
  * Main Application Component
@@ -34,57 +24,112 @@ export default function App() {
   
   // Track priorities panel expanded state
   const [isPrioritiesExpanded, setIsPrioritiesExpanded] = useState(true);
+
+  // Explicit scroll container element for the priorities auto-toggle logic.
+  // This avoids PrioritiesPanel needing DOM querySelector/MutationObserver.
+  const [scrollableElement, setScrollableElement] = useState(null);
   
   // Shady feature: Worst Food Ever mode
   const [isWorstMode, setIsWorstMode] = useState(false);
+
+  // Ranking data computed in a worker to keep first paint + interactions snappy.
+  const workerRef = useRef(null);
+  const seqRef = useRef(0);
+  const [rankedDishes, setRankedDishes] = useState([]);
+  const [rankingMeta, setRankingMeta] = useState(null);
+  const [rankingStatus, setRankingStatus] = useState('loading'); // 'loading' | 'ready' | 'error'
+  const [rankingError, setRankingError] = useState(null);
+  const lastPayloadRef = useRef(null);
   
 
   // Apply theme class to document
   useEffect(() => {
     if (isDark) document.documentElement.classList.add('dark');
     else document.documentElement.classList.remove('dark');
+    // Allow transitions after initial theme is resolved to avoid startup flicker
+    document.documentElement.classList.remove('theme-preload');
   }, [isDark]);
 
-  // Build ingredient index once for O(1) lookups
-  const ingredientIndex = useMemo(() => {
-    return buildIngredientIndex(ingredientsData);
+  // Create worker once.
+  useEffect(() => {
+    const w = new Worker(new URL('./workers/rankingWorker.js', import.meta.url), { type: 'module' });
+    workerRef.current = w;
+
+    const onMessage = (e) => {
+      const msg = e?.data || {};
+      if (!msg || typeof msg !== 'object') return;
+
+      // Drop stale results.
+      if (msg.seq !== seqRef.current) return;
+
+      if (msg.type === 'result') {
+        setRankedDishes(Array.isArray(msg.rankedDishes) ? msg.rankedDishes : []);
+        setRankingMeta(msg.rankingMeta || null);
+        setRankingStatus('ready');
+        setRankingError(null);
+      }
+
+      if (msg.type === 'error') {
+        setRankingStatus('error');
+        setRankingError(msg.message || 'Ranking worker error');
+      }
+    };
+
+    w.addEventListener('message', onMessage);
+    w.addEventListener('error', (err) => {
+      setRankingStatus('error');
+      setRankingError(err?.message || 'Worker crashed');
+    });
+
+    return () => {
+      w.removeEventListener('message', onMessage);
+      w.terminate();
+      workerRef.current = null;
+    };
   }, []);
 
-  // Heavy computation: analyze all dishes ONCE per (zone + overrides).
-  // Then materialize the 2x3 variants (timeMode x priceUnit) without re-analyzing.
-  const analysisVariants = useMemo(() => {
-    return analyzeAllDishesVariants(
-      dishesData,
-      ingredientIndex,
+  // Recompute ranking whenever inputs change (computation itself runs off-main-thread).
+  useEffect(() => {
+    const w = workerRef.current;
+    if (!w) return;
+
+    setRankingStatus('loading');
+    setRankingError(null);
+
+    const payload = {
       selectedZone,
-      overrides
-    );
-  }, [ingredientIndex, selectedZone, overrides]);
+      overrides,
+      isOptimized,
+      priceUnit,
+      priorities: computationPriorities,
+    };
+    lastPayloadRef.current = payload;
 
-  const analysisBase = useMemo(() => {
-    const key = `${isOptimized ? 'optimized' : 'normal'}:${priceUnit}`;
-    const variant = analysisVariants?.variants?.[key];
-    if (!variant) {
-      // Fallback with empty byName Map to avoid undefined errors
-      return { analyzed: [], datasetStats: {}, byName: new Map() };
-    }
-    return variant;
-  }, [analysisVariants, isOptimized, priceUnit]);
+    const seq = (seqRef.current || 0) + 1;
+    seqRef.current = seq;
 
-  // Lightweight computation: score and sort (runs when priorities change)
-  const rankedDishes = useMemo(() => {
-    if (!analysisBase.analyzed.length) return [];
-    
-    return scoreAndSortDishes(
-      analysisBase.analyzed,
-      analysisBase.datasetStats,
-      computationPriorities
-    );
-  }, [analysisBase, computationPriorities]);
+    w.postMessage({
+      type: 'compute',
+      seq,
+      payload,
+    });
+  }, [selectedZone, overrides, isOptimized, priceUnit, computationPriorities]);
+
+  const retryRanking = () => {
+    const w = workerRef.current;
+    const payload = lastPayloadRef.current;
+    if (!w || !payload) return;
+
+    setRankingStatus('loading');
+    setRankingError(null);
+    const seq = (seqRef.current || 0) + 1;
+    seqRef.current = seq;
+    w.postMessage({ type: 'compute', seq, payload });
+  };
 
 
   // Shady feature: Toggle Worst Food Ever mode and set fixed priority values
-  const handleWorstModeToggle = useCallback(() => {
+  const handleWorstModeToggle = () => {
     setIsWorstMode(prev => {
       const newMode = !prev;
       
@@ -102,7 +147,7 @@ export default function App() {
       
       return newMode;
     });
-  }, []);
+  };
 
   return (
     <div className="min-h-screen bg-surface-100 dark:bg-surface-900 pattern-grid transition-colors duration-300">
@@ -128,6 +173,7 @@ export default function App() {
         >
           <PrioritiesPanel
             onExpandedChange={setIsPrioritiesExpanded}
+            scrollableElement={scrollableElement}
           />
         </div>
 
@@ -141,14 +187,20 @@ export default function App() {
           {viewMode === 'grid' ? (
             <DishGrid
               dishes={rankedDishes}
-              ingredientIndex={ingredientIndex}
-              analysisVariants={analysisVariants}
+              rankingMeta={rankingMeta}
+              isLoading={rankingStatus === 'loading'}
+              error={rankingStatus === 'error' ? rankingError : null}
+              onRetry={retryRanking}
+              onScrollContainerChange={setScrollableElement}
             />
           ) : (
             <DishList
               dishes={rankedDishes}
-              ingredientIndex={ingredientIndex}
-              analysisVariants={analysisVariants}
+              rankingMeta={rankingMeta}
+              isLoading={rankingStatus === 'loading'}
+              error={rankingStatus === 'error' ? rankingError : null}
+              onRetry={retryRanking}
+              onScrollContainerChange={setScrollableElement}
             />
           )}
         </motion.main>

@@ -129,7 +129,7 @@ export function getPriceColor(price, minPrice, maxPrice) {
 
 export function getPriceUnitLabel(priceUnit) {
   if (priceUnit === 'per1kg') return '/kg';
-  if (priceUnit === 'per1000kcal') return '/1000kcal';
+  if (priceUnit === 'per1000kcal') return '/kkcal';
   return '';
 }
 

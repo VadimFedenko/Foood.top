@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import EconomicZonesSvgMap from './EconomicZonesSvgMap';
 
 /**
@@ -6,7 +5,7 @@ import EconomicZonesSvgMap from './EconomicZonesSvgMap';
  * - 11 clickable zones
  * - No country geometry in runtime
  */
-const WorldMapWidget = memo(function WorldMapWidget({ selectedZone, onZoneSelect, variant = 'wide' }) {
+export default function WorldMapWidget({ selectedZone, onZoneSelect, variant = 'wide' }) {
   const zoom = variant === 'square' ? 1.5 : 1.3;
 
   return (
@@ -22,6 +21,4 @@ const WorldMapWidget = memo(function WorldMapWidget({ selectedZone, onZoneSelect
       />
     </div>
   );
-});
-
-export default WorldMapWidget;
+}

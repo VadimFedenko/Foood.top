@@ -88,106 +88,83 @@ export default function DishTile({
   dish, 
   rank,
   onClick, 
-  overrides = {}, 
   priceUnit = 'serving',
   priorities = {},
 }) {
   const scoreColors = getScoreColor(dish.score);
-  
-  // Effective values with overrides applied
-  const effectiveValues = useMemo(() => {
-    const baseTaste = dish.baseTaste ?? dish.taste ?? 5;
-    const baseHealth = dish.baseHealth ?? dish.health ?? 5;
-    const baseEthics = dish.baseEthics ?? dish.ethics ?? 5;
-    const baseCalories = dish.baseCalories ?? dish.calories ?? 0;
-    
-    const effectiveTaste = overrides?.tasteMul !== undefined 
-      ? Math.min(10, Math.max(0, baseTaste * overrides.tasteMul))
-      : dish.taste;
-    
-    const effectiveHealth = overrides?.healthMul !== undefined
-      ? Math.min(10, Math.max(0, baseHealth * overrides.healthMul))
-      : dish.health;
-    
-    const effectiveEthics = overrides?.ethicsMul !== undefined
-      ? Math.min(10, Math.max(0, baseEthics * overrides.ethicsMul))
-      : dish.ethics;
-    
-    const effectiveCalories = overrides?.caloriesMul !== undefined
-      ? Math.max(0, Math.round(baseCalories * overrides.caloriesMul))
-      : dish.calories ?? 0;
-    
+
+  const values = useMemo(() => {
+    const calories = dish?.calories ?? 0;
     const weight = dish?.weight ?? 0;
-    const calPerG = weight > 0 && effectiveCalories > 0
-      ? ((effectiveCalories / weight) * 1000 / 100)
+    const calPerG = weight > 0 && calories > 0
+      ? ((calories / weight) * 1000 / 100)
       : 0;
-    
     return {
-      taste: effectiveTaste,
-      health: effectiveHealth,
-      ethics: effectiveEthics,
-      calories: effectiveCalories,
+      taste: dish?.taste ?? 0,
+      health: dish?.health ?? 0,
+      ethics: dish?.ethics ?? 0,
+      time: dish?.time ?? 0,
+      price: dish?.prices?.[priceUnit] ?? dish?.cost ?? 0,
       calPerG,
-      time: dish.time,
-      price: dish.prices?.[priceUnit] ?? dish.cost ?? 0,
     };
-  }, [dish, overrides, priceUnit]);
-  
-  // Filter metrics based on active priorities (only show if priority !== 0)
-  const activeMetrics = useMemo(() => {
-    const metrics = [];
-    
+  }, [dish, priceUnit]);
+
+  const metrics = useMemo(() => {
+    // Filter metrics based on active priorities (only show if priority !== 0)
+    const next = [];
+
     // Mapping priority keys to metric configs
     if (priorities.taste !== undefined && priorities.taste !== 0) {
-      metrics.push({
+      next.push({
         icon: Utensils,
-        value: effectiveValues.taste,
+        value: values.taste,
         format: (v) => v.toFixed(1),
       });
     }
-    
+
     if (priorities.health !== undefined && priorities.health !== 0) {
-      metrics.push({
+      next.push({
         icon: Heart,
-        value: effectiveValues.health,
+        value: values.health,
         format: (v) => v.toFixed(1),
       });
     }
-    
+
     if (priorities.cheapness !== undefined && priorities.cheapness !== 0) {
-      metrics.push({
+      next.push({
         icon: DollarSign,
-        value: effectiveValues.price,
+        value: values.price,
         format: (v) => v.toFixed(2),
       });
     }
-    
+
     if (priorities.speed !== undefined && priorities.speed !== 0) {
-      metrics.push({
+      next.push({
         icon: Clock,
-        value: effectiveValues.time,
+        value: values.time,
         format: (v) => formatTime(Math.round(v)),
       });
     }
-    
+
     if (priorities.lowCalorie !== undefined && priorities.lowCalorie !== 0) {
-      metrics.push({
+      next.push({
         icon: Flame,
-        value: effectiveValues.calPerG,
+        value: values.calPerG,
         format: (v) => `${Math.round(v)}c/g`,
       });
     }
-    
+
     if (priorities.ethics !== undefined && priorities.ethics !== 0) {
-      metrics.push({
+      next.push({
         icon: Leaf,
-        value: effectiveValues.ethics,
+        value: values.ethics,
         format: (v) => v.toFixed(1),
       });
     }
-    
-    return metrics;
-  }, [priorities, effectiveValues]);
+
+    return next;
+  }, [values, priorities]);
+  
 
   return (
     <motion.div
@@ -198,11 +175,11 @@ export default function DishTile({
     >
       {/* Main tile container */}
       <div className="relative rounded-2xl overflow-hidden bg-black shadow-lg border border-surface-700/30 dark:border-surface-700/50">
-        {/* Image container with aspect ratio */}
-        <div className="relative aspect-[512/416]">
+        {/* Image container with aspect ratio - fallback for old browsers using padding-bottom */}
+        <div className="relative" style={{ paddingBottom: '80.952%' }}>
           {/* Dish image */}
           <img
-            src={dish?.originalDish?.img_m || dish?.img_m}
+            src={dish?.originalDish?.img_s || dish?.img_s}
             alt={dish.name}
             className="absolute inset-0 w-full h-full object-cover"
             loading="lazy"
@@ -232,11 +209,11 @@ export default function DishTile({
           <RankBadge rank={rank} />
           
           {/* Metrics overlay - bottom */}
-          {activeMetrics.length > 0 && (
+          {metrics.length > 0 && (
             <div className="absolute bottom-0 left-0 right-0 px-3 pt-3 pb-1 z-10">
               {/* Metrics row - only active priorities */}
               <div className="flex flex-wrap gap-x-3 gap-y-1 mb-1.5">
-                {activeMetrics.map((metric, idx) => (
+                {metrics.map((metric, idx) => (
                   <TileMetric
                     key={idx}
                     icon={metric.icon}
@@ -255,7 +232,7 @@ export default function DishTile({
       
       {/* Dish name below the tile */}
       <div className="mt-2 px-1">
-        <h3 className="font-display font-semibold text-sm text-surface-800/70 dark:text-surface-100/70 truncate text-center">
+        <h3 className="font-display font-semibold text-sm text-surface-600 dark:text-surface-100 truncate text-center">
           {dish.name}
         </h3>
       </div>

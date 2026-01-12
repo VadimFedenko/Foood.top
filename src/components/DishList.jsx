@@ -1,8 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, lazy, Suspense } from 'react';
 import DishCardSimple from './DishCardSimple';
-import DishModal from './DishModal';
 import { StatsBar, EmptyState } from './DishListCommon';
+import { LoadingState, ErrorState } from './DishListCommon';
 import { usePrefs, prefsActions } from '../store/prefsStore';
+import { useDishDeepLinking } from '../hooks/useDishDeepLinking';
+import { useIsMobile } from '../lib/useIsMobile';
+
+const DishModal = lazy(() => import('./DishModal'));
 
 /**
  * Main Dish List Component
@@ -10,13 +14,17 @@ import { usePrefs, prefsActions } from '../store/prefsStore';
  */
 export default function DishList({ 
   dishes, 
-  ingredientIndex,
-  analysisVariants = null
+  analysisVariants = null,
+  rankingMeta = null,
+  isLoading = false,
+  error = null,
+  onRetry = null,
+  onScrollContainerChange = null,
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDish, setSelectedDish] = useState(null);
+  const [hasOpenedModal, setHasOpenedModal] = useState(false);
   const priceUnit = usePrefs((s) => s.prefs.priceUnit);
-  const overrides = usePrefs((s) => s.prefs.overrides);
   const isOptimized = usePrefs((s) => s.prefs.isOptimized);
   const priorities = usePrefs((s) => s.computationPriorities);
 
@@ -42,23 +50,42 @@ export default function DishList({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery, dishes, pageSize]);
 
-  const visibleDishes = useMemo(() => {
-    return filteredDishes.slice(0, visibleCount);
-  }, [filteredDishes, visibleCount]);
+  const visibleDishes = filteredDishes.slice(0, visibleCount);
 
-  const handleDishClick = (dish) => {
-    setSelectedDish(dish);
-  };
+  const { openDish, closeDish } = useDishDeepLinking({
+    dishes,
+    selectedDish,
+    setSelectedDish,
+    paramName: 'dish',
+  });
+
+  // Keep selected dish object fresh when the ranked list recomputes (e.g. after overrides Save).
+  useEffect(() => {
+    const id = selectedDish?.id;
+    if (!id) return;
+    const next = dishes?.find((d) => d?.id === id) ?? null;
+    if (next && next !== selectedDish) setSelectedDish(next);
+  }, [dishes, selectedDish, selectedDish?.id]);
   
-  const handleCloseModal = () => {
-    setSelectedDish(null);
-  };
-  
-  const handleResetOverrides = (dishName) => {
-    prefsActions.setOverrideForDish(dishName, {});
+  const handleResetOverrides = (dishId) => {
+    prefsActions.setOverrideForDish(dishId, {});
   };
 
   const remaining = Math.max(0, filteredDishes.length - visibleCount);
+  const isModalOpen = selectedDish !== null;
+  const isMobile = useIsMobile();
+
+  const setScrollContainerEl = useCallback(
+    (el) => {
+      onScrollContainerChange?.(el);
+    },
+    [onScrollContainerChange],
+  );
+
+  // Lazy-load modal code only when it is first needed (open or deeplink).
+  useEffect(() => {
+    if (isModalOpen && !hasOpenedModal) setHasOpenedModal(true);
+  }, [isModalOpen, hasOpenedModal]);
 
   return (
     <div className="flex flex-col h-full">
@@ -74,55 +101,64 @@ export default function DishList({
         />
       </div>
 
-      {/* Dish list */}
-      <div className="flex-1 overflow-y-auto px-4 pt-0 pb-4">
-        {filteredDishes.length === 0 ? (
-          <EmptyState hasSearch={!!searchQuery} />
-        ) : (
-          <>
-            <div className="space-y-1.5">
-              {visibleDishes.map((dish) => (
-                <div key={dish.name}>
-                  <DishCardSimple
-                    dish={dish}
-                    onClick={() => handleDishClick(dish)}
-                    overrides={overrides[dish.name] || {}}
-                    onResetOverrides={handleResetOverrides}
-                    priceUnit={priceUnit}
-                  />
-                </div>
-              ))}
-            </div>
+      {/* Dish list - hide only on mobile when modal is open */}
+      {!(isModalOpen && isMobile) && (
+        <div ref={setScrollContainerEl} className="flex-1 overflow-y-auto px-4 pt-0 pb-4">
+          {isLoading && dishes.length === 0 ? (
+            <LoadingState variant="list" />
+          ) : error && dishes.length === 0 ? (
+            <ErrorState message={error} onRetry={onRetry} />
+          ) : filteredDishes.length === 0 ? (
+            <EmptyState hasSearch={!!searchQuery} />
+          ) : (
+            <>
+              <div className="space-y-1.5">
+                {visibleDishes.map((dish) => (
+                  <div key={dish.id}>
+                    <DishCardSimple
+                      dish={dish}
+                      onClick={() => openDish(dish)}
+                      onResetOverrides={handleResetOverrides}
+                      priceUnit={priceUnit}
+                    />
+                  </div>
+                ))}
+              </div>
 
-            {remaining > 0 && (
-              <button
-                type="button"
-                onClick={() => setVisibleCount((c) => c + pageSize)}
-                className="w-full mt-4 py-3 rounded-xl
-                           bg-white/80 dark:bg-surface-800/80
-                           border border-surface-300/50 dark:border-surface-700/50
-                           text-sm font-semibold text-surface-700 dark:text-surface-200
-                           hover:bg-white dark:hover:bg-surface-800
-                           transition-colors shadow-sm dark:shadow-none"
-              >
-                Show more ({remaining} left)
-              </button>
-            )}
-          </>
-        )}
-      </div>
+              {remaining > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setVisibleCount((c) => c + pageSize)}
+                  className="w-full mt-4 py-3 rounded-xl
+                             bg-white/80 dark:bg-surface-800/80
+                             border border-surface-300/50 dark:border-surface-700/50
+                             text-sm font-semibold text-surface-700 dark:text-surface-200
+                             hover:bg-white dark:hover:bg-surface-800
+                             transition-colors shadow-sm dark:shadow-none"
+                >
+                  Show more ({remaining} left)
+                </button>
+              )}
+            </>
+          )}
+        </div>
+      )}
       
       {/* Dish Modal */}
-      <DishModal
-        dish={selectedDish}
-        isOpen={selectedDish !== null}
-        onClose={handleCloseModal}
-        ingredientIndex={ingredientIndex}
-        priorities={priorities}
-        isOptimized={isOptimized}
-        analysisVariants={analysisVariants}
-        priceUnit={priceUnit}
-      />
+      {hasOpenedModal && (
+        <Suspense fallback={null}>
+          <DishModal
+            dish={selectedDish}
+            isOpen={selectedDish !== null}
+            onClose={closeDish}
+            priorities={priorities}
+            isOptimized={isOptimized}
+            analysisVariants={analysisVariants}
+            rankingMeta={rankingMeta}
+            priceUnit={priceUnit}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { ChevronDown } from 'lucide-react';
 import WorldMapWidget from './WorldMapWidget';
 import { ECONOMIC_ZONES } from '../lib/RankingEngine';
+import ZoneIcon from './ZoneIcon';
 
 /**
  * Economic zone widget content
@@ -29,7 +30,7 @@ export default function EconomicZoneWidget({
           onClick={handleZoneButtonClick}
           className="flex items-center gap-2 text-sm font-medium text-surface-700 dark:text-surface-200 hover:opacity-80 transition-opacity w-full text-left"
         >
-          <span className="text-lg">{ECONOMIC_ZONES[selectedZone]?.emoji}</span>
+          <ZoneIcon zoneId={selectedZone} size={18} />
           <span className="truncate flex-1">{ECONOMIC_ZONES[selectedZone]?.name}</span>
           <ChevronDown 
             size={16} 

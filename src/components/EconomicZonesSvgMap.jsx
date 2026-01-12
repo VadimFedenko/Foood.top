@@ -1,7 +1,8 @@
-import { memo, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { ECONOMIC_ZONES } from '../lib/RankingEngine';
 import { useSvgMap } from '../lib/useSvgMap';
 import { centeredScaleTransform } from '../lib/svgMapUtils';
+import ZoneIcon from './ZoneIcon';
 
 function getZoneFillDefault(zoneId, selectedZone, isHovered) {
   // On hover - show lighter zone color
@@ -44,7 +45,7 @@ function getZoneOpacityDefault(zoneId, selectedZone) {
  * - No country borders, no topojson in runtime
  * - Supports custom coloring, tooltips, and zone selection
  */
-const EconomicZonesSvgMap = memo(function EconomicZonesSvgMap({
+export default function EconomicZonesSvgMap({
   selectedZone,
   onZoneSelect,
   hoveredZone: externalHoveredZone,
@@ -69,7 +70,7 @@ const EconomicZonesSvgMap = memo(function EconomicZonesSvgMap({
   svgStyle = {},
 }) {
   const { viewBox, paths, isLoading } = useSvgMap();
-  const zoneEntries = useMemo(() => Object.entries(ECONOMIC_ZONES), []);
+  const zoneEntries = Object.entries(ECONOMIC_ZONES);
   const [internalHoveredZone, setInternalHoveredZone] = useState(null);
   
   // Use external hoveredZone if provided, otherwise use internal state
@@ -162,7 +163,7 @@ const EconomicZonesSvgMap = memo(function EconomicZonesSvgMap({
       {showTooltip && tooltipContent && (
         <div className="absolute top-1.5 left-1.5 bg-surface-800 rounded-md px-2 py-1.5 border border-surface-600/50 shadow-lg z-10">
           <div className="flex items-center gap-1.5">
-            <span className="text-sm">{tooltipContent.emoji}</span>
+            <ZoneIcon zoneId={hoveredZone} size={14} className="text-surface-100" />
             <span className="text-xs font-medium text-surface-100">{tooltipContent.name}</span>
           </div>
           {tooltipContent.price !== undefined && (
@@ -178,8 +179,6 @@ const EconomicZonesSvgMap = memo(function EconomicZonesSvgMap({
       )}
     </div>
   );
-});
-
-export default EconomicZonesSvgMap;
+}
 
 

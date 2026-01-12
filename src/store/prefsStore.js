@@ -20,7 +20,7 @@ const DEFAULT_PREFS = {
   isOptimized: true,
   priceUnit: 'per1000kcal',
   theme: 'dark',
-  viewMode: 'list', // 'list' or 'grid'
+  viewMode: 'grid', // 'list' or 'grid'
 };
 
 function readJsonSafe(key) {
@@ -236,14 +236,14 @@ function createPrefsStore() {
       flushCompute();
     },
 
-    setOverrideForDish(dishName, newOverrides) {
+    setOverrideForDish(dishId, newOverrides) {
       const prev = state.prefs.overrides || {};
       const next = { ...prev };
 
       if (!newOverrides || Object.keys(newOverrides).length === 0) {
-        delete next[dishName];
+        delete next[dishId];
       } else {
-        next[dishName] = newOverrides;
+        next[dishId] = newOverrides;
       }
 
       if (next !== prev) {
@@ -264,7 +264,7 @@ export const prefsActions = {
     prefsStore.setUiPriorities(next);
   },
   flushPriorities: () => prefsStore.flushPriorities(),
-  setOverrideForDish: (dishName, o) => prefsStore.setOverrideForDish(dishName, o),
+  setOverrideForDish: (dishId, o) => prefsStore.setOverrideForDish(dishId, o),
 };
 
 export function usePrefs(selector) {

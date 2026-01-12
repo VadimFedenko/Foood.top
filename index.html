@@ -5,12 +5,51 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#18181B" />
+    <meta name="color-scheme" content="dark light" />
     <meta name="description" content="Best Food Ever - Personal food ranking database with dynamic priority-based scoring" />
+
+    <!-- Prevent white flash before CSS/JS load -->
+    <style>
+      html, body { background: #000; color: #fff; }
+      /* Disable transitions during initial theme resolution to avoid "fade" flicker */
+      html.theme-preload *, body.theme-preload * { transition: none !important; }
+    </style>
+
+    <!-- Resolve theme ASAP (before React mounts) to avoid light->dark flash -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add('theme-preload');
+
+        var theme = null;
+        try {
+          var raw = localStorage.getItem('bfe_prefs_v2');
+          if (raw) {
+            var parsed = JSON.parse(raw);
+            if (parsed && typeof parsed === 'object' && parsed.theme) theme = parsed.theme;
+          }
+          if (!theme) theme = localStorage.getItem('bfe_theme');
+        } catch (e) {
+          // ignore
+        }
+
+        var isDark = theme !== 'light';
+        if (isDark) root.classList.add('dark');
+        else root.classList.remove('dark');
+
+        try {
+          root.style.colorScheme = isDark ? 'dark' : 'light';
+        } catch (e) {
+          // ignore
+        }
+      })();
+    </script>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@400;500;600;700&display=swap"></noscript>
     
     <title>Best Food Ever</title>
   </head>

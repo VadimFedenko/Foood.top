@@ -32,7 +32,9 @@
     "comment": "Scrambled eggs keep well in the refrigerator. Spend half the time by making two servings at once, eat one, and save the other for later.",
     "taste_score": 8.8,
     "satiety_index": 150,
-    "img_m": "/dishes/512x416/scrambled-eggs.webp"
+    "id": "scrambled-eggs",
+    "img_b": "/dishes/768x624/scrambled-eggs.webp",
+    "img_s": "/dishes/420x340/scrambled-eggs.webp"
   },
   {
     "dish": "Omelette",
@@ -77,7 +79,9 @@
     "comment": "Omelette keeps well in the refrigerator for 2-3 days. Batch-prep fillings like sautéed onions and peppers ahead, storing them separately to reheat quickly when making omelettes. Use pre-chopped frozen onions and bell peppers to slash chopping time without much cost increase. Employ a thin non-stick pan on medium-high heat for faster setting without flipping, and keep cheese at room temp for even melting.",
     "taste_score": 8.9,
     "satiety_index": 152,
-    "img_m": "/dishes/512x416/omelette.webp"
+    "id": "omelette",
+    "img_b": "/dishes/768x624/omelette.webp",
+    "img_s": "/dishes/420x340/omelette.webp"
   },
   {
     "dish": "Fried Eggs",
@@ -102,7 +106,9 @@
     "comment": "Fried eggs are best fresh but can be refrigerated for a day. Halve time by frying multiple eggs for several servings at once in a large pan, eating one portion now and saving others. Use a well-heated non-stick pan or spray to prevent sticking and speed cooking. Crack all eggs into a bowl first for quick pan addition.",
     "taste_score": 8.8,
     "satiety_index": 150,
-    "img_m": "/dishes/512x416/fried-eggs.webp"
+    "id": "fried-eggs",
+    "img_b": "/dishes/768x624/fried-eggs.webp",
+    "img_s": "/dishes/420x340/fried-eggs.webp"
   },
   {
     "dish": "Arugula Salad with Parmesan and Cherry Tomatoes",
@@ -147,7 +153,9 @@
     "comment": "You can prepare two or more portions of this salad at once: store the dry ingredients separately from the cherry tomatoes. Or if you are feeling lazy, mix all the ingredients with cherry and and accept that they will be less juicy the next day. Then dress the salad right before serving. This will significantly cut down your prep time. You can also use pre-washed arugula and pre-toasted walnuts.",
     "taste_score": 8.3,
     "satiety_index": 120,
-    "img_m": "/dishes/512x416/arugula-salad-with-parmesan-and-che.webp"
+    "id": "arugula-salad-with-parmesan-and-che",
+    "img_b": "/dishes/768x624/arugula-salad-with-parmesan-and-che.webp",
+    "img_s": "/dishes/420x340/arugula-salad-with-parmesan-and-che.webp"
   },
   {
     "dish": "Borscht",
@@ -205,9 +213,11 @@
     "cook_t_optimized": 20,
     "passive_t_hours": 2.5,
     "comment": "You can cook a big pot of borscht for several meals: ideally, cool it quickly, portion it into airtight containers, and keep toppings like sour cream and fresh herbs separate, adding them only when serving. It's only getting tastier the next day! This will significantly cut down your prep time. You can even keep it for a few months in freezer, before you lose the taste. It's convenient to use boiled beets so as not to get the entire room purple. You can also use pre‑shredded frozen beet and carrot mix to cut chopping time. Keep a batch of homemade or store‑bought stock ready, so you only need to stir the vegetables.",
-    "taste_score": 9.0,
+    "taste_score": 9,
     "satiety_index": 202,
-    "img_m": "/dishes/512x416/borscht.webp"
+    "id": "borscht",
+    "img_b": "/dishes/768x624/borscht.webp",
+    "img_s": "/dishes/420x340/borscht.webp"
   },
   {
     "dish": "Ramen",
@@ -252,7 +262,9 @@
     "comment": "Batch-cook a large pot of broth using chicken bones or store-bought dashi/stock in a pressure cooker (20 min), then freeze in portions. Prep toppings like boiled eggs and chopped scallions ahead, storing separately in fridge up to 3 days. Boil noodles fresh and assemble: total active time drops as batching cuts per-serving prep by 70%. Use pre-boiled eggs from store or microwave method for eggs (1 min).",
     "taste_score": 9.7,
     "satiety_index": 147.5,
-    "img_m": "/dishes/512x416/ramen.webp"
+    "id": "ramen",
+    "img_b": "/dishes/768x624/ramen.webp",
+    "img_s": "/dishes/420x340/ramen.webp"
   },
   {
     "dish": "Khao soi",
@@ -322,7 +334,9 @@
     "comment": "Make extra curry paste (blend garlic, shallots, spices, lemongrass ahead) and freeze in ice cube trays for 1-month use. Pressure cook large batch of chicken broth with aromatics (lemongrass, lime leaves, chicken) to cut simmer to 20 min, portion and freeze. Reheat frozen broth, add coconut milk and fresh noodles; fry shallots in small batch or use oven for less oil. Batch cooking reduces per-serving active time by 70%; homemade paste cheaper than store-bought long-term.",
     "taste_score": 9,
     "satiety_index": 147.5,
-    "img_m": "/dishes/512x416/khao-soi.webp"
+    "id": "khao-soi",
+    "img_b": "/dishes/768x624/khao-soi.webp",
+    "img_s": "/dishes/420x340/khao-soi.webp"
   },
   {
     "dish": "Pho",
@@ -377,7 +391,9 @@
     "comment": "Use store-bought quality beef stock or stock cubes to skip long simmering; char aromatics under broiler for 5 minutes instead of stovetop. Prepare a large batch of broth, cool quickly, portion into airtight containers, and freeze for up to 3 months—reheat only what you need. Boil multiple noodle portions at once and keep toppings like basil, onion, and lime separate until serving. Blanch bean sprouts quickly if desired.",
     "taste_score": 9.7,
     "satiety_index": 147.5,
-    "img_m": "/dishes/512x416/pho.webp"
+    "id": "pho",
+    "img_b": "/dishes/768x624/pho.webp",
+    "img_s": "/dishes/420x340/pho.webp"
   },
   {
     "dish": "Xiao Long Bao",
@@ -427,19 +443,16 @@
     "comment": "Make double or triple batch of filling and aspic ahead, freeze aspic in portions and filling separately; thaw overnight for quick assembly next day. Prepare dough in bulk and store wrapped; assemble 20+ dumplings at once to halve pleating time per batch. Steam multiple trays simultaneously in a large steamer setup. Freeze uncooked assembled dumplings on tray then transfer to bags for up to 2 months—steam directly from frozen, adding 2 minutes.",
     "taste_score": 9.6,
     "satiety_index": 144.4,
-    "img_m": "/dishes/512x416/xiao-long-bao.webp"
+    "id": "xiao-long-bao",
+    "img_b": "/dishes/768x624/xiao-long-bao.webp",
+    "img_s": "/dishes/420x340/xiao-long-bao.webp"
   },
   {
-    "dish": "Miso Soup",
+    "dish": "Hondashi Miso Soup",
     "ingredients": [
       {
-        "name": "Kombu",
+        "name": "Hondashi",
         "g": 2,
-        "state": "boiled"
-      },
-      {
-        "name": "Bonito flakes",
-        "g": 3,
         "state": "boiled"
       },
       {
@@ -465,14 +478,63 @@
     ],
     "desc": "A fragrant Japanese comfort food, Miso Soup blends savory dashi broth with sweet miso paste and soft tofu. It’s a staple for breakfast or as an accompaniment to any meal, offering warmth in just a few minutes.",
     "prep_t": 5,
-    "prep_t_optimized": 2,
+    "prep_t_optimized": 3,
     "cook_t": 5,
-    "cook_t_optimized": 2,
+    "cook_t_optimized": 3,
     "passive_t_hours": 0,
+    "comment": "Use pre-cut tofu and scallions stored in water to slash chopping time. Assemble soup in under 2 minutes with prepped stock.",
+    "taste_score": 8.0,
+    "satiety_index": 202,
+    "id": "hondashi-miso-soup",
+    "img_b": "/dishes/768x624/miso-soup.webp",
+    "img_s": "/dishes/420x340/miso-soup.webp"
+  },
+  {
+    "dish": "Traditional Miso Soup",
+    "ingredients": [
+      {
+        "name": "Kombu",
+        "g": 3,
+        "state": "boiled"
+      },
+      {
+        "name": "Bonito flakes",
+        "g": 25,
+        "state": "boiled"
+      },
+      {
+        "name": "Dou fu",
+        "g": 50,
+        "state": "boiled"
+      },
+      {
+        "name": "Scallions",
+        "g": 7,
+        "state": "raw"
+      },
+      {
+        "name": "Miso paste",
+        "g": 20,
+        "state": "dissolved"
+      },
+      {
+        "name": "Water",
+        "g": 300,
+        "state": "boiled"
+      }
+    ],
+    "desc": "A fragrant Japanese comfort food, Miso Soup blends savory dashi broth with sweet miso paste and soft tofu. It’s a staple for breakfast or as an accompaniment to any meal, offering warmth in just a few minutes.",
+    "prep_t": 10,
+    "prep_t_optimized": 5,
+    "cook_t": 15,
+    "cook_t_optimized": 5,
+    "passive_t_hours": 2,
     "comment": "Prepare dashi stock in advance and store it in the refrigerator for up to 3 days, or freeze in ice cube trays for single portions. Keep miso paste ready-mixed in small jars for quick dissolving. For batch cooking, make a large pot of dashi once a week, portion into daily bags, and freeze—thaw overnight in fridge. Use pre-cut tofu and scallions stored in water to slash chopping time. Assemble soup in under 2 minutes with prepped stock.",
     "taste_score": 9,
     "satiety_index": 202,
-    "img_m": "/dishes/512x416/miso-soup.webp"
+    "id": "traditional-miso-soup",
+    "img_b": "/dishes/768x624/miso-soup.webp",
+    "img_s": "/dishes/420x340/miso-soup.webp"
   },
   {
     "dish": "Chicken Soup",
@@ -537,7 +599,9 @@
     "comment": "Cook a large batch of soup for several meals: cool quickly, portion into airtight containers, refrigerate up to 4 days or freeze up to 3 months, adding parsley fresh when serving. Tastes better next day. Use pre-shredded carrots and frozen mirepoix mix (carrot, celery, onion) to slash chopping time without cost hike. Keep stock and pre-cooked shredded chicken (from batch) ready. Use Instant Pot: 10 min high pressure for everything after sauté.",
     "taste_score": 9,
     "satiety_index": 202,
-    "img_m": "/dishes/512x416/chicken-soup.webp"
+    "id": "chicken-soup",
+    "img_b": "/dishes/768x624/chicken-soup.webp",
+    "img_s": "/dishes/420x340/chicken-soup.webp"
   },
   {
     "dish": "Udon",
@@ -582,7 +646,9 @@
     "comment": "Prepare dashi stock in advance and store in refrigerator up to 3 days or freeze in portions. For batch, make large dashi pot once weekly. Use dashi powder: just dissolve in hot water. Boil noodles separately in fresh water 8-10 min, rinse cold to stop cooking. Keep pre-boiled rinsed noodles and chopped scallions frozen. Soup assembles in under 5 min if dashi/noodles ready: heat dashi, add seasonings/noodles, top with flakes/scallions.",
     "taste_score": 9.1,
     "satiety_index": 147.5,
-    "img_m": "/dishes/512x416/udon.webp"
+    "id": "udon",
+    "img_b": "/dishes/768x624/udon.webp",
+    "img_s": "/dishes/420x340/udon.webp"
   },
   {
     "dish": "Tom Yum",
@@ -642,7 +708,9 @@
     "comment": "Prepare a big batch of the aromatic paste (pound or blend lemongrass, galangal, lime leaves, chili flakes together) and freeze in ice cube trays for up to 3 months; drop one cube per serving into simmering stock. Use pre-sliced mushrooms and store-bought fish stock to skip chopping and boiling from scratch. Cook a large pot of soup, cool quickly, portion into airtight containers, and freeze for up to 1 month; reheat with fresh shrimp or protein. This cuts per-serving prep by 70%.",
     "taste_score": 9.5,
     "satiety_index": 237,
-    "img_m": "/dishes/512x416/tom-yum.webp"
+    "id": "tom-yum",
+    "img_b": "/dishes/768x624/tom-yum.webp",
+    "img_s": "/dishes/420x340/tom-yum.webp"
   },
   {
     "dish": "Tom Kha Gai",
@@ -697,7 +765,9 @@
     "comment": "Make a large batch of aromatic paste (blend lemongrass, galangal, prik kee noo, lime leaves) and freeze in portions for quick use; simmer with coconut milk and stock. Use bite-sized pre-cut chicken and pre-sliced cao gu to minimize chopping. Prepare big pot, cool rapidly, portion and freeze base (without chicken) for 1-2 months; add fresh or pre-poached chicken upon reheating. Batch cooking slashes active time per serving by 70%. Pre-poach chicken in bulk for the week.",
     "taste_score": 9,
     "satiety_index": 237,
-    "img_m": "/dishes/512x416/tom-kha-gai.webp"
+    "id": "tom-kha-gai",
+    "img_b": "/dishes/768x624/tom-kha-gai.webp",
+    "img_s": "/dishes/420x340/tom-kha-gai.webp"
   },
   {
     "dish": "Laksa",
@@ -762,7 +832,9 @@
     "comment": "Prepare the spice paste in advance and store it in the refrigerator or freezer for up to a month. Cook a large batch of broth using a pressure cooker to reduce cooking time, then portion and freeze. When ready to serve, reheat the broth, add fresh noodles, and garnish. Pre-cook shrimp separately and store in the refrigerator, adding them just before serving. Batch cooking cuts active prep time per serving by about 70%.",
     "taste_score": 9.2,
     "satiety_index": 147.5,
-    "img_m": "/dishes/512x416/laksa.webp"
+    "id": "laksa",
+    "img_b": "/dishes/768x624/laksa.webp",
+    "img_s": "/dishes/420x340/laksa.webp"
   },
   {
     "dish": "Harira",
@@ -852,7 +924,9 @@
     "comment": "To save time, blend onions, celery, and herbs in a food processor instead of hand-chopping. Use a pressure cooker to tenderize the lamb and chickpeas in 45 minutes rather than 1.5 hours. Make a large batch of the base (meat/legumes/broth) and freeze it; add the vermicelli and flour thickener (tedouira) only upon reheating to maintain the perfect texture.",
     "taste_score": 9.2,
     "satiety_index": 202,
-    "img_m": "/dishes/512x416/harira.webp"
+    "id": "harira",
+    "img_b": "/dishes/768x624/harira.webp",
+    "img_s": "/dishes/420x340/harira.webp"
   },
   {
     "dish": "Shchi",
@@ -927,7 +1001,9 @@
     "comment": "Shchi is famous for tasting better the next day ('Sutochnye Shchi'), so always cook a double batch to let flavors cure overnight in the fridge. For a massive time saver, use high-quality sauerkraut instead of fresh cabbage—it eliminates shredding time and provides the authentic sour profile instantly. If using a pressure cooker, add potatoes only for the last 5 minutes of pressure to prevent them from disintegrating.",
     "taste_score": 8.9,
     "satiety_index": 202,
-    "img_m": "/dishes/512x416/shchi.webp"
+    "id": "shchi",
+    "img_b": "/dishes/768x624/shchi.webp",
+    "img_s": "/dishes/420x340/shchi.webp"
   },
   {
     "dish": "Okroshka",
@@ -977,7 +1053,9 @@
     "comment": "Pre-boil eggs and potatoes in advance and store them in the refrigerator for up to 3 days. Pre-chop all vegetables and store them separately in airtight containers. When ready to serve, simply mix everything with kefir. You can prepare the vegetable mix for several days ahead. Batch preparation cuts active prep time by about 60%.",
     "taste_score": 7.6,
     "satiety_index": 202,
-    "img_m": "/dishes/512x416/okroshka.webp"
+    "id": "okroshka",
+    "img_b": "/dishes/768x624/okroshka.webp",
+    "img_s": "/dishes/420x340/okroshka.webp"
   },
   {
     "dish": "Lagman",
@@ -1042,7 +1120,9 @@
     "comment": "Make the dough a few hours ahead, chill it in the fridge, and roll out when ready to cook. This cuts resting time. Also, pre‑cut all vegetables and marinate beef overnight for deeper flavor.",
     "taste_score": 8.9,
     "satiety_index": 147.5,
-    "img_m": "/dishes/512x416/lagman.webp"
+    "id": "lagman",
+    "img_b": "/dishes/768x624/lagman.webp",
+    "img_s": "/dishes/420x340/lagman.webp"
   },
   {
     "dish": "Kharcho",
@@ -1112,7 +1192,9 @@
     "comment": "Cook a large pot of kharcho for 4-6 servings: after boiling beef, portion cooled soup into airtight containers and freeze for up to 3 months, reheating only what you need. Use pre-made beef stock or frozen cooked beef to skip initial simmer. Keep a batch of roasted onion-tomato paste mix frozen, adding directly to stock. Prepare spice paste (fenugreek, garlic, coriander) ahead and store in fridge for a week. These steps retain flavor while slashing active time.",
     "taste_score": 8.8,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/kharcho.webp"
+    "id": "kharcho",
+    "img_b": "/dishes/768x624/kharcho.webp",
+    "img_s": "/dishes/420x340/kharcho.webp"
   },
   {
     "dish": "Šaltibarščiai",
@@ -1167,7 +1249,9 @@
     "comment": "Batch-boil beets and potatoes ahead for up to 5 days in fridge or freeze peeled beets for months. Pre-chop scallions, cucumber, and dill, storing separately in airtight containers for 3 days. Mix kefir base with salt and store chilled up to 2 days; stir in veggies just before serving to keep crisp. For daily use, maintain a large tub of soup base and add fresh garnishes per bowl. This cuts active prep by 75%.",
     "taste_score": 8.5,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/altibariai.webp"
+    "id": "altibariai",
+    "img_b": "/dishes/768x624/altibariai.webp",
+    "img_s": "/dishes/420x340/altibariai.webp"
   },
   {
     "dish": "Focaccia",
@@ -1222,7 +1306,9 @@
     "comment": "Prepare the dough in advance and let it rise in the refrigerator overnight or for several hours. This cuts active prep time significantly. Use a food processor to mix the dough quickly. For batch preparation, make multiple focaccias at once and freeze the extras. The dough can be stored in the refrigerator for up to 3 days before baking.",
     "taste_score": 8.9,
     "satiety_index": 134.2,
-    "img_m": "/dishes/512x416/focaccia.webp"
+    "id": "focaccia",
+    "img_b": "/dishes/768x624/focaccia.webp",
+    "img_s": "/dishes/420x340/focaccia.webp"
   },
   {
     "dish": "Minestrone",
@@ -1292,7 +1378,9 @@
     "comment": "Use pre‑chopped vegetable mix and canned beans to shave off prep time. If making a larger batch, simmer at low heat for up to 2 hours; the soup deepens in flavor and can be stored refrigerated for 3–4 days.",
     "taste_score": 8.9,
     "satiety_index": 202,
-    "img_m": "/dishes/512x416/minestrone.webp"
+    "id": "minestrone",
+    "img_b": "/dishes/768x624/minestrone.webp",
+    "img_s": "/dishes/420x340/minestrone.webp"
   },
   {
     "dish": "French Onion Soup",
@@ -1337,7 +1425,9 @@
     "comment": "Caramelize onions in a big batch for multiple servings—store extras in the freezer for quick reheats, halving future cook time. Use pre-minced garlic and oven-bake all onions at 300°F for hands-off caramelization. Keep stock on hand or freeze portions; broil multiple cheese toasts at once under broiler.",
     "taste_score": 9.2,
     "satiety_index": 202,
-    "img_m": "/dishes/512x416/french-onion-soup.webp"
+    "id": "french-onion-soup",
+    "img_b": "/dishes/768x624/french-onion-soup.webp",
+    "img_s": "/dishes/420x340/french-onion-soup.webp"
   },
   {
     "dish": "Gazpacho",
@@ -1392,7 +1482,9 @@
     "comment": "Use a blender or food processor to quickly process all vegetables. Gazpacho can be made in large batches and stored in the refrigerator for several days—it actually improves in flavor. Pre-chop vegetables and store them separately, then blend when ready to serve. Batch preparation cuts active prep time by about 70%.",
     "taste_score": 8.9,
     "satiety_index": 202,
-    "img_m": "/dishes/512x416/gazpacho.webp"
+    "id": "gazpacho",
+    "img_b": "/dishes/768x624/gazpacho.webp",
+    "img_s": "/dishes/420x340/gazpacho.webp"
   },
   {
     "dish": "Tomato Soup",
@@ -1452,7 +1544,9 @@
     "comment": "Cook a larger batch of soup for up to four servings, then refrigerate or freeze individual portions. The soup tastes even better the next day and can be stored for several days. Use an immersion blender directly in the pot for faster pureeing. Batch cooking reduces the overall cooking effort per serving by about 60%. Pre-chop mirepoix (onion, carrot, garlic) and freeze in portions.",
     "taste_score": 8.1,
     "satiety_index": 202,
-    "img_m": "/dishes/512x416/tomato-soup.webp"
+    "id": "tomato-soup",
+    "img_b": "/dishes/768x624/tomato-soup.webp",
+    "img_s": "/dishes/420x340/tomato-soup.webp"
   },
   {
     "dish": "Caldo Verde",
@@ -1507,7 +1601,9 @@
     "comment": "Cook a large pot for 4 servings: cool quickly, portion into airtight containers, refrigerate up to 4 days or freeze up to 3 months, adding chorizo fresh when serving. Soup improves next day. Use pre-boiled potatoes from batch and frozen chopped kale to slash chopping. Keep sliced onions/garlic frozen ready. Batch cuts active time per serving by 50%. Pressure cooker halves boil time.",
     "taste_score": 8.9,
     "satiety_index": 202,
-    "img_m": "/dishes/512x416/caldo-verde.webp"
+    "id": "caldo-verde",
+    "img_b": "/dishes/768x624/caldo-verde.webp",
+    "img_s": "/dishes/420x340/caldo-verde.webp"
   },
   {
     "dish": "Fufu",
@@ -1532,7 +1628,9 @@
     "comment": "Peel and cut cassava into chunks ahead, store in water fridge up to 2 days. Boil multiple portions, pound/shape while hot using stand mixer or potato masher with water for smooth fast texture. Store pounded fufu airtight up to 24h or freeze portions. Pressure cooker cuts boil to 15min. Batch pounding for 4 saves 50% active time.",
     "taste_score": 7.5,
     "satiety_index": 133,
-    "img_m": "/dishes/512x416/fufu.webp"
+    "id": "fufu",
+    "img_b": "/dishes/768x624/fufu.webp",
+    "img_s": "/dishes/420x340/fufu.webp"
   },
   {
     "dish": "Egusi Soup",
@@ -1582,7 +1680,9 @@
     "comment": "Pre-grind egusi, chop/freeze onions in portions. Use pressure cooker for beef (15min) and keep stock frozen. Frozen spinach thaws instantly. Cook double batch, cool quick, portion/freeze up to 2 months; reheats fast, flavors deepen. Separate spinach add when serving. Batch cuts per-serving active time by 50%.",
     "taste_score": 7.5,
     "satiety_index": 202,
-    "img_m": "/dishes/512x416/egusi-soup.webp"
+    "id": "egusi-soup",
+    "img_b": "/dishes/768x624/egusi-soup.webp",
+    "img_s": "/dishes/420x340/egusi-soup.webp"
   },
   {
     "dish": "Greek salad",
@@ -1637,7 +1737,9 @@
     "comment": "Pre-chop all vegetables and store them separately in airtight containers in the refrigerator for up to 3 days. Cube feta and portion olives ahead. You can prepare the vegetable mix for several days ahead, but add dressing only when serving. Use a vegetable chopper or food processor pulse for uniform dice in seconds.",
     "taste_score": 9,
     "satiety_index": 197,
-    "img_m": "/dishes/512x416/greek-salad.webp"
+    "id": "greek-salad",
+    "img_b": "/dishes/768x624/greek-salad.webp",
+    "img_s": "/dishes/420x340/greek-salad.webp"
   },
   {
     "dish": "Gravlax",
@@ -1677,7 +1779,9 @@
     "comment": "Prepare a large batch of gravlax (e.g., 1kg salmon) at once—scale up the cure mix evenly, wrap tightly, and refrigerate; it keeps for a week or freezes well in portions. This cuts active prep time per serving by 70% since mixing/spreading scales minimally. Use pre-chopped frozen dill if available cheaply to save chopping; flip the package once midway passively.",
     "taste_score": 9.4,
     "satiety_index": 225,
-    "img_m": "/dishes/512x416/gravlax.webp"
+    "id": "gravlax",
+    "img_b": "/dishes/768x624/gravlax.webp",
+    "img_s": "/dishes/420x340/gravlax.webp"
   },
   {
     "dish": "Soba",
@@ -1737,7 +1841,9 @@
     "comment": "Pre-make dashi and sauce in batches, freeze dashi cubes; slice garnishes ahead. Boil multiple portions at once in a large pot to cut time per serving. Soak dried soba 15min before boiling for better texture and shorter cook [web:14].",
     "taste_score": 8.8,
     "satiety_index": 147.5,
-    "img_m": "/dishes/512x416/soba.webp"
+    "id": "soba",
+    "img_b": "/dishes/768x624/soba.webp",
+    "img_s": "/dishes/420x340/soba.webp"
   },
   {
     "dish": "Hot Dog",
@@ -1782,7 +1888,9 @@
     "comment": "Cook multiple sausages at once in a skillet or on a griddle to halve cooking time per serving; they reheat well from fridge or freezer in 30 seconds microwave. Pre-chop onions and store in fridge up to 3 days, or use a food processor for batch slicing. Keep condiments in squeeze bottles at the table for instant assembly.",
     "taste_score": 9.3,
     "satiety_index": 134.2,
-    "img_m": "/dishes/512x416/hot-dog.webp"
+    "id": "hot-dog",
+    "img_b": "/dishes/768x624/hot-dog.webp",
+    "img_s": "/dishes/420x340/hot-dog.webp"
   },
   {
     "dish": "Burger",
@@ -1837,7 +1945,9 @@
     "comment": "Pre-form multiple patties from ground beef, stack with parchment, and freeze; they cook straight from frozen in 1 extra minute. Batch-chop tomatoes, onions if added, and lettuce, storing in airtight containers in fridge up to 2 days. Toast buns in bulk under broiler while patties sizzle, and keep condiments sauced-mixed in a squirt bottle.",
     "taste_score": 9.7,
     "satiety_index": 138,
-    "img_m": "/dishes/512x416/burger.webp"
+    "id": "burger",
+    "img_b": "/dishes/768x624/burger.webp",
+    "img_s": "/dishes/420x340/burger.webp"
   },
   {
     "dish": "Pizza Pepperoni",
@@ -1882,7 +1992,9 @@
     "comment": "Keep a batch of pizza dough in the fridge, doing a long cold rise for 1–3 days so you only need to shape and top before baking. Let the dough warm slightly while you preheat the oven and stone or steel, so shaping is easier without adding extra time. Prepare tomato sauce in advance and store it in the fridge or freezer in small portions ready to scoop. Grate cheese and slice pepperoni for several pizzas at once, storing them in airtight containers for a few days, so assembling a pizza takes under 10 minutes. Baking two pizzas at once on separate racks or using a large sheet pan maximizes oven use without increasing active time.",
     "taste_score": 9.7,
     "satiety_index": 140.67,
-    "img_m": "/dishes/512x416/pizza-pepperoni.webp"
+    "id": "pizza-pepperoni",
+    "img_b": "/dishes/768x624/pizza-pepperoni.webp",
+    "img_s": "/dishes/420x340/pizza-pepperoni.webp"
   },
   {
     "dish": "Pizza Margherita",
@@ -1922,7 +2034,9 @@
     "comment": "Mix a larger batch of Neapolitan-style dough and let it cold-proof in the refrigerator for 1–3 days, portioned into balls so each one is ready to stretch and bake. Take dough out 45–60 minutes before baking so it relaxes and stretches quickly without extra work. Keep simple tomato sauce pre-cooked or blended and chilled in a squeeze bottle for fast topping. Store mozzarella di bufala and basil ready to use, patting the cheese dry and tearing it by hand right before baking to avoid a watery pizza. Bake on a preheated stone or steel at maximum oven temperature so the pizza cooks in just a few minutes.",
     "taste_score": 9.7,
     "satiety_index": 123,
-    "img_m": "/dishes/512x416/pizza-margherita.webp"
+    "id": "pizza-margherita",
+    "img_b": "/dishes/768x624/pizza-margherita.webp",
+    "img_s": "/dishes/420x340/pizza-margherita.webp"
   },
   {
     "dish": "Grilled Cheese",
@@ -1952,7 +2066,9 @@
     "comment": "Shred a block of cheddar cheese ahead and store in the fridge for up to a week, or use store-bought pre-shredded bags for instant grab-and-go. Keep bread slices frozen in portions and butter softened at room temperature so you can spread it evenly in seconds without a knife. Heat a cast-iron skillet or nonstick pan over medium and cook two sandwiches at once, flipping only once; for batches, preheat the oven to 400°F and bake multiple on a sheet pan for even faster hands-off crisping while you prep sides.",
     "taste_score": 9,
     "satiety_index": 125.3,
-    "img_m": "/dishes/512x416/grilled-cheese.webp"
+    "id": "grilled-cheese",
+    "img_b": "/dishes/768x624/grilled-cheese.webp",
+    "img_s": "/dishes/420x340/grilled-cheese.webp"
   },
   {
     "dish": "Club Sandwich",
@@ -1997,7 +2113,9 @@
     "comment": "Fry a large batch of bacon on a sheet pan in the oven at 400°F and store cooked strips in the fridge for up to 5 days or freeze them flat for quick thawing. Buy pre-sliced deli turkey breast and store it vacuum-sealed or wrapped tightly; slice tomatoes and lettuce ahead, keeping them crisp in separate fridge bins with paper towels. Toast all three bread slices at once in a toaster oven or pop-up toaster, then layer assembly-line style for multiple sandwiches—reheat bacon briefly in a microwave if needed to save pan time.",
     "taste_score": 9,
     "satiety_index": 134.2,
-    "img_m": "/dishes/512x416/club-sandwich.webp"
+    "id": "club-sandwich",
+    "img_b": "/dishes/768x624/club-sandwich.webp",
+    "img_s": "/dishes/420x340/club-sandwich.webp"
   },
   {
     "dish": "BLT",
@@ -2037,7 +2155,9 @@
     "comment": "Cook a full tray of bacon in the oven and refrigerate it for up to 3 days or freeze it, then re-crisp slices in a pan or toaster oven as needed. Keep washed lettuce leaves and sliced tomatoes in airtight containers with a paper towel to absorb moisture so they are grab-and-assemble. Store sandwich bread in the freezer and toast slices directly from frozen to save on waste and shopping trips. When everything is prepped, you only need to toast bread, reheat bacon, and assemble several sandwiches at once, which keeps active time low even for multiple portions.",
     "taste_score": 9.1,
     "satiety_index": 138.4,
-    "img_m": "/dishes/512x416/blt.webp"
+    "id": "blt",
+    "img_b": "/dishes/768x624/blt.webp",
+    "img_s": "/dishes/420x340/blt.webp"
   },
   {
     "dish": "California Sushi Roll",
@@ -2092,7 +2212,9 @@
     "comment": "Cook a larger batch of sushi rice, season it while warm, and cool it quickly in a thin layer; it keeps well at cool room temperature for several hours covered with a damp towel, so you can roll multiple batches with one cooking session. Use surimi sticks instead of raw fish so you only need to cut them into strips, which is faster and safer for home storage. Pre-cut cucumber and avocado into batons and store them in tight containers (add a light brush of rice vinegar or lemon to avocado to reduce browning). A bamboo mat lined with plastic wrap speeds rolling and cleanup, and assembling 3–4 rolls in a row dramatically reduces per-roll active time.",
     "taste_score": 9.7,
     "satiety_index": 181.5,
-    "img_m": "/dishes/512x416/california-sushi-roll.webp"
+    "id": "california-sushi-roll",
+    "img_b": "/dishes/768x624/california-sushi-roll.webp",
+    "img_s": "/dishes/420x340/california-sushi-roll.webp"
   },
   {
     "dish": "Fajitas",
@@ -2157,7 +2279,9 @@
     "comment": "Marinate sliced beef overnight for flavor (passive). Prep double veggies with a mandoline or food processor. Batch-cook filling for 4 servings in one large skillet to halve active cook time, then freeze portions. Warm multiple tortillas in microwave wrapped in damp towel instead of oven.",
     "taste_score": 7.9,
     "satiety_index": 163.8,
-    "img_m": "/dishes/512x416/fajitas.webp"
+    "id": "fajitas",
+    "img_b": "/dishes/768x624/fajitas.webp",
+    "img_s": "/dishes/420x340/fajitas.webp"
   },
   {
     "dish": "Burrito",
@@ -2222,7 +2346,9 @@
     "comment": "Batch-cook rice, beans, and beef filling ahead for multiple burritos; store separately in fridge up to 3 days or freeze. Use microwave rice cooker or instant cooker for rice/beans, reheat components 1-2 min each, assemble fast. Pre-chop onions/peppers and keep frozen bags ready.",
     "taste_score": 9.1,
     "satiety_index": 163.8,
-    "img_m": "/dishes/512x416/burrito.webp"
+    "id": "burrito",
+    "img_b": "/dishes/768x624/burrito.webp",
+    "img_s": "/dishes/420x340/burrito.webp"
   },
   {
     "dish": "Quesadilla",
@@ -2252,7 +2378,9 @@
     "comment": "Use pre-shredded cheese and keep tortillas stacked to avoid individual wrapping. Make multiple quesadillas at once in a large skillet or on a griddle, flipping them together to halve the active cooking time per serving. Batch-prep by assembling several ahead and cooking in sequence.",
     "taste_score": 9.2,
     "satiety_index": 149.6,
-    "img_m": "/dishes/512x416/quesadilla.webp"
+    "id": "quesadilla",
+    "img_b": "/dishes/768x624/quesadilla.webp",
+    "img_s": "/dishes/420x340/quesadilla.webp"
   },
   {
     "dish": "Pommes frites",
@@ -2287,7 +2415,9 @@
     "comment": "Cut extra potatoes into uniform fries and steam-blanch them in microwave for 4-5 min to speed peeling and parboil, then pat dry. Fry larger batches in a deep fryer or wok, reusing oil for multiple meals stored frozen after first fry. Mix animal fat into oil for better crispiness without extra steps.",
     "taste_score": 9,
     "satiety_index": 116,
-    "img_m": "/dishes/512x416/pommes-frites.webp"
+    "id": "pommes-frites",
+    "img_b": "/dishes/768x624/pommes-frites.webp",
+    "img_s": "/dishes/420x340/pommes-frites.webp"
   },
   {
     "dish": "Kebab (Doner)",
@@ -2337,7 +2467,9 @@
     "comment": "Use pre-sliced thin beef sheets or minute steaks, season quickly and cut post-cook. Pan-sear or broil multiple portions at once on a sheet pan under oven broiler for fast cooking without rotisserie; store extra cooked meat refrigerated up to 2 days. Prep veggie toppings in bulk jars ahead.",
     "taste_score": 9.6,
     "satiety_index": 165,
-    "img_m": "/dishes/512x416/kebab.webp"
+    "id": "kebab",
+    "img_b": "/dishes/768x624/kebab.webp",
+    "img_s": "/dishes/420x340/kebab.webp"
   },
   {
     "dish": "Shawarma",
@@ -2397,7 +2529,9 @@
     "comment": "Marinate chicken ahead in yogurt, garlic, lemon, oil, salt, pepper for hours or overnight to infuse flavor with zero extra active time. Prepare multiple shawarmas at once: slice all chicken after roasting, chop onions in bulk, mix sauce big batch, assemble as needed—halves prep per serving. Use store-bought rotisserie chicken to skip roasting entirely, or pre-toasted pita kept warm in foil. Quick yogurt sauce blends in seconds with minced garlic from jar.",
     "taste_score": 9.2,
     "satiety_index": 165,
-    "img_m": "/dishes/512x416/shawarma.webp"
+    "id": "shawarma",
+    "img_b": "/dishes/768x624/shawarma.webp",
+    "img_s": "/dishes/420x340/shawarma.webp"
   },
   {
     "dish": "Gyros",
@@ -2442,7 +2576,9 @@
     "comment": "Use thin pork slices or ground pork pressed into loaf for home oven roasting instead of vertical spit; season simply with oregano, garlic, salt, pepper. Make extra loaf or slices for multiple servings: roast once, store sliced meat in fridge up to 4 days or freeze, reheat quickly in pan—cuts active cook time per gyros. Buy pre-sliced 'gyros meat' from butcher or store if available cheaply, or rotisserie pork/chicken as substitute. Prep tzatziki sauce in advance and chop veggies in bulk for instant assembly.",
     "taste_score": 9.2,
     "satiety_index": 165,
-    "img_m": "/dishes/512x416/gyros.webp"
+    "id": "gyros",
+    "img_b": "/dishes/768x624/gyros.webp",
+    "img_s": "/dishes/420x340/gyros.webp"
   },
   {
     "dish": "Pad Thai",
@@ -2517,7 +2653,9 @@
     "comment": "Soak noodles in advance or use hot water soak for 5-10 min to cut prep; prepare sauce mix and chop all ahead mise-en-place style. Make double batch in two woks or large pans to halve active time per serving; use pre-chopped garlic/shallots if freezing your own batches. Keep garnishes separate and add fresh for best taste.",
     "taste_score": 9.4,
     "satiety_index": 147.5,
-    "img_m": "/dishes/512x416/pad-thai.webp"
+    "id": "pad-thai",
+    "img_b": "/dishes/768x624/pad-thai.webp",
+    "img_s": "/dishes/420x340/pad-thai.webp"
   },
   {
     "dish": "Pad Krapow",
@@ -2577,7 +2715,9 @@
     "comment": "Chop garlic and chilies in bulk and freeze in portions to slash prep; batch-cook multiple servings in one wide pan, stirring efficiently. Use pre-minced pork from trusted butchers or grind your own ahead; wilt basil at end to preserve aroma without overcooking.",
     "taste_score": 9,
     "satiety_index": 153.2,
-    "img_m": "/dishes/512x416/pad-krapow.webp"
+    "id": "pad-krapow",
+    "img_b": "/dishes/768x624/pad-krapow.webp",
+    "img_s": "/dishes/420x340/pad-krapow.webp"
   },
   {
     "dish": "Banh Mi",
@@ -2642,7 +2782,9 @@
     "comment": "Roast or grill pork belly in bulk ahead and slice thin when needed; quick-pickle shredded carrot/daikon in 30-min vinegar brine using microwave for speed. Use store-bought pate and pre-sliced baguettes; assemble multiples at once to minimize per-sandwich handling. Freeze extra pickled veg in portions.",
     "taste_score": 9.2,
     "satiety_index": 134.2,
-    "img_m": "/dishes/512x416/banh-mi.webp"
+    "id": "banh-mi",
+    "img_b": "/dishes/768x624/banh-mi.webp",
+    "img_s": "/dishes/420x340/banh-mi.webp"
   },
   {
     "dish": "Southern Fried Chicken",
@@ -2707,7 +2849,9 @@
     "comment": "Brining in salted buttermilk adds juiciness but takes 8 hours passively; skip it for quicker meals using straight buttermilk soak for 15 minutes. Cut chicken into uniform bite-sized pieces and keep chilled until frying to speed prep. Fry multiple batches in the same hot oil reusing it across meals, or double-fry (first low temp 8 min, rest, then high temp 3 min) for extra crisp without longer total active time. Batch brine larger amounts for the week, freezing portions.",
     "taste_score": 8.4,
     "satiety_index": 162.1,
-    "img_m": "/dishes/512x416/southern-fried-chicken.webp"
+    "id": "southern-fried-chicken",
+    "img_b": "/dishes/768x624/southern-fried-chicken.webp",
+    "img_s": "/dishes/420x340/southern-fried-chicken.webp"
   },
   {
     "dish": "Roast Chicken",
@@ -2772,7 +2916,9 @@
     "comment": "Use pre-cut frozen vegetables like carrot, onion, potato mix to slash chopping time without extra cost. Roast two chickens side-by-side in a large tray; oven time barely increases but doubles output. Start with room-temp chicken and blast high heat first (10 min at 450F then lower) to cut total cook time while keeping skin crisp.",
     "taste_score": 9.1,
     "satiety_index": 182.1,
-    "img_m": "/dishes/512x416/roast-chicken.webp"
+    "id": "roast-chicken",
+    "img_b": "/dishes/768x624/roast-chicken.webp",
+    "img_s": "/dishes/420x340/roast-chicken.webp"
   },
   {
     "dish": "Fish and Chips",
@@ -2832,7 +2978,9 @@
     "comment": "Prep fries first: cut into even thin strips, soak in cold water 30 min passively to remove starch for crispier results, then pat dry. Mix batter ahead and rest 30 min in fridge for better texture without active time. Use two pans for simultaneous frying of fish and chips to halve cook time; reuse hot oil for multiple servings.",
     "taste_score": 9.2,
     "satiety_index": 170.5,
-    "img_m": "/dishes/512x416/fish-and-chips.webp"
+    "id": "fish-and-chips",
+    "img_b": "/dishes/768x624/fish-and-chips.webp",
+    "img_s": "/dishes/420x340/fish-and-chips.webp"
   },
   {
     "dish": "Steak Ribeye Wagyu",
@@ -2882,7 +3030,9 @@
     "comment": "Let the steak temper at room temperature for 30-60 minutes before cooking to reduce total time and ensure even cooking. Use a cast iron pan preheated on high while prepping; sear multiple steaks at once since pan time doesn't scale with quantity. Keep pre-made garlic-thyme butter logs in freezer for instant basting.",
     "taste_score": 9.7,
     "satiety_index": 176,
-    "img_m": "/dishes/512x416/steak-ribeye-wagyu.webp"
+    "id": "steak-ribeye-wagyu",
+    "img_b": "/dishes/768x624/steak-ribeye-wagyu.webp",
+    "img_s": "/dishes/420x340/steak-ribeye-wagyu.webp"
   },
   {
     "dish": "Lasagna",
@@ -2957,7 +3107,9 @@
     "comment": "Using no-boil lasagna sheets cuts prep time by eliminating the boiling step. Prepare the meat sauce and béchamel in bulk and freeze individual portions; assemble and bake only takes a few minutes, saving both prep and cook time for future meals. Chop onion and garlic in food processor to halve prep.",
     "taste_score": 9.7,
     "satiety_index": 141.8,
-    "img_m": "/dishes/512x416/lasagna.webp"
+    "id": "lasagna",
+    "img_b": "/dishes/768x624/lasagna.webp",
+    "img_s": "/dishes/420x340/lasagna.webp"
   },
   {
     "dish": "Chicken Parmesan",
@@ -3017,7 +3169,9 @@
     "comment": "Pound chicken thin for even faster baking and use cooking spray instead of oil spray lightly. Bread and freeze batches ahead; bake from frozen adding 5 min. Set up breading station in advance and bake multiple portions at once as oven time stays similar.",
     "taste_score": 9,
     "satiety_index": 182.1,
-    "img_m": "/dishes/512x416/chicken-parmesan.webp"
+    "id": "chicken-parmesan",
+    "img_b": "/dishes/768x624/chicken-parmesan.webp",
+    "img_s": "/dishes/420x340/chicken-parmesan.webp"
   },
   {
     "dish": "Spaghetti Carbonara",
@@ -3072,7 +3226,9 @@
     "comment": "Cook a double batch of carbonara: fry extra pancetta, boil more pasta, and portion the sauce components separately for quick reheating in microwave with a splash of water—saves half the active time next meal. Use pre-grated cheese and guanciale/pancetta chunks over slices to speed chopping. Boil pasta while frying pancetta simultaneously on two burners.",
     "taste_score": 9.3,
     "satiety_index": 141.8,
-    "img_m": "/dishes/512x416/spaghetti-carbonara.webp"
+    "id": "spaghetti-carbonara",
+    "img_b": "/dishes/768x624/spaghetti-carbonara.webp",
+    "img_s": "/dishes/420x340/spaghetti-carbonara.webp"
   },
   {
     "dish": "Spaghetti Bolognese",
@@ -3152,7 +3308,9 @@
     "comment": "Make a large pot of Bolognese sauce and freeze in portions; reheat only what you need, cutting future prep by two-thirds since chopping and initial frying is done. Use a food processor to pulse onion, carrot, celery, and garlic together in seconds. Keep soffritto (onion-carrot-celery) frozen in batches for instant start. Double the recipe upfront to amortize active cooking time.",
     "taste_score": 9.3,
     "satiety_index": 180,
-    "img_m": "/dishes/512x416/spaghetti-bolognese.webp"
+    "id": "spaghetti-bolognese",
+    "img_b": "/dishes/768x624/spaghetti-bolognese.webp",
+    "img_s": "/dishes/420x340/spaghetti-bolognese.webp"
   },
   {
     "dish": "Risotto",
@@ -3217,7 +3375,9 @@
     "comment": "Prepare multiple risotto portions by scaling up the recipe in a wide pan, stirring less frequently after initial toasting; portion and chill for reheating in microwave with stock splash, halving active time per serving. Pre-mince onion-garlic and measure rice/stock in advance. Use hot stock in a pitcher for seamless additions without constant checking.",
     "taste_score": 9.1,
     "satiety_index": 153.2,
-    "img_m": "/dishes/512x416/risotto.webp"
+    "id": "risotto",
+    "img_b": "/dishes/768x624/risotto.webp",
+    "img_s": "/dishes/420x340/risotto.webp"
   },
   {
     "dish": "Paella",
@@ -3282,7 +3442,9 @@
     "comment": "Cook a large batch for 4 servings at once to halve prep time: chop veggies in bulk once, use pre-boiled beets or frozen mirepoix if available cheaply, steep saffron ahead in warm stock. For single servings, prep soffrito and proteins in advance, refrigerate, then add rice just before serving to cut active prep. Use oven for even rice cooking at 190C after initial boil to speed up.",
     "taste_score": 8.7,
     "satiety_index": 153.2,
-    "img_m": "/dishes/512x416/paella.webp"
+    "id": "paella",
+    "img_b": "/dishes/768x624/paella.webp",
+    "img_s": "/dishes/420x340/paella.webp"
   },
   {
     "dish": "Har Gow (Shrimp Dumplings)",
@@ -3332,7 +3494,9 @@
     "comment": "Make double batch of filling and dough, freeze formed dumplings flat on tray then bag: steam from frozen adds just 1 min, skips all chopping next time. Use food processor for quick mince on shrimp/ginger/garlic. Tortilla press between oiled parchment speeds wrapper rolling evenly without cracks. Batch-steam multiple tiers in steamer.",
     "taste_score": 8.7,
     "satiety_index": 144.4,
-    "img_m": "/dishes/512x416/har-gow.webp"
+    "id": "har-gow",
+    "img_b": "/dishes/768x624/har-gow.webp",
+    "img_s": "/dishes/420x340/har-gow.webp"
   },
   {
     "dish": "Gyoza",
@@ -3397,7 +3561,9 @@
     "comment": "Make a larger batch of filling and wrappers at once, then freeze uncooked gyoza flat on a tray before transferring them to a container; they can go straight from freezer to pan without thawing, only adding 1–2 minutes to cooking. Mix the filling in a stand mixer or with chopsticks until sticky to speed up the kneading step, and use a small measuring scoop so portioning goes quickly and evenly. A non‑stick pan with a fitted lid lets you steam‑fry many dumplings at once without babysitting, so active time per portion drops sharply when cooking several servings together.",
     "taste_score": 9.2,
     "satiety_index": 144.4,
-    "img_m": "/dishes/512x416/gyoza.webp"
+    "id": "gyoza",
+    "img_b": "/dishes/768x624/gyoza.webp",
+    "img_s": "/dishes/420x340/gyoza.webp"
   },
   {
     "dish": "Wontons",
@@ -3455,8 +3621,10 @@
     "cook_t_optimized": 6,
     "passive_t_hours": 0,
     "comment": "Shape a large batch of wontons at once and freeze them on a tray; they can be boiled directly from frozen with just 1–2 extra minutes in the water. Use store‑bought square wonton wrappers instead of rolling dough to cut prep drastically, and set up a small assembly line (filling, folding, sealing) so multiple portions are folded in one focused session and cooked to order later.",
-    "taste_score": 9.0,
-	"img_m": "/dishes/512x416/wontons.webp"
+    "taste_score": 9,
+    "id": "wontons",
+    "img_b": "/dishes/768x624/wontons.webp",
+    "img_s": "/dishes/420x340/wontons.webp"
   },
   {
     "dish": "Fresh Spring Rolls",
@@ -3516,7 +3684,9 @@
     "comment": "Prepare multiple rolls at once: boil a larger batch of shrimp and vermicelli simultaneously (active 5 min, passive boil 5-7 min), chill in ice water for quick cool-down, and use pre-julienned frozen carrot/cucumber mixes from the store—often cheaper than fresh in off-season. Keep filling ingredients portioned in bowls assembly-line style. Toast peanuts in bulk ahead and store. This cuts individual roll prep by half without raising costs.",
     "taste_score": 9,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/fresh-spring-rolls.webp"
+    "id": "fresh-spring-rolls",
+    "img_b": "/dishes/768x624/fresh-spring-rolls.webp",
+    "img_s": "/dishes/420x340/fresh-spring-rolls.webp"
   },
   {
     "dish": "Hot Pot",
@@ -3581,7 +3751,9 @@
     "comment": "Prepare a large batch of broth ahead and freeze in portions; reheat one while prepping ingredients for next use, cutting active time drastically. Buy pre-sliced meats and frozen pre-chopped vegetable mixes like cabbage, carrot, spinach to halve chopping. Slice everything at once for 4-6 servings, using a mandoline for meats and veggies; cook one portion now, refrigerate others raw for later table-cooking. Boil noodles separately in bulk.",
     "taste_score": 9.2,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/hot-pot.webp"
+    "id": "hot-pot",
+    "img_b": "/dishes/768x624/hot-pot.webp",
+    "img_s": "/dishes/420x340/hot-pot.webp"
   },
   {
     "dish": "Peking Duck",
@@ -3641,7 +3813,9 @@
     "comment": "Use a fan or hairdryer to speed skin drying to 8-10 hours instead of 24; rub with baking soda for extra crispness without long air-drying. For multiple ducks, rotate in oven to batch roast, saving 20-25 min per bird via hot air circulation. Buy ready-made Peking duck pancakes or steam frozen ones in bulk to skip batter mixing. Keep duck hanging hooks ready and preheat oven fully while prepping glaze.",
     "taste_score": 9.7,
     "satiety_index": 172.1,
-    "img_m": "/dishes/512x416/peking-duck.webp"
+    "id": "peking-duck",
+    "img_b": "/dishes/768x624/peking-duck.webp",
+    "img_s": "/dishes/420x340/peking-duck.webp"
   },
   {
     "dish": "Kung Pao Chicken",
@@ -3711,7 +3885,9 @@
     "comment": "Batch-prep ingredients for multiple portions by using a mandoline or food processor for uniform chopping of peppers, onions, garlic, and chilies, then store in bowls. Toast extra Sichuan peppercorns and grind into powder ahead for quick use. Double the recipe in one wok to halve per-portion cook time; cool quickly, portion into airtight containers, and freeze for up to a month—reheat straight from freezer in hot wok with splash of water.",
     "taste_score": 9,
     "satiety_index": 182.1,
-    "img_m": "/dishes/512x416/kung-pao-chicken.webp"
+    "id": "kung-pao-chicken",
+    "img_b": "/dishes/768x624/kung-pao-chicken.webp",
+    "img_s": "/dishes/420x340/kung-pao-chicken.webp"
   },
   {
     "dish": "Mapo Tofu",
@@ -3776,7 +3952,9 @@
     "comment": "Pre-mince garlic, ginger, and pork together and store in fridge for up to a day; keep pre-toasted ground Sichuan peppercorns handy. Cook double batch of sauce base (pork, doubanjiang, aromatics) ahead, freeze portions, then just simmer with tofu when needed—thaws and reheats in wok in half the time. Use store-bought chicken stock if faster than homemade.",
     "taste_score": 9.2,
     "satiety_index": 133,
-    "img_m": "/dishes/512x416/mapo-tofu.webp"
+    "id": "mapo-tofu",
+    "img_b": "/dishes/768x624/mapo-tofu.webp",
+    "img_s": "/dishes/420x340/mapo-tofu.webp"
   },
   {
     "dish": "Char Siu",
@@ -3826,7 +4004,9 @@
     "comment": "Marinate a large pork shoulder batch (2-3kg) overnight, then roast or grill all at once—per-portion active oven time drops as it hands-off. Use oven fan/convection for even faster cooking and crispier results. Vacuum-seal and freeze marinated portions for quick future preps; thaw overnight in fridge. Apply extra glaze under broiler for 2-3 min caramelization.",
     "taste_score": 9.6,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/char-siu.webp"
+    "id": "char-siu",
+    "img_b": "/dishes/768x624/char-siu.webp",
+    "img_s": "/dishes/420x340/char-siu.webp"
   },
   {
     "dish": "Tempura",
@@ -3891,7 +4071,9 @@
     "comment": "Prepare batter just before frying by chilling dry ingredients and soda water ahead; use ice-cold sparkling water for crispiness. Slice vegetables uniformly in advance and pat dry to speed up. Fry multiple batches at once in a wide pot for home use, reusing oil for 2-3 sessions if filtered and stored properly. Make double portion: fry all, cool on rack, freeze extras in single layer then bag; reheat in 180C oven 3-4 min for crisp revival.",
     "taste_score": 9.3,
     "satiety_index": 137,
-    "img_m": "/dishes/512x416/tempura.webp"
+    "id": "tempura",
+    "img_b": "/dishes/768x624/tempura.webp",
+    "img_s": "/dishes/420x340/tempura.webp"
   },
   {
     "dish": "Sashimi",
@@ -3926,7 +4108,9 @@
     "comment": "Buy sashimi-grade tuna pre-sliced or partially frozen (sushi block)—thaw briefly in fridge and slice in 2-3 min vs 8 min fresh. Prepare multiple portions ahead: slice whole tuna loin into 150g packs, wrap airtight, refrigerate up to 2 days or freeze; grate extra ginger/wasabi in bulk and store. Use a mandoline slicer for uniform thin cuts to halve knife time safely.",
     "taste_score": 9.5,
     "satiety_index": 225,
-    "img_m": "/dishes/512x416/sashimi.webp"
+    "id": "sashimi",
+    "img_b": "/dishes/768x624/sashimi.webp",
+    "img_s": "/dishes/420x340/sashimi.webp"
   },
   {
     "dish": "Unagi Don",
@@ -3976,7 +4160,9 @@
     "comment": "Use pre-boned frozen unagi fillets (thaw in fridge ahead) to skip filleting/boning. Prepare double sauce batch and store refrigerated for instant use next time. Cook rice in cooker or microwave pouch while broiling eel; make multiple portions at once to halve active time per serving. Reuse foil tray for easy cleanup.",
     "taste_score": 9,
     "satiety_index": 225,
-    "img_m": "/dishes/512x416/unagi-don.webp"
+    "id": "unagi-don",
+    "img_b": "/dishes/768x624/unagi-don.webp",
+    "img_s": "/dishes/420x340/unagi-don.webp"
   },
   {
     "dish": "Yakitori",
@@ -4021,7 +4207,9 @@
     "comment": "Cut chicken and scallions into uniform pieces ahead; soak bamboo skewers in water batch for multiple uses to prevent burning. Prepare tare sauce in advance and store. Thread multiple skewers at once for batch grilling under broiler or on grill pan; flip and glaze in one go. Buy pre-cut chicken thigh if available cheaply.",
     "taste_score": 9.2,
     "satiety_index": 167,
-    "img_m": "/dishes/512x416/yakitori.webp"
+    "id": "yakitori",
+    "img_b": "/dishes/768x624/yakitori.webp",
+    "img_s": "/dishes/420x340/yakitori.webp"
   },
   {
     "dish": "Tonkatsu",
@@ -4066,7 +4254,9 @@
     "comment": "Pound pork thin for even faster cooking; set up breading station with bowls in assembly line. Shred cabbage with mandoline or pre-shredded bag while oil heats. Fry two cutlets sequentially using same oil (skimming crumbs); double-fry briefly for extra crisp without extra oil. Freeze extra breaded cutlets for instant future meals.",
     "taste_score": 9.3,
     "satiety_index": 137,
-    "img_m": "/dishes/512x416/tonkatsu.webp"
+    "id": "tonkatsu",
+    "img_b": "/dishes/768x624/tonkatsu.webp",
+    "img_s": "/dishes/420x340/tonkatsu.webp"
   },
   {
     "dish": "Okonomiyaki",
@@ -4131,7 +4321,9 @@
     "comment": "Prepare a double or triple batch of batter and chop extra cabbage ahead, storing in fridge; this halves chopping time next day. Use pre-shredded cabbage coleslaw mix to skip chopping. Make multiple pancakes at once on a large griddle to reduce per-pancake cooking flips and attention.",
     "taste_score": 9,
     "satiety_index": 134.4,
-    "img_m": "/dishes/512x416/okonomiyaki.webp"
+    "id": "okonomiyaki",
+    "img_b": "/dishes/768x624/okonomiyaki.webp",
+    "img_s": "/dishes/420x340/okonomiyaki.webp"
   },
   {
     "dish": "Bibimbap",
@@ -4186,7 +4378,9 @@
     "comment": "Use pre-washed, pre-cut veggies and microwave rice to cut prep time. Fry beef in bulk for several servings; store the fried egg separately if making multiple portions.",
     "taste_score": 9,
     "satiety_index": 153.2,
-    "img_m": "/dishes/512x416/bibimbap.webp"
+    "id": "bibimbap",
+    "img_b": "/dishes/768x624/bibimbap.webp",
+    "img_s": "/dishes/420x340/bibimbap.webp"
   },
   {
     "dish": "Bulgogi",
@@ -4251,7 +4445,9 @@
     "comment": "Marinate beef overnight or freeze briefly to slice thinner faster; use pre-minced garlic and ginger paste. Batch-grill double portion on a hot cast-iron skillet or grill pan, then portion and fridge for 2-3 days. Thinly slice veggies ahead and store in water to crisp.",
     "taste_score": 9.1,
     "satiety_index": 176,
-    "img_m": "/dishes/512x416/bulgogi.webp"
+    "id": "bulgogi",
+    "img_b": "/dishes/768x624/bulgogi.webp",
+    "img_s": "/dishes/420x340/bulgogi.webp"
   },
   {
     "dish": "Kimchi",
@@ -4301,7 +4497,9 @@
     "comment": "Prepare a large batch (4-6 servings) of kimchi at once: the salting and mixing time per portion drops significantly as chopping and tossing scales better for multiples; portion into jars immediately after mixing to save daily prep. Use pre-minced garlic and ginger from jars (cheaper in bulk, lasts months refrigerated) to halve chopping time. Keep salted cabbage in a colander over a bowl in fridge for 1-2 days if short on counter space, yielding even better flavor extraction.",
     "taste_score": 9,
     "satiety_index": 151,
-    "img_m": "/dishes/512x416/kimchi.webp"
+    "id": "kimchi",
+    "img_b": "/dishes/768x624/kimchi.webp",
+    "img_s": "/dishes/420x340/kimchi.webp"
   },
   {
     "dish": "Tteokbokki",
@@ -4361,7 +4559,9 @@
     "comment": "Cook a big batch for 3-4 servings to halve chopping and sauce-mixing time per portion; cool quickly, portion into airtight containers, and refrigerate for up to 3 days—flavors intensify nicely. Use pre-sliced garlic/ginger paste or frozen minced packs to skip fresh mincing. Buy ready-to-use tteok from stores (often cheaper in bulk Asian markets) to avoid any soaking if dry. Slice surimi while sauce simmers for overlap.",
     "taste_score": 9,
     "satiety_index": 149.8,
-    "img_m": "/dishes/512x416/tteokbokki.webp"
+    "id": "tteokbokki",
+    "img_b": "/dishes/768x624/tteokbokki.webp",
+    "img_s": "/dishes/420x340/tteokbokki.webp"
   },
   {
     "dish": "Samgyeopsal",
@@ -4421,7 +4621,9 @@
     "comment": "Grill multiple batches at once for 2-4 servings to halve cooking time per portion, using a large grill pan or cast iron skillet; cut into bites with kitchen scissors directly on the grill to speed up serving. Preheat the grill well and avoid overcrowding to ensure quick, even crisping. Pre-chop vegetables and portion ssamjang ahead; freeze extra pork belly slices flat for instant thawing next time.",
     "taste_score": 9.1,
     "satiety_index": 176,
-    "img_m": "/dishes/512x416/samgyeopsal.webp"
+    "id": "samgyeopsal",
+    "img_b": "/dishes/768x624/samgyeopsal.webp",
+    "img_s": "/dishes/420x340/samgyeopsal.webp"
   },
   {
     "dish": "Japchae",
@@ -4486,7 +4688,9 @@
     "comment": "Prep vegetables for 4 servings at once and store in fridge up to 2 days to slash chopping time next cooks; blanch spinach and cook noodles in two pots simultaneously. Stir-fry double batch in shifts using large wok, then portion immediately—noodles absorb flavors better overnight in fridge. Use pre-sliced beef and frozen mirepoix mix if available cheaply to minimize knife work.",
     "taste_score": 9,
     "satiety_index": 149.85,
-    "img_m": "/dishes/512x416/japchae.webp"
+    "id": "japchae",
+    "img_b": "/dishes/768x624/japchae.webp",
+    "img_s": "/dishes/420x340/japchae.webp"
   },
   {
     "dish": "Butter Chicken",
@@ -4551,7 +4755,9 @@
     "comment": "Marinate chicken overnight or several hours ahead in fridge to deepen flavor without extra active time. Prepare sauce base ahead and freeze in portions, then thaw and simmer with pre-marinated chicken. Use store-bought ginger-garlic paste and tomato puree to slash chopping time; batch-marinade for multiple meals to halve per-portion prep.",
     "taste_score": 9.7,
     "satiety_index": 162.1,
-    "img_m": "/dishes/512x416/butter-chicken.webp"
+    "id": "butter-chicken",
+    "img_b": "/dishes/768x624/butter-chicken.webp",
+    "img_s": "/dishes/420x340/butter-chicken.webp"
   },
   {
     "dish": "Tandoori Chicken",
@@ -4606,7 +4812,9 @@
     "comment": "Marinate chicken overnight in fridge for best tenderness with zero extra active time. Use pre-cut chicken thighs and bottled lemon juice to minimize prep; batch-grill multiple portions on a tray in hot oven or air fryer to cut cook time per serving. Freeze marinated raw chicken in portions for quick future cooks.",
     "taste_score": 9.2,
     "satiety_index": 182.1,
-    "img_m": "/dishes/512x416/tandoori-chicken.webp"
+    "id": "tandoori-chicken",
+    "img_b": "/dishes/768x624/tandoori-chicken.webp",
+    "img_s": "/dishes/420x340/tandoori-chicken.webp"
   },
   {
     "dish": "Biryani",
@@ -4666,7 +4874,9 @@
     "comment": "Batch-cook double portions: fry onions and cook chicken gravy ahead, layer with soaked rice, and dum in oven or sealed pot for even resting. Soak rice and marinate chicken/gravy a day prior in fridge. Use frozen pre-sliced onions (often cheaper bulk) and microwave partially cook rice to cut active boiling time.",
     "taste_score": 9.2,
     "satiety_index": 153.2,
-    "img_m": "/dishes/512x416/biryani.webp"
+    "id": "biryani",
+    "img_b": "/dishes/768x624/biryani.webp",
+    "img_s": "/dishes/420x340/biryani.webp"
   },
   {
     "dish": "Naan",
@@ -4711,7 +4921,9 @@
     "comment": "Prepare a large batch of dough and refrigerate for up to 2 days; portion into balls and proof only the needed amount while the rest stays cold, cutting kneading and rising time per naan. Use no-yeast baking powder version with hot water and yogurt for instant 20-min total process. Preheat cast-iron skillet or tawa hot to speed up cooking per piece.",
     "taste_score": 9.2,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/naan.webp"
+    "id": "naan",
+    "img_b": "/dishes/768x624/naan.webp",
+    "img_s": "/dishes/420x340/naan.webp"
   },
   {
     "dish": "Samosa",
@@ -4771,7 +4983,9 @@
     "comment": "Boil and mash potatoes in advance or use leftover mashed potatoes to skip 15 min boiling and cooling; prepare large filling batch and freeze in portions, thawing quickly for assembly. Make double dough batch, chill or freeze wrapped portions to cut resting and kneading time next uses. Use premade spring roll wrappers if available for 10-min assembly, sealing with water.",
     "taste_score": 9,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/samosa.webp"
+    "id": "samosa",
+    "img_b": "/dishes/768x624/samosa.webp",
+    "img_s": "/dishes/420x340/samosa.webp"
   },
   {
     "dish": "Pani Puri",
@@ -4821,7 +5035,9 @@
     "comment": "Use storebought puri shells and pre-boiled potatoes/chickpeas from bulk cooking to halve prep. Prepare tamarind pani in large batches ahead as noted in its recipe and store chilled. Finely chop onions and coriander in bulk or use pre-chopped frozen mixes if cheaper locally. Fry multiple servings at once reusing oil safely to cut cook time.",
     "taste_score": 9,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/pani-puri.webp"
+    "id": "pani-puri",
+    "img_b": "/dishes/768x624/pani-puri.webp",
+    "img_s": "/dishes/420x340/pani-puri.webp"
   },
   {
     "dish": "Masala Dosa",
@@ -4881,7 +5097,9 @@
     "comment": "Prepare batter in large batches and ferment overnight in fridge for up to 5 days using portioned containers. Boil and mash potatoes ahead storing in fridge up to 3 days. Chop onions in bulk or use frozen pre-chopped to save 5min. Use non-stick tawa preheated to reduce oil and flipping time; make 2-3 dosas at once if tawa allows.",
     "taste_score": 9.1,
     "satiety_index": 133,
-    "img_m": "/dishes/512x416/masala-dosa.webp"
+    "id": "masala-dosa",
+    "img_b": "/dishes/768x624/masala-dosa.webp",
+    "img_s": "/dishes/420x340/masala-dosa.webp"
   },
   {
     "dish": "Palak Paneer",
@@ -4936,7 +5154,9 @@
     "comment": "Use frozen chopped spinach thawed quickly under hot water skipping blanch time. Buy pre-cubed paneer or cut from block in bulk ahead. Prepare onion-tomato masala base in large pot and freeze portions to cut saute time by half. Blend spinach smooth with immersion blender while cooking for speed.",
     "taste_score": 8.5,
     "satiety_index": 133,
-    "img_m": "/dishes/512x416/palak-paneer.webp"
+    "id": "palak-paneer",
+    "img_b": "/dishes/768x624/palak-paneer.webp",
+    "img_s": "/dishes/420x340/palak-paneer.webp"
   },
   {
     "dish": "Som Tam",
@@ -5001,7 +5221,9 @@
     "comment": "Prepare a large batch of shredded green papaya and blanched yardlong beans ahead, storing in fridge up to 3 days to halve shredding and chopping time for multiple servings. Pound sauce ingredients (garlic, chilies, sugar, fish sauce, lime) in mortar first while prepping veggies, then toss all together. Use pre-roasted peanuts and a julienne peeler for carrots/tomatoes to speed up.",
     "taste_score": 9,
     "satiety_index": 212,
-    "img_m": "/dishes/512x416/som-tam.webp"
+    "id": "som-tam",
+    "img_b": "/dishes/768x624/som-tam.webp",
+    "img_s": "/dishes/420x340/som-tam.webp"
   },
   {
     "dish": "Massaman Curry",
@@ -5041,7 +5263,9 @@
     "comment": "Cook a large batch for 4-6 servings to halve active times: chop once, simmer big pot, portion and freeze (up to 3 months, flavors deepen). Use pressure cooker (20-25 min high pressure for tender beef). Pre-peeled frozen potatoes/onions save 5 min chopping. Store-bought roasted peanuts (20g, roasted state) optional for crunch without extra toast time.",
     "taste_score": 9.4,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/massaman-curry.webp"
+    "id": "massaman-curry",
+    "img_b": "/dishes/768x624/massaman-curry.webp",
+    "img_s": "/dishes/420x340/massaman-curry.webp"
   },
   {
     "dish": "Green Curry",
@@ -5111,7 +5335,9 @@
     "comment": "Double the batch: fry paste once for multiple pans, saving 5 min per extra portion. Use frozen pre-sliced veggies (bell pepper, zucchini, bamboo) to skip chopping. Pressure cooker on high for 5 min cuts simmer to 15 min total active cook. Keep aromatics (lemongrass, lime leaves) in infuser bag for easy removal.",
     "taste_score": 9.1,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/green-curry.webp"
+    "id": "green-curry",
+    "img_b": "/dishes/768x624/green-curry.webp",
+    "img_s": "/dishes/420x340/green-curry.webp"
   },
   {
     "dish": "Chicken Satay",
@@ -5171,7 +5397,9 @@
     "comment": "Batch marinate 1kg chicken (divide into bags, freeze extras): cuts future prep to 5 min thaw/skewer. Use pre-shelled roasted peanuts blended quick for sauce. Grill multiple batches at once on large tray or double grill; broil in oven (8 min flip once) skips outdoor setup. Soak bamboo skewers in bulk ahead.",
     "taste_score": 9.1,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/chicken-satay.webp"
+    "id": "chicken-satay",
+    "img_b": "/dishes/768x624/chicken-satay.webp",
+    "img_s": "/dishes/420x340/chicken-satay.webp"
   },
   {
     "dish": "Fried Rice",
@@ -5231,7 +5459,9 @@
     "comment": "Use day-old leftover rice straight from the fridge to skip cooling time. Prep all veggies and sauces in advance while rice warms if needed. For batch cooking, double or triple the recipe in a wok—fixed costs like heating the pan stay the same, chopping scales but takes less proportional time; portion and fridge for 3-4 days. Pre-chopped frozen mixed veggies (peas, carrots) cut chopping to zero.",
     "taste_score": 9,
     "satiety_index": 153.2,
-    "img_m": "/dishes/512x416/fried-rice.webp"
+    "id": "fried-rice",
+    "img_b": "/dishes/768x624/fried-rice.webp",
+    "img_s": "/dishes/420x340/fried-rice.webp"
   },
   {
     "dish": "Nasi Goreng",
@@ -5286,7 +5516,9 @@
     "comment": "Use cold leftover rice to avoid clumping. Mince garlic/onion together ahead or use frozen pre-minced for speed. Batch cook multiple servings in one wok to halve per-portion active time; store extras in fridge up to 3 days. Mix sambal into oil first for even spice distribution without extra stirring.",
     "taste_score": 8.8,
     "satiety_index": 153.2,
-    "img_m": "/dishes/512x416/nasi-goreng.webp"
+    "id": "nasi-goreng",
+    "img_b": "/dishes/768x624/nasi-goreng.webp",
+    "img_s": "/dishes/420x340/nasi-goreng.webp"
   },
   {
     "dish": "Rendang",
@@ -5351,7 +5583,9 @@
     "comment": "Using an Instant Pot or pressure cooker cuts the cooking time to about 30-35 minutes (including pressure build/release) while still developing depth of flavor. For batch preparation, double ingredients for 2-3 meals and store in airtight containers; reheat gently on the stove or microwave. Blend spice paste (onion, garlic, ginger, galangal, lemongrass, etc.) in food processor to halve chopping time; freeze extra paste in ice cube trays for future batches.",
     "taste_score": 8.7,
     "satiety_index": 176,
-    "img_m": "/dishes/512x416/rendang.webp"
+    "id": "rendang",
+    "img_b": "/dishes/768x624/rendang.webp",
+    "img_s": "/dishes/420x340/rendang.webp"
   },
   {
     "dish": "Goi Cuon",
@@ -5416,7 +5650,9 @@
     "comment": "Boil shrimps and vermicelli noodles in bulk ahead of time and store them in the fridge for up to 3 days. Pre-julienne vegetables and keep them in airtight containers with a damp paper towel. When ready to serve, you'll only need to soften the rice paper and assemble the rolls, cutting prep time in half. You can also freeze pre-cooked shrimps for weeks.",
     "taste_score": 9.1,
     "satiety_index": 172,
-    "img_m": "/dishes/512x416/goi-cuon.webp"
+    "id": "goi-cuon",
+    "img_b": "/dishes/768x624/goi-cuon.webp",
+    "img_s": "/dishes/420x340/goi-cuon.webp"
   },
   {
     "dish": "Chili Crab",
@@ -5481,7 +5717,9 @@
     "comment": "Use pre-cleaned frozen crab segments to eliminate shell-cleaning time. Prepare the chili-tomato sauce base in a large batch and freeze it in portions—it keeps well for months and only needs reheating when you add the crab. You can also use a pressure cooker to cut the simmering time in half while tenderizing the crab meat.",
     "taste_score": 8.8,
     "satiety_index": 225,
-    "img_m": "/dishes/512x416/chili-crab.webp"
+    "id": "chili-crab",
+    "img_b": "/dishes/768x624/chili-crab.webp",
+    "img_s": "/dishes/420x340/chili-crab.webp"
   },
   {
     "dish": "Hainanese Chicken Rice",
@@ -5541,7 +5779,9 @@
     "comment": "Use a rice cooker with a steamer basket to poach the chicken and cook rice simultaneously in chicken stock, saving significant time and cleanup. Pre-made chicken stock (homemade frozen or quality store-bought) eliminates the need to make it fresh. Cook extra chicken and rice—they keep well refrigerated for 3 days and the flavors improve overnight. Slice chicken when cold for cleaner cuts.",
     "taste_score": 9.1,
     "satiety_index": 153.2,
-    "img_m": "/dishes/512x416/hainanese-chicken-rice.webp"
+    "id": "hainanese-chicken-rice",
+    "img_b": "/dishes/768x624/hainanese-chicken-rice.webp",
+    "img_s": "/dishes/420x340/hainanese-chicken-rice.webp"
   },
   {
     "dish": "Falafel",
@@ -5601,7 +5841,9 @@
     "comment": "Soak dried chickpeas overnight (or quick-soak by boiling 1 min then 1 hour off-heat) for best texture; use a food processor for fast chopping of onion, garlic, herbs, and spices into a coarse paste. Form 6-8 small balls and freeze 15 min to firm up before frying—this prevents crumbling and cuts active frying time. Fry in batches but make double quantity, freeze extras on a tray then bag them; reheat from frozen in air fryer or oven to halve per-batch time on repeat meals.",
     "taste_score": 9.2,
     "satiety_index": 133,
-    "img_m": "/dishes/512x416/falafel.webp"
+    "id": "falafel",
+    "img_b": "/dishes/768x624/falafel.webp",
+    "img_s": "/dishes/420x340/falafel.webp"
   },
   {
     "dish": "Tabouleh",
@@ -5651,7 +5893,9 @@
     "comment": "Use fine bulgur and pour boiling water or lemon juice over it to soak quickly while chopping—fine grind hydrates in 15-20 min without cooking. Buy pre-washed parsley/mint bunches and pulse in processor with onion for speed; make a big tub for the week, portion into jars—it keeps 4-5 days in fridge as flavors meld better. Freeze chopped parsley in ice cube trays with water for future batches.",
     "taste_score": 8.2,
     "satiety_index": 212,
-    "img_m": "/dishes/512x416/tabouleh.webp"
+    "id": "tabouleh",
+    "img_b": "/dishes/768x624/tabouleh.webp",
+    "img_s": "/dishes/420x340/tabouleh.webp"
   },
   {
     "dish": "Fattoush",
@@ -5721,7 +5965,9 @@
     "comment": "Toast multiple pitas at once in the oven on a sheet for several salads, storing cooled chips airtight for weeks. Use pre-washed salad greens and a food processor pulse for chopping veggies in seconds. Keep sumac-lemon-olive oil dressing premixed in fridge up to 5 days, shaking before use.",
     "taste_score": 9,
     "satiety_index": 212,
-    "img_m": "/dishes/512x416/fattoush.webp"
+    "id": "fattoush",
+    "img_b": "/dishes/768x624/fattoush.webp",
+    "img_s": "/dishes/420x340/fattoush.webp"
   },
   {
     "dish": "Shakshouka",
@@ -5781,7 +6027,9 @@
     "comment": "Prep a big batch of the sauce base (onions, peppers, tomatoes, spices) and freeze in portions; reheat one, crack eggs in, cover to poach—cuts daily cook time in half. Use frozen diced onions/peppers to skip chopping, or a food processor for quick dice. Make multiple egg nests in one pan for 2-4 servings at once.",
     "taste_score": 9.4,
     "satiety_index": 170.8,
-    "img_m": "/dishes/512x416/shakshouka.webp"
+    "id": "shakshouka",
+    "img_b": "/dishes/768x624/shakshouka.webp",
+    "img_s": "/dishes/420x340/shakshouka.webp"
   },
   {
     "dish": "Couscous",
@@ -5816,7 +6064,9 @@
     "comment": "Cook a large batch (multiply by 4), portion into airtight containers; reheat single servings in microwave with a splash of water in 1 minute. Use instant/quick-cook couscous variety if available. Keep stock boiling on hand or use microwave from start: boil stock 2 min, stir in couscous, cover 5 min.",
     "taste_score": 9,
     "satiety_index": 151,
-    "img_m": "/dishes/512x416/couscous.webp"
+    "id": "couscous",
+    "img_b": "/dishes/768x624/couscous.webp",
+    "img_s": "/dishes/420x340/couscous.webp"
   },
   {
     "dish": "Tagine",
@@ -5900,7 +6150,9 @@
     "passive_t_hours": 1.5,
     "comment": "Tagine tastes even better the next day, so make a large batch in advance—brown extra meat and sauté aromatics in bulk, then portion and refrigerate for up to 5 days or freeze for months. Pre-toast and grind your spice mix in batches to save daily prep time. You can use canned tomatoes and pre-washed baby carrots. If you have a pressure cooker or Instant Pot, reduce passive cooking time to 30–40 minutes while achieving the same tender results.",
     "taste_score": 8.3,
-	"img_m": "/dishes/512x416/tagine.webp"
+    "id": "tagine",
+    "img_b": "/dishes/768x624/tagine.webp",
+    "img_s": "/dishes/420x340/tagine.webp"
   },
   {
     "dish": "Baklava",
@@ -5964,7 +6216,9 @@
     "passive_t_hours": 3,
     "comment": "Always use store-bought phyllo dough—making it from scratch is impractical for home cooks. Prepare syrup while baklava bakes to streamline workflow. Toast nuts in bulk and freeze in portions for future batches. Most importantly, bake a full tray (20–30 pieces) at once and store tightly wrapped at room temperature for up to 2 weeks, or freeze for months. This reduces per-piece active time dramatically. Brush melted butter between every 2–3 layers instead of each layer to save time without sacrificing texture.",
     "taste_score": 8.3,
-	"img_m": "/dishes/512x416/baklava.webp"
+    "id": "baklava",
+    "img_b": "/dishes/768x624/baklava.webp",
+    "img_s": "/dishes/420x340/baklava.webp"
   },
   {
     "dish": "Pide",
@@ -6023,7 +6277,9 @@
     "passive_t_hours": 1.5,
     "comment": "Make dough in large batches: after the first rise, divide into portions, wrap tightly, and freeze for up to 3 months. Thaw overnight in the fridge, then shape and bake. Pre-cook ground beef in bulk, season well, and refrigerate or freeze in portions—this alone cuts daily prep by 10 minutes. Use pre-shredded cheese to save more time. For ultimate efficiency, assemble multiple pides and bake them simultaneously on two oven racks, rotating halfway through for even browning.",
     "taste_score": 8.8,
-	"img_m": "/dishes/512x416/pide.webp"
+    "id": "pide",
+    "img_b": "/dishes/768x624/pide.webp",
+    "img_s": "/dishes/420x340/pide.webp"
   },
   {
     "dish": "Lahmacun",
@@ -6103,7 +6359,9 @@
     "comment": "Prepare a larger batch of dough and topping for multiple lahmacuns: divide into portions, freeze extras flat on trays then bag, thaw overnight in fridge for quick future use, cutting active prep by over 30%. Use a food processor to chop onions, tomatoes, and parsley in seconds. Preheat oven with pizza stone or inverted heavy tray at max heat (250C+) for crispier results in less time. Spread topping very thin to ensure even quick baking.",
     "taste_score": 9,
     "satiety_index": 165,
-    "img_m": "/dishes/512x416/lahmacun.webp"
+    "id": "lahmacun",
+    "img_b": "/dishes/768x624/lahmacun.webp",
+    "img_s": "/dishes/420x340/lahmacun.webp"
   },
   {
     "dish": "Kofte",
@@ -6168,7 +6426,9 @@
     "comment": "Mix a large batch of kofta dough by hand or food processor, shape into patties or logs, layer with parchment in airtight containers, and freeze; grill or pan-fry straight from frozen (add 2 min), halving prep for multiple meals. Grate onions instead of chopping to speed mixing. Rest shaped koftas only 15 min covered at room temp, or skip for urgency. Use air fryer at 190C for 10-12 min total with flip, no active watch needed.",
     "taste_score": 9,
     "satiety_index": 165,
-    "img_m": "/dishes/512x416/kofte.webp"
+    "id": "kofte",
+    "img_b": "/dishes/768x624/kofte.webp",
+    "img_s": "/dishes/420x340/kofte.webp"
   },
   {
     "dish": "Borek",
@@ -6203,7 +6463,9 @@
     "comment": "Use ready‑made yufka or phyllo sheets so you only have to mix the filling and assemble, skipping dough making completely. Prepare a larger tray of borek, cut it after baking, and refrigerate or freeze portions; reheat directly from the fridge or freezer so the effort of layering and filling is spread over several meals. You can mix the cheese filling in advance and keep it covered in the fridge for up to two days, so on busy days you only roll and bake.",
     "taste_score": 9,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/borek.webp"
+    "id": "borek",
+    "img_b": "/dishes/768x624/borek.webp",
+    "img_s": "/dishes/420x340/borek.webp"
   },
   {
     "dish": "Lula Kebab",
@@ -6263,7 +6525,9 @@
     "comment": "Prepare a larger batch of seasoned meat mixture, shape kebabs, and refrigerate or freeze them on a tray; once firm, store in containers so you can grill straight from chilled or frozen with almost no prep. Use a grill pan or oven broiler to cook multiple skewers at once instead of turning individual kebabs in a small pan. Grate onion in bulk and freeze it in ice‑cube portions for future kebab batches to avoid repeated chopping.",
     "taste_score": 9.1,
     "satiety_index": 165,
-    "img_m": "/dishes/512x416/lula-kebab.webp"
+    "id": "lula-kebab",
+    "img_b": "/dishes/768x624/lula-kebab.webp",
+    "img_s": "/dishes/420x340/lula-kebab.webp"
   },
   {
     "dish": "Moussaka",
@@ -6328,7 +6592,9 @@
     "comment": "Roast sliced eggplant on a single large tray under the broiler instead of pan‑frying batches to save both time and oil. Make the meat sauce and béchamel while the eggplant roasts so assembly happens immediately after. Assemble a whole pan of moussaka a day ahead, chill it well, then bake once for several meals; leftovers reheat very well and the flavors meld even more.",
     "taste_score": 9.1,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/moussaka.webp"
+    "id": "moussaka",
+    "img_b": "/dishes/768x624/moussaka.webp",
+    "img_s": "/dishes/420x340/moussaka.webp"
   },
   {
     "dish": "Souvlaki",
@@ -6383,7 +6649,9 @@
     "comment": "Marinate the meat overnight or at least 2 hours beforehand to deepen flavor and reduce active prep time. Make a double or triple batch since souvlaki keeps well in the refrigerator for 3-4 days and reheats beautifully in a hot pan or oven. You can prep skewers in advance, freeze them marinated, and grill directly from frozen, adding just 3-4 minutes to cooking time. Use pre-cut bell peppers or frozen vegetable mixes to eliminate chopping.",
     "taste_score": 9.3,
     "satiety_index": 165,
-    "img_m": "/dishes/512x416/souvlaki.webp"
+    "id": "souvlaki",
+    "img_b": "/dishes/768x624/souvlaki.webp",
+    "img_s": "/dishes/420x340/souvlaki.webp"
   },
   {
     "dish": "Spanakopita",
@@ -6428,7 +6696,9 @@
     "comment": "Make a large pan for multiple servings since spanakopita keeps excellently in the refrigerator for up to 5 days and freezes beautifully for up to 3 months. Use pre-washed frozen spinach (already chopped and moisture-removed) to eliminate prep work. Buy store-bought phyllo dough instead of making from scratch, saving hours of labor. You can assemble the entire dish a day ahead, refrigerate unbaked, and pop it in the oven when ready. Reheat individual portions in a toaster oven to restore crispness.",
     "taste_score": 9,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/spanakopita.webp"
+    "id": "spanakopita",
+    "img_b": "/dishes/768x624/spanakopita.webp",
+    "img_s": "/dishes/420x340/spanakopita.webp"
   },
   {
     "dish": "Schnitzel",
@@ -6473,7 +6743,9 @@
     "comment": "Prep several veal cutlets at once: pound, season, and bread a batch, then freeze them flat on a tray before transferring to a container; they can go straight from freezer to pan with just a couple of extra minutes of cooking on low–medium heat at the start. Set up a breading station with wide containers and use one hand for wet and the other for dry ingredients to cut mess and speed up coating. Use a large pan so you can fry 2–3 schnitzels in a single batch without crowding; this keeps them crisp and reduces total active time. If you often cook schnitzel, pre‑blend a simple seasoning mix for the flour and breadcrumbs so you skip measuring every time.",
     "taste_score": 9.3,
     "satiety_index": 176,
-    "img_m": "/dishes/512x416/schnitzel.webp"
+    "id": "schnitzel",
+    "img_b": "/dishes/768x624/schnitzel.webp",
+    "img_s": "/dishes/420x340/schnitzel.webp"
   },
   {
     "dish": "Currywurst",
@@ -6533,7 +6805,9 @@
     "comment": "Cook a large batch of curry sauce once: it keeps well in the fridge for up to several days and freezes even longer, so you only need to sear the sausages when hungry. Par‑cook several bratwursts in lightly simmering water, then chill them; later you only need a quick pan‑fry or grill to reheat and brown. Store sauce and sausages separately in airtight containers so you can portion them flexibly for single or multiple servings. If you eat this often, pre‑mix your own curry–paprika–sugar blend to shorten seasoning steps.",
     "taste_score": 9,
     "satiety_index": 176,
-    "img_m": "/dishes/512x416/currywurst.webp"
+    "id": "currywurst",
+    "img_b": "/dishes/768x624/currywurst.webp",
+    "img_s": "/dishes/420x340/currywurst.webp"
   },
   {
     "dish": "Bratwurst",
@@ -6562,7 +6836,9 @@
     "passive_t_hours": 0,
     "taste_score": 9,
     "satiety_index": 176,
-    "img_m": "/dishes/512x416/bratwurst.webp"
+    "id": "bratwurst",
+    "img_b": "/dishes/768x624/bratwurst.webp",
+    "img_s": "/dishes/420x340/bratwurst.webp"
   },
   {
     "dish": "Pretzel",
@@ -6612,7 +6888,9 @@
     "comment": "Make a double or triple batch of dough to freeze portions after initial rise, defrost overnight in fridge and shape directly to save repeated mixing time. Use instant yeast to skip proofing, and prepare the baking soda bath while dough rests. Bake multiple pretzels at once on one sheet to optimize oven time.",
     "taste_score": 8.8,
     "satiety_index": 124.2,
-    "img_m": "/dishes/512x416/pretzel.webp"
+    "id": "pretzel",
+    "img_b": "/dishes/768x624/pretzel.webp",
+    "img_s": "/dishes/420x340/pretzel.webp"
   },
   {
     "dish": "Sauerkraut",
@@ -6637,7 +6915,9 @@
     "comment": "Shred multiple heads of cabbage at once using a food processor to batch-prep several jars, halving per-jar time. Use weights or fermentation crocks to ensure even pressing without daily checks. Start multiple jars in rotation every week for continuous supply without full prep repeats.",
     "taste_score": 7.1,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/sauerkraut.webp"
+    "id": "sauerkraut",
+    "img_b": "/dishes/768x624/sauerkraut.webp",
+    "img_s": "/dishes/420x340/sauerkraut.webp"
   },
   {
     "dish": "Sauerbraten",
@@ -6697,7 +6977,9 @@
     "comment": "Marinate several roasts at once in large batches, freezing extras post-marinade to skip future prep. Use a pressure cooker or Instant Pot for cooking to reduce active time to 45 min from 3 hours. Pre-chop and freeze veggie mixes for the marinade to cut daily chopping.",
     "taste_score": 9,
     "satiety_index": 176,
-    "img_m": "/dishes/512x416/sauerbraten.webp"
+    "id": "sauerbraten",
+    "img_b": "/dishes/768x624/sauerbraten.webp",
+    "img_s": "/dishes/420x340/sauerbraten.webp"
   },
   {
     "dish": "Käsespätzle",
@@ -6747,7 +7029,9 @@
     "comment": "Use store-bought or pre-made spätzle (refrigerated or dried) to eliminate dough mixing and resting. Slice onions thinly in advance or use a mandoline for quick frying in 2 min. Grate cheese ahead and layer cold for faster melting under broiler instead of stovetop stirring.",
     "taste_score": 9.1,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/ksesptzle.webp"
+    "id": "ksesptzle",
+    "img_b": "/dishes/768x624/ksesptzle.webp",
+    "img_s": "/dishes/420x340/ksesptzle.webp"
   },
   {
     "dish": "Rouladen",
@@ -6797,7 +7081,9 @@
     "comment": "Prepare a big batch of 4-6 rolls at once: assembly time per roll drops significantly after the first. Use pre-cut thin beef slices (top round) from the butcher to skip trimming. Brown all rolls in one pan quickly over high heat. For reheating, make extra gravy and store rolls immersed in it in the fridge; they reheat in 5 minutes on stovetop. Freeze cooked rolls in sauce for up to 3 months, thaw overnight and reheat gently.",
     "taste_score": 9,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/rouladen.webp"
+    "id": "rouladen",
+    "img_b": "/dishes/768x624/rouladen.webp",
+    "img_s": "/dishes/420x340/rouladen.webp"
   },
   {
     "dish": "Goulash",
@@ -6862,7 +7148,9 @@
     "comment": "Cook a large pot for 4-6 servings: chopping once and simmering scales time down per portion. Caramelize onions slowly in advance and freeze portions for instant base. Use a pressure cooker or Instant Pot for full cook in 40 minutes total. Keep pre-made spice mix (paprika, salt, pepper) ready. Freeze in portions; it tastes better next day and holds flavor well up to 3 months frozen.",
     "taste_score": 9,
     "satiety_index": 176,
-    "img_m": "/dishes/512x416/goulash.webp"
+    "id": "goulash",
+    "img_b": "/dishes/768x624/goulash.webp",
+    "img_s": "/dishes/420x340/goulash.webp"
   },
   {
     "dish": "Pelmeni",
@@ -6922,7 +7210,9 @@
     "comment": "Prepare a large batch of dough and filling for multiple meals, shape all pelmeni at once, freeze extras on a floured tray then transfer to bags; this halves assembly time per serving. Use a pasta machine or food processor for dough and meat grinding to speed up. Boil in batches while shaping the next to overlap active time. Buy frozen pelmeni for instant cooking if time is critical.",
     "taste_score": 9.2,
     "satiety_index": 144.4,
-    "img_m": "/dishes/512x416/pelmeni.webp"
+    "id": "pelmeni",
+    "img_b": "/dishes/768x624/pelmeni.webp",
+    "img_s": "/dishes/420x340/pelmeni.webp"
   },
   {
     "dish": "Olivier Salad",
@@ -6977,7 +7267,9 @@
     "comment": "Batch-boil potatoes, carrots, eggs, and peas together in one pot to minimize cooking time; cool quickly in ice water for safe fast chopping. Dice everything uniformly using a vegetable chopper or grid cutting board. Make a large batch, portion and refrigerate up to 3 days, adding mayo just before serving to keep fresh. Use frozen peas directly thawed to skip boiling.",
     "taste_score": 8.5,
     "satiety_index": 197,
-    "img_m": "/dishes/512x416/olivier-salad.webp"
+    "id": "olivier-salad",
+    "img_b": "/dishes/768x624/olivier-salad.webp",
+    "img_s": "/dishes/420x340/olivier-salad.webp"
   },
   {
     "dish": "Blini with Caviar",
@@ -7032,7 +7324,9 @@
     "comment": "Prepare a double or triple batch of batter ahead and store in the fridge for up to 2 days; this cuts mixing time significantly for multiple servings. Use a dedicated blini pan or electric griddle to cook 4-6 blini at once instead of one-by-one, reducing total cooking time. Pre-portion toppings like sour cream and caviar in a piping bag for quick assembly.",
     "taste_score": 8.7,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/blini-with-caviar.webp"
+    "id": "blini-with-caviar",
+    "img_b": "/dishes/768x624/blini-with-caviar.webp",
+    "img_s": "/dishes/420x340/blini-with-caviar.webp"
   },
   {
     "dish": "Beef Stroganoff",
@@ -7092,7 +7386,9 @@
     "comment": "Slice a large batch of beef and vegetables ahead, storing in fridge for 1-2 days to halve prep for multiple meals. Use pre-made roux (flour-butter mix cooked and frozen in ice cube trays) to instantly thicken sauce without stirring flour fresh. Opt for tenderloin or pre-sliced beef stir-fry cuts to shorten cooking to medium-rare sear before saucing.",
     "taste_score": 9.1,
     "satiety_index": 176,
-    "img_m": "/dishes/512x416/beef-stroganoff.webp"
+    "id": "beef-stroganoff",
+    "img_b": "/dishes/768x624/beef-stroganoff.webp",
+    "img_s": "/dishes/420x340/beef-stroganoff.webp"
   },
   {
     "dish": "Varenyky",
@@ -7147,7 +7443,9 @@
     "comment": "Boil potatoes in microwave for 5-7 min to speed mashing; use food processor for dough and filling. Fry onions in bulk while dough rests. Make double batch, freeze uncooked varenyky on tray then bag them; boil from frozen to halve future prep. Keep pre-boiled potatoes or mashed potato mix frozen.",
     "taste_score": 8.9,
     "satiety_index": 144.4,
-    "img_m": "/dishes/512x416/varenyky.webp"
+    "id": "varenyky",
+    "img_b": "/dishes/768x624/varenyky.webp",
+    "img_s": "/dishes/420x340/varenyky.webp"
   },
   {
     "dish": "Pierogi",
@@ -7222,7 +7520,9 @@
     "comment": "Microwave potatoes for quick boil/mash; use store-bought or no-rest dough recipe to skip resting. Prep all fillings in bulk food processor, fry meats/veggies together. Assemble double batch, freeze uncooked on tray then store; boil directly from frozen. Rinse sauerkraut to cut prep, use frozen chopped onions/mushrooms if available cheaply.",
     "taste_score": 8.6,
     "satiety_index": 144.4,
-    "img_m": "/dishes/512x416/pierogi.webp"
+    "id": "pierogi",
+    "img_b": "/dishes/768x624/pierogi.webp",
+    "img_s": "/dishes/420x340/pierogi.webp"
   },
   {
     "dish": "Bigos",
@@ -7287,7 +7587,9 @@
     "comment": "Cook a large batch as it tastes better after 2-3 days and freezes perfectly. Use a pressure cooker to reduce simmering from 3 hours to 45 minutes. Utilizing a food processor for shredding cabbage and carrots can save significant prep time without increasing costs.",
     "taste_score": 8.9,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/bigos.webp"
+    "id": "bigos",
+    "img_b": "/dishes/768x624/bigos.webp",
+    "img_s": "/dishes/420x340/bigos.webp"
   },
   {
     "dish": "Stuffed Cabbage Rolls",
@@ -7352,7 +7654,9 @@
     "comment": "Freeze the whole cabbage head for 24 hours then thaw it; the leaves will become soft and pliable without boiling, saving time and avoiding burns. Use a slow cooker or a heavy pot to let them simmer passively while you do other tasks.",
     "taste_score": 7.9,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/stuffed-cabbage-rolls.webp"
+    "id": "stuffed-cabbage-rolls",
+    "img_b": "/dishes/768x624/stuffed-cabbage-rolls.webp",
+    "img_s": "/dishes/420x340/stuffed-cabbage-rolls.webp"
   },
   {
     "dish": "Potato Pancakes",
@@ -7407,7 +7711,9 @@
     "comment": "Use a food processor with a fine grating disk to prepare the batter in seconds instead of minutes. Frying with two large pans simultaneously cuts the cooking time in half and ensures everyone eats at the same time.",
     "taste_score": 8.9,
     "satiety_index": 126,
-    "img_m": "/dishes/512x416/potato-pancakes.webp"
+    "id": "potato-pancakes",
+    "img_b": "/dishes/768x624/potato-pancakes.webp",
+    "img_s": "/dishes/420x340/potato-pancakes.webp"
   },
   {
     "dish": "Salo",
@@ -7442,7 +7748,9 @@
     "comment": "Prepare a large batch of 1-2kg salo at once: the rubbing and layering time stays similar, but halve per-portion prep by doing multiple pieces. Use pre-peeled frozen garlic to save slicing time. For hot brine method, boil spices in bulk ahead and reuse; cool quickly in ice bath for fridge storage. Store in fridge up to months or freeze portions.",
     "taste_score": 7.1,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/salo.webp"
+    "id": "salo",
+    "img_b": "/dishes/768x624/salo.webp",
+    "img_s": "/dishes/420x340/salo.webp"
   },
   {
     "dish": "Shashlik",
@@ -7497,7 +7805,9 @@
     "comment": "Batch-marinate 1-2kg beef at once: chopping and mixing time per portion halves with volume. Use pre-minced garlic and frozen onion slices to cut prep. Skewer multiple ahead and grill in bigger batches on larger grill or broil in oven; rotate less frequently for time save. Reheat leftovers on hot grill.",
     "taste_score": 9.2,
     "satiety_index": 176,
-    "img_m": "/dishes/512x416/shashlik.webp"
+    "id": "shashlik",
+    "img_b": "/dishes/768x624/shashlik.webp",
+    "img_s": "/dishes/420x340/shashlik.webp"
   },
   {
     "dish": "Plov",
@@ -7562,7 +7872,9 @@
     "comment": "Batch-cook several portions at once in larger pot; the simmering time drops slightly because a larger volume retains heat better. Use pre-chopped frozen onion-carrot mix and keep homemade stock frozen in portions to slash chopping and heating. Store cooked plov in airtight containers in the fridge for up to 48 hours or freeze individual servings.",
     "taste_score": 9.1,
     "satiety_index": 153.2,
-    "img_m": "/dishes/512x416/plov.webp"
+    "id": "plov",
+    "img_b": "/dishes/768x624/plov.webp",
+    "img_s": "/dishes/420x340/plov.webp"
   },
   {
     "dish": "Manti",
@@ -7642,7 +7954,9 @@
     "comment": "Make a large batch of manti dough and filling, shape and par-bake them all at once, then freeze in portions; this spreads fixed prep time over multiple meals, halving per-portion active time on repeats. Boil straight from frozen without thawing, adding just 1-2 minutes. Use a pasta machine or rolling pin with guide for thinner, uniform dough sheets to speed rolling. Prepare yogurt and sauces ahead in bulk.",
     "taste_score": 8.9,
     "satiety_index": 144.4,
-    "img_m": "/dishes/512x416/manti.webp"
+    "id": "manti",
+    "img_b": "/dishes/768x624/manti.webp",
+    "img_s": "/dishes/420x340/manti.webp"
   },
   {
     "dish": "Dolma",
@@ -7702,7 +8016,9 @@
     "comment": "Prepare large batches of filling and roll/roll dolma ahead, layering in pots or freezer bags to steam multiple meals at once, cutting per-portion prep in half. Use jarred or pre-blanched grape leaves to skip blanching. Par-cook rice ahead or use microwave quick-rice. For cooking, use a pressure cooker to reduce simmer time significantly. Keep herbs chopped and frozen in portions.",
     "taste_score": 8.9,
     "satiety_index": 144.4,
-    "img_m": "/dishes/512x416/dolma.webp"
+    "id": "dolma",
+    "img_b": "/dishes/768x624/dolma.webp",
+    "img_s": "/dishes/420x340/dolma.webp"
   },
   {
     "dish": "Khinkali",
@@ -7777,7 +8093,9 @@
     "comment": "Prepare a large batch of dough and filling for multiple meals: roll and fill 20+ khinkali at once, boil half immediately and freeze the rest uncooked on a floured tray, then bag for later. This cuts per-portion prep by half. Use a stand mixer for dough kneading and food processor for onion to save 15-20 min. Rest dough only 30 min instead of 1 hour. Boil in batches using a large pot whirlpool method to prevent sticking.",
     "taste_score": 9.2,
     "satiety_index": 144.4,
-    "img_m": "/dishes/512x416/khinkali.webp"
+    "id": "khinkali",
+    "img_b": "/dishes/768x624/khinkali.webp",
+    "img_s": "/dishes/420x340/khinkali.webp"
   },
   {
     "dish": "Khachapuri",
@@ -7832,7 +8150,9 @@
     "comment": "Make double dough batch and freeze half portioned balls for next time, thawing overnight in fridge to skip rising. Grate cheese ahead and store in fridge up to 2 days. Use rapid-rise yeast and warm spot for 45 min rise instead of 90. For multiple, rotate oven trays to shave 3 min bake. Knead in stand mixer to save 5 min.",
     "taste_score": 9.7,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/khachapuri.webp"
+    "id": "khachapuri",
+    "img_b": "/dishes/768x624/khachapuri.webp",
+    "img_s": "/dishes/420x340/khachapuri.webp"
   },
   {
     "dish": "Satsivi",
@@ -7887,7 +8207,9 @@
     "comment": "Prepare a large batch of walnut sauce base (grind walnuts, sauté onions, blend with spices and broth), portion and freeze; just boil turkey and mix when needed to slash active time. Use pre-boiled turkey from store rotisserie (shred and measure) or a pressure cooker to cut turkey cooking to 20 min. Keep spices like utskho suneli pre-mixed for instant flavor.",
     "taste_score": 8.9,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/satsivi.webp"
+    "id": "satsivi",
+    "img_b": "/dishes/768x624/satsivi.webp",
+    "img_s": "/dishes/420x340/satsivi.webp"
   },
   {
     "dish": "Cepelinai",
@@ -7927,7 +8249,9 @@
     "comment": "Grate potatoes in a food processor to halve dough prep; make double batch of filling and raw cepelinai, freeze on tray then bag for quick future boils. Use riced boiled potatoes mixed with starch for easier non-sticky dough handling. Form all dumplings at once assembly-line style.",
     "taste_score": 8.4,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/cepelinai.webp"
+    "id": "cepelinai",
+    "img_b": "/dishes/768x624/cepelinai.webp",
+    "img_s": "/dishes/420x340/cepelinai.webp"
   },
   {
     "dish": "Kibinai",
@@ -7967,7 +8291,9 @@
     "comment": "Prepare dough and filling ahead, assemble and freeze raw kibinai on a tray before baking to cut daily active time; bake straight from freezer adding a few minutes. Use food processor for quick onion chop and dough mix. Make mega-batch, portion freeze for grab-and-bake convenience.",
     "taste_score": 8.9,
     "satiety_index": 134.2,
-    "img_m": "/dishes/512x416/kibinai.webp"
+    "id": "kibinai",
+    "img_b": "/dishes/768x624/kibinai.webp",
+    "img_s": "/dishes/420x340/kibinai.webp"
   },
   {
     "dish": "Smorrebrod with Egg and Anchovies",
@@ -8007,7 +8333,9 @@
     "comment": "Boil multiple eggs at once and keep peeled in the fridge for up to a week. Buy pre-sliced rye bread or use a toaster to skip cutting. Prepare toppings ahead and assemble several smorrebrod in one go to halve assembly time.",
     "taste_score": 8.5,
     "satiety_index": 134.2,
-    "img_m": "/dishes/512x416/smorrebrod-with-egg-and-anchovies.webp"
+    "id": "smorrebrod-with-egg-and-anchovies",
+    "img_b": "/dishes/768x624/smorrebrod-with-egg-and-anchovies.webp",
+    "img_s": "/dishes/420x340/smorrebrod-with-egg-and-anchovies.webp"
   },
   {
     "dish": "Italian Meatballs",
@@ -8067,7 +8395,9 @@
     "comment": "Double the batch, freeze raw formed meatballs in single layers on a tray then bag them; thaw overnight in fridge before frying to slash future prep. Use a food processor pulse for quick meat and parsley mixing. Keep premade sauce simmering while frying to overlap times.",
     "taste_score": 8.9,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/italian-meatballs.webp"
+    "id": "italian-meatballs",
+    "img_b": "/dishes/768x624/italian-meatballs.webp",
+    "img_s": "/dishes/420x340/italian-meatballs.webp"
   },
   {
     "dish": "Cinnamon Buns",
@@ -8117,7 +8447,9 @@
     "comment": "Refrigerate shaped buns overnight for slow proof, bake fresh in morning to cut active prep. Use rapid-rise yeast and warm oven proofing (heat oven briefly then turn off with light on) to halve rise times. Make double dough batch, freeze half pre-rolled for quick future bakes.",
     "taste_score": 8.9,
     "satiety_index": 65,
-    "img_m": "/dishes/512x416/cinnamon-buns.webp"
+    "id": "cinnamon-buns",
+    "img_b": "/dishes/768x624/cinnamon-buns.webp",
+    "img_s": "/dishes/420x340/cinnamon-buns.webp"
   },
   {
     "dish": "Swiss Cheese Fondue",
@@ -8167,7 +8499,9 @@
     "comment": "Pre-shred cheese and chop garlic ahead, store in fridge. Cube bread while cheese melts to overlap steps. For multiples, use bigger pot and keep warm on low heat longer without extra active time.",
     "taste_score": 9.2,
     "satiety_index": 116,
-    "img_m": "/dishes/512x416/swiss-cheese-fondue.webp"
+    "id": "swiss-cheese-fondue",
+    "img_b": "/dishes/768x624/swiss-cheese-fondue.webp",
+    "img_s": "/dishes/420x340/swiss-cheese-fondue.webp"
   },
   {
     "dish": "Raclette",
@@ -8202,7 +8536,9 @@
     "comment": "Boil a large batch of potatoes ahead and reheat as needed; slice onions and portion pickles in advance for multiple servings. Use pre-boiled baby potatoes or microwave them in 5 minutes to halve boiling time. For cheese, prepare multiple portions under the broiler simultaneously or use a raclette grill if available to melt faster without constant monitoring.",
     "taste_score": 9.1,
     "satiety_index": 116,
-    "img_m": "/dishes/512x416/raclette.webp"
+    "id": "raclette",
+    "img_b": "/dishes/768x624/raclette.webp",
+    "img_s": "/dishes/420x340/raclette.webp"
   },
   {
     "dish": "Rosti",
@@ -8237,7 +8573,9 @@
     "comment": "Grate potatoes for multiple portions at once using a food processor to save time; squeeze out moisture in a clean kitchen towel batch-style. Use a non-stick pan or pre-shredded frozen hash browns (thaw quickly under water) for even faster crisping without sticking. Cook double batch and reheat slices in toaster oven for later meals.",
     "taste_score": 8.2,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/rosti.webp"
+    "id": "rosti",
+    "img_b": "/dishes/768x624/rosti.webp",
+    "img_s": "/dishes/420x340/rosti.webp"
   },
   {
     "dish": "Croissant",
@@ -8287,7 +8625,9 @@
     "comment": "Laminate and chill dough overnight or freeze pre-laminated blocks for quick thawing; divide dough into multiple portions for batch freezing after proofing to cut active time per croissant. Use rough puff pastry method skipping multiple folds or store-bought puff pastry sheets rolled into crescents for home use, slashing bake time. Proof multiple at once in a warm oven with light turned on.",
     "taste_score": 9.4,
     "satiety_index": 47,
-    "img_m": "/dishes/512x416/croissant.webp"
+    "id": "croissant",
+    "img_b": "/dishes/768x624/croissant.webp",
+    "img_s": "/dishes/420x340/croissant.webp"
   },
   {
     "dish": "Baguette",
@@ -8322,7 +8662,9 @@
     "comment": "Prepare multiple baguettes at once from bulk dough: mix large batch the night before for overnight rise, divide and shape quickly in morning. Use pre-ferment (poolish) started day ahead to enhance flavor while fitting schedule. Keep dough in fridge for cold retard to extend rise controllably and batch multiple days. Freeze shaped loaves post-proofing, bake from frozen adding few extra minutes.",
     "taste_score": 8.3,
     "satiety_index": 124.2,
-    "img_m": "/dishes/512x416/baguette.webp"
+    "id": "baguette",
+    "img_b": "/dishes/768x624/baguette.webp",
+    "img_s": "/dishes/420x340/baguette.webp"
   },
   {
     "dish": "Arancini",
@@ -8362,7 +8704,9 @@
     "comment": "Cook large batch of risotto ahead and chill overnight; portion into balls quickly while cold for easier handling. Use pre-shredded/grated cheeses to skip cutting. Make multiple batches of balls, freeze on tray then bag; fry straight from freezer adding 1-2 min, keeps shape well. Batch breading station setup speeds assembly for many.",
     "taste_score": 8.9,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/arancini.webp"
+    "id": "arancini",
+    "img_b": "/dishes/768x624/arancini.webp",
+    "img_s": "/dishes/420x340/arancini.webp"
   },
   {
     "dish": "Caprese Salad",
@@ -8407,7 +8751,9 @@
     "comment": "Slice tomatoes and mozzarella while the knife is sharp, or use pre-sliced cheese and cherry tomatoes halved in bulk to minimize cutting time. Prepare multiple salads at once by slicing everything ahead and assembling as needed; store components separately in the fridge for up to a day. Keep basil leaves whole if bought in larger bunches to avoid extra chopping.",
     "taste_score": 8.9,
     "satiety_index": 197,
-    "img_m": "/dishes/512x416/caprese-salad.webp"
+    "id": "caprese-salad",
+    "img_b": "/dishes/768x624/caprese-salad.webp",
+    "img_s": "/dishes/420x340/caprese-salad.webp"
   },
   {
     "dish": "Bruschetta",
@@ -8457,7 +8803,9 @@
     "comment": "Use a microplane for grating garlic directly onto the hot toasts to save rubbing time, and mix toppings in advance for multiple batches. Slice and toast a whole baguette at once under the broiler, then store cooled slices airtight for quick assembly later. Buy pre-diced tomatoes or dice a large batch ahead and drain excess liquid overnight.",
     "taste_score": 8.9,
     "satiety_index": 134.2,
-    "img_m": "/dishes/512x416/bruschetta.webp"
+    "id": "bruschetta",
+    "img_b": "/dishes/768x624/bruschetta.webp",
+    "img_s": "/dishes/420x340/bruschetta.webp"
   },
   {
     "dish": "Polenta",
@@ -8486,7 +8834,9 @@
     "passive_t_hours": 0.5,
     "comment": "To save time on busy days, cook a larger batch once, spread it in a thin layer to cool quickly, then refrigerate. Reheat a portion with a splash of water (or milk) and whisk for 3–5 minutes to get it creamy again, instead of cooking from scratch.",
     "taste_score": 7.2,
-	"img_m": "/dishes/512x416/polenta.webp"
+    "id": "polenta",
+    "img_b": "/dishes/768x624/polenta.webp",
+    "img_s": "/dishes/420x340/polenta.webp"
   },
   {
     "dish": "Ossobuco",
@@ -8545,7 +8895,9 @@
     "passive_t_hours": 2.5,
     "comment": "For faster weeknight ossobuco, use a pressure cooker to shorten the long simmer (the main time sink) while keeping the same ingredient list. Another practical speed-up is to keep a frozen diced onion-carrot-celery mix on hand: it’s usually inexpensive and cuts chopping time to almost zero.",
     "taste_score": 8.6,
-	"img_m": "/dishes/512x416/ossobuco.webp"
+    "id": "ossobuco",
+    "img_b": "/dishes/768x624/ossobuco.webp",
+    "img_s": "/dishes/420x340/ossobuco.webp"
   },
   {
     "dish": "Gnocchi",
@@ -8584,7 +8936,9 @@
     "passive_t_hours": 0.5,
     "comment": "To speed this up, microwave the potatoes instead of boiling (less waiting and no big pot), then rice them while hot so they dry out quickly. For an even bigger win, form a double batch and freeze the uncooked gnocchi on a tray; they can be boiled straight from frozen for quick meals later.",
     "taste_score": 8.5,
-	"img_m": "/dishes/512x416/gnocchi.webp"
+    "id": "gnocchi",
+    "img_b": "/dishes/768x624/gnocchi.webp",
+    "img_s": "/dishes/420x340/gnocchi.webp"
   },
   {
     "dish": "Ricotta Spinach Ravioli",
@@ -8649,7 +9003,9 @@
     "comment": "Making ravioli dough and filling for one serving is time-intensive; double or triple the batch, freeze uncooked ravioli on a floured tray, then transfer to bags for up to 3 months. Boil straight from frozen, adding 1 minute. Use a food processor to chop spinach and mix filling in seconds. Pre-blanch spinach in bulk and freeze portions to skip wilting each time. Roll dough with a pasta machine if available to halve rolling time.",
     "taste_score": 8.9,
     "satiety_index": 141.8,
-    "img_m": "/dishes/512x416/ricotta-spinach-ravioli.webp"
+    "id": "ricotta-spinach-ravioli",
+    "img_b": "/dishes/768x624/ricotta-spinach-ravioli.webp",
+    "img_s": "/dishes/420x340/ricotta-spinach-ravioli.webp"
   },
   {
     "dish": "Fettuccine Alfredo",
@@ -8704,7 +9060,9 @@
     "comment": "Cook pasta while cream, butter, and grated cheese gently warm together—no need to boil sauce vigorously, just stir until emulsified over low heat. Grate cheese ahead and store in fridge; mince garlic in bulk and freeze in ice cube trays with oil for instant addition. Double portions to boil pasta once for two meals, sauce reheats perfectly with a splash of pasta water. Use no-boil lasagna sheets cut into strips if available for zero pasta cook time.",
     "taste_score": 8.9,
     "satiety_index": 141.8,
-    "img_m": "/dishes/512x416/fettuccine-alfredo.webp"
+    "id": "fettuccine-alfredo",
+    "img_b": "/dishes/768x624/fettuccine-alfredo.webp",
+    "img_s": "/dishes/420x340/fettuccine-alfredo.webp"
   },
   {
     "dish": "Jamón Ibérico",
@@ -8734,7 +9092,9 @@
     "comment": "Use an electric slicer or sharpest knife warmed in hot water and dried for ultra-thin slices without effort. Buy pre-sliced vacuum packs for single servings to skip all cutting. Store whole ham wrapped tightly in parchment and cloth in fridge; it lasts months. Slice multiple servings at once, wrap extras individually to eat cold anytime.",
     "taste_score": 9.6,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/jamn-ibrico.webp"
+    "id": "jamn-ibrico",
+    "img_b": "/dishes/768x624/jamn-ibrico.webp",
+    "img_s": "/dishes/420x340/jamn-ibrico.webp"
   },
   {
     "dish": "Prosciutto di Parma",
@@ -8759,7 +9119,9 @@
     "comment": "Buy pre-sliced Prosciutto di Parma to halve slicing time. Prepare multiple servings at once by arranging slices on a platter ahead, storing covered in fridge, and drizzling oil just before serving. This cuts daily prep significantly.",
     "taste_score": 9.2,
     "satiety_index": 116,
-    "img_m": "/dishes/512x416/prosciutto-di-parma.webp"
+    "id": "prosciutto-di-parma",
+    "img_b": "/dishes/768x624/prosciutto-di-parma.webp",
+    "img_s": "/dishes/420x340/prosciutto-di-parma.webp"
   },
   {
     "dish": "Escargots de Bourgogne",
@@ -8794,7 +9156,9 @@
     "comment": "Use pre-cooked or canned snails (drained) to skip cleaning and initial boiling, saving 20+ minutes. Make a large batch of garlic-parsley butter ahead and freeze in portions; melt quickly for multiple servings. Bake several trays at once to reduce per-portion cooking time.",
     "taste_score": 7.9,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/escargots-de-bourgogne.webp"
+    "id": "escargots-de-bourgogne",
+    "img_b": "/dishes/768x624/escargots-de-bourgogne.webp",
+    "img_s": "/dishes/420x340/escargots-de-bourgogne.webp"
   },
   {
     "dish": "Boeuf Bourguignon",
@@ -8849,7 +9213,9 @@
     "comment": "Batch-cook a large pot for several meals: brown meat and veggies in advance, then slow-simmer. Cool quickly, portion into airtight containers, and freeze for months—flavor improves on reheating. Use pre-chopped frozen mirepoix (onion/carrot) and pearl onions to slash chopping; keep stock batches ready.",
     "taste_score": 9.3,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/boeuf-bourguignon.webp"
+    "id": "boeuf-bourguignon",
+    "img_b": "/dishes/768x624/boeuf-bourguignon.webp",
+    "img_s": "/dishes/420x340/boeuf-bourguignon.webp"
   },
   {
     "dish": "Cassoulet",
@@ -8914,7 +9280,9 @@
     "comment": "Cook a large pot for 4-6 servings: soak and pressure cook beans in bulk (10 min under pressure), chop veggies in food processor, layer meats and beans in pot, bake once. Cool quickly, portion into airtight containers, freeze up to 3 months—reheat portions as needed, adding fresh breadcrumbs only when serving. Use store-bought duck confit and pre-cooked sausage to skip confit prep. This cuts active prep by multitasking and oven time in half by using hotter initial bake at 220°C/450°F for 1 hour then lower.",
     "taste_score": 9.1,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/cassoulet.webp"
+    "id": "cassoulet",
+    "img_b": "/dishes/768x624/cassoulet.webp",
+    "img_s": "/dishes/420x340/cassoulet.webp"
   },
   {
     "dish": "Coq au Vin",
@@ -8979,7 +9347,9 @@
     "comment": "Batch for 3-4 servings: sear all chicken/bacon/veggies at once in wide pot, deglaze with wine/stock, braise covered. Use pre-cut mirepoix veggies or food processor for chopping, ready chicken stock cubes, skip flour roux by thickening with cornstarch slurry post-cook. Pressure cook for 20-25 min total after sear (high pressure), or slow cooker 4h low after sear. Freeze portions flat in bags, thaw overnight, reheat gently on stove.",
     "taste_score": 9.1,
     "satiety_index": 172.1,
-    "img_m": "/dishes/512x416/coq-au-vin.webp"
+    "id": "coq-au-vin",
+    "img_b": "/dishes/768x624/coq-au-vin.webp",
+    "img_s": "/dishes/420x340/coq-au-vin.webp"
   },
   {
     "dish": "Ratatouille",
@@ -9029,7 +9399,9 @@
     "comment": "Prep multiple batches: use food processor to dice all veggies uniformly in seconds, sauté onions/garlic base, mix all in one pot or sheet pan. Bake sheet pan version at 400°F/200°C covered 20 min then uncovered 10 min for roasting flavors without stirring. Use frozen diced veg mix (eggplant/zucchini/pepper) thawed quick, simmer all in pot 15-20 min stovetop. Portion and freeze flat, microwave-reheat in 3 min or fridge 4 days—flavors improve next day.",
     "taste_score": 8.9,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/ratatouille.webp"
+    "id": "ratatouille",
+    "img_b": "/dishes/768x624/ratatouille.webp",
+    "img_s": "/dishes/420x340/ratatouille.webp"
   },
   {
     "dish": "Quiche Lorraine",
@@ -9074,7 +9446,9 @@
     "comment": "Make double batch of pastry dough and freeze extras for next time, or use store-bought pie dough to slash prep in half. Blind bake the crust while frying bacon simultaneously to overlap tasks. Cook a large batch, cool quickly, portion into airtight containers, and refrigerate up to 3 days or freeze for 2 months; reheat slices in oven to restore crispness.",
     "taste_score": 8.9,
     "satiety_index": 65,
-    "img_m": "/dishes/512x416/quiche-lorraine.webp"
+    "id": "quiche-lorraine",
+    "img_b": "/dishes/768x624/quiche-lorraine.webp",
+    "img_s": "/dishes/420x340/quiche-lorraine.webp"
   },
   {
     "dish": "Mashed Potatoes",
@@ -9109,7 +9483,9 @@
     "comment": "Batch-cook 3-4 portions at once in a large pot or pressure cooker (boil time ~8 min), cool quickly under cold water, portion and store in fridge up to 4 days or freeze flat in bags for 2 months; reheat with milk splash in microwave. Microwave whole potatoes 5 min first to cut boiling time, or use pre-peeled frozen potatoes if budget allows.",
     "taste_score": 8.2,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/mashed-potatoes.webp"
+    "id": "mashed-potatoes",
+    "img_b": "/dishes/768x624/mashed-potatoes.webp",
+    "img_s": "/dishes/420x340/mashed-potatoes.webp"
   },
   {
     "dish": "Bouillabaisse",
@@ -9149,7 +9525,9 @@
     "comment": "Keep pre-made fish stock and frozen seafood mix on hand; sauté aromatics while stock heats. Use pressure cooker or instant pot for simmering to halve time. Cook big pot for 4-6 servings, cool rapidly in ice bath, portion broth separate from seafood in airtight containers, refrigerate 3 days or freeze 2 months; add fresh herbs when reheating.",
     "taste_score": 9.1,
     "satiety_index": 225,
-    "img_m": "/dishes/512x416/bouillabaisse.webp"
+    "id": "bouillabaisse",
+    "img_b": "/dishes/768x624/bouillabaisse.webp",
+    "img_s": "/dishes/420x340/bouillabaisse.webp"
   },
   {
     "dish": "Croque Monsieur",
@@ -9194,7 +9572,9 @@
     "comment": "Prepare a double batch of béchamel sauce and store in fridge for up to 2 days, reheating gently to save making it from scratch each time. Use pre-sliced ham and grated cheese to cut assembly time. Make 2-4 sandwiches at once in a large skillet or under broiler, halving active cooking per sandwich. Keep béchamel warm in a thermos for instant use.",
     "taste_score": 8.9,
     "satiety_index": 134.2,
-    "img_m": "/dishes/512x416/croque-monsieur.webp"
+    "id": "croque-monsieur",
+    "img_b": "/dishes/768x624/croque-monsieur.webp",
+    "img_s": "/dishes/420x340/croque-monsieur.webp"
   },
   {
     "dish": "Steak frites",
@@ -9244,7 +9624,9 @@
     "comment": "Use pre-cut frozen fries to cut cutting and drying time. Marinate the steak overnight in a salt-pepper mix to reduce searing time. Batch-cook multiple steaks on a grill sheet to share prep steps.",
     "taste_score": 8.9,
     "satiety_index": 176,
-    "img_m": "/dishes/512x416/steak-frites.webp"
+    "id": "steak-frites",
+    "img_b": "/dishes/768x624/steak-frites.webp",
+    "img_s": "/dishes/420x340/steak-frites.webp"
   },
   {
     "dish": "Moules-frites",
@@ -9309,7 +9691,9 @@
     "comment": "Buy pre-scrubbed, debearded mussels to skip 5min cleaning. Use frozen fries for frites, baking while sautéing aromatics/steaming mussels to overlap 5min. Prep chopped onion/garlic/pepper in bulk freezer bags for instant start. Cook double mussels batch, portion and freeze half (add parsley fresh), halving next prep/cook.",
     "taste_score": 8.9,
     "satiety_index": 150,
-    "img_m": "/dishes/512x416/moules-frites.webp"
+    "id": "moules-frites",
+    "img_b": "/dishes/768x624/moules-frites.webp",
+    "img_s": "/dishes/420x340/moules-frites.webp"
   },
   {
     "dish": "Spanish Tortilla",
@@ -9344,7 +9728,9 @@
     "comment": "Prepare a double batch: slice extra potatoes and onions ahead, store in water in fridge; fry all potatoes/onions together (scales easily), use half the oil for cooking, save the rest. Flip easier in larger pan. Use pre-sliced frozen potatoes if available to cut prep by half.",
     "taste_score": 8.2,
     "satiety_index": 150,
-    "img_m": "/dishes/512x416/spanish-tortilla.webp"
+    "id": "spanish-tortilla",
+    "img_b": "/dishes/768x624/spanish-tortilla.webp",
+    "img_s": "/dishes/420x340/spanish-tortilla.webp"
   },
   {
     "dish": "Patatas Bravas",
@@ -9389,7 +9775,9 @@
     "comment": "Batch fry potatoes for multiple servings, draining on racks; pre-make and fridge sauce (improves flavor); use frozen pre-cut fries or potato cubes for home use, parboil briefly to speed crisping. Infuse oil with garlic ahead.",
     "taste_score": 8.2,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/patatas-bravas.webp"
+    "id": "patatas-bravas",
+    "img_b": "/dishes/768x624/patatas-bravas.webp",
+    "img_s": "/dishes/420x340/patatas-bravas.webp"
   },
   {
     "dish": "Fabada",
@@ -9434,7 +9822,9 @@
     "comment": "Soak beans overnight or use quick-soak (boil 2 min, rest 1 hr); cook large pot for 4+ servings in pressure cooker or Instant Pot (high pressure 25-30 min after building flavors). Freeze portions flat in bags for quick reheat; keep meats separate if desired.",
     "taste_score": 8.9,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/fabada.webp"
+    "id": "fabada",
+    "img_b": "/dishes/768x624/fabada.webp",
+    "img_s": "/dishes/420x340/fabada.webp"
   },
   {
     "dish": "Crepes",
@@ -9479,7 +9869,9 @@
     "comment": "Let the batter rest 30 minutes while prepping other things or use a blender to mix instantly without lumps. Make batter for 8-10 crepes at once; cooking time per crepe stays but fixed prep like melting butter is done once. Use non-stick pan or well-seasoned crepe pan to skip oiling every time.",
     "taste_score": 8.6,
     "satiety_index": 65,
-    "img_m": "/dishes/512x416/crepes.webp"
+    "id": "crepes",
+    "img_b": "/dishes/768x624/crepes.webp",
+    "img_s": "/dishes/420x340/crepes.webp"
   },
   {
     "dish": "Gelato",
@@ -9519,7 +9911,9 @@
     "comment": "Heat milk with sugar first to dissolve, temper yolks off heat to avoid scrambling; chill base in ice bath to speed up instead of overnight. Whip cream while base cools. For no-churn, freeze in shallow metal tray, stir vigorously with fork every 30 min for 3 times to break crystals instead of churning. Make double batch, portion and freeze ahead.",
     "taste_score": 9.7,
     "satiety_index": 96,
-    "img_m": "/dishes/512x416/gelato.webp"
+    "id": "gelato",
+    "img_b": "/dishes/768x624/gelato.webp",
+    "img_s": "/dishes/420x340/gelato.webp"
   },
   {
     "dish": "Tiramisu",
@@ -9569,7 +9963,9 @@
     "comment": "Brew espresso ahead and chill; separate eggs cold then warm bowl for whites to whip faster. Use electric mixer for mascarpone cream to halve whipping time. Quickly dip ladyfingers (don't soak) in wide shallow dish; assemble layers in one go. Make double portion in larger dish to spread fixed steps like whipping over more servings.",
     "taste_score": 9.5,
     "satiety_index": 65,
-    "img_m": "/dishes/512x416/tiramisu.webp"
+    "id": "tiramisu",
+    "img_b": "/dishes/768x624/tiramisu.webp",
+    "img_s": "/dishes/420x340/tiramisu.webp"
   },
   {
     "dish": "Cheesecake",
@@ -9624,7 +10020,9 @@
     "comment": "Bake multiple cheesecakes at once in the oven to halve prep time per cake—prep two crusts and fillings in sequence while the first bakes, using the same water bath setup. Use pre-crushed graham cracker crumbs from bulk packaging to skip crushing. Prepare filling in a food processor for faster blending. Store whole cheesecakes wrapped tightly in the freezer for up to 2 months, thawing overnight in fridge for quick desserts.",
     "taste_score": 9.5,
     "satiety_index": 65,
-    "img_m": "/dishes/512x416/cheesecake.webp"
+    "id": "cheesecake",
+    "img_b": "/dishes/768x624/cheesecake.webp",
+    "img_s": "/dishes/420x340/cheesecake.webp"
   },
   {
     "dish": "American Pancakes",
@@ -9679,7 +10077,9 @@
     "comment": "Double the batter for multiple breakfasts, cooking all pancakes at once on a large griddle or two pans to halve cooking time per batch—cool and stack with parchment, freezing flat then bagging for up to a month; reheat in toaster or microwave 30 seconds. Melt butter in the milk microwave for 20 seconds to speed mixing. Use a measuring cup as a batter scoop for uniform quick portions.",
     "taste_score": 8.9,
     "satiety_index": 65,
-    "img_m": "/dishes/512x416/american-pancakes.webp"
+    "id": "american-pancakes",
+    "img_b": "/dishes/768x624/american-pancakes.webp",
+    "img_s": "/dishes/420x340/american-pancakes.webp"
   },
   {
     "dish": "French Toast",
@@ -9724,7 +10124,9 @@
     "comment": "Prepare triple the custard and soak multiple batches of bread slices ahead, stacking in a covered dish in fridge overnight for instant morning cooking, halving active prep—soak releases flavors better too. Fry two pans simultaneously or use a large electric griddle for batch cooking to cut cook time in half. Freeze cooked extras in single layers with parchment, toaster-reheat straight from freezer.",
     "taste_score": 8.4,
     "satiety_index": 65,
-    "img_m": "/dishes/512x416/french-toast.webp"
+    "id": "french-toast",
+    "img_b": "/dishes/768x624/french-toast.webp",
+    "img_s": "/dishes/420x340/french-toast.webp"
   },
   {
     "dish": "Oatmeal",
@@ -9759,7 +10161,9 @@
     "comment": "Cook a larger batch (e.g., double portions) on the stovetop or in the microwave to halve per-portion active cooking time: boil water, add oats and microwave 2 min or stir 5 min total, then portion and fridge extras for up to 5 days—reheat in 30 sec. Pre-slice bananas and portion honey/oats into jars nightly for grab-and-go overnight oats (no cooking). Use quick/instant oats if available for 1 min microwave total.",
     "taste_score": 7.1,
     "satiety_index": 209,
-    "img_m": "/dishes/512x416/oatmeal.webp"
+    "id": "oatmeal",
+    "img_b": "/dishes/768x624/oatmeal.webp",
+    "img_s": "/dishes/420x340/oatmeal.webp"
   },
   {
     "dish": "Traditional Caesar Salad",
@@ -9814,7 +10218,9 @@
     "comment": "To achieve a  flavor profile at home without the fuss, crush your garlic into a paste with a little salt before mixing it into the dressing; this prevents bitter chunks. You can prepare a double batch of this 'authentic' dressing and keep it in the fridge for up to 3 days. Always toss the lettuce with the dressing first, and add croutons only at the very last second to ensure they never lose their crunch.",
     "taste_score": 8.8,
     "satiety_index": 197,
-    "img_m": "/dishes/512x416/traditional-caesar-salad.webp"
+    "id": "traditional-caesar-salad",
+    "img_b": "/dishes/768x624/traditional-caesar-salad.webp",
+    "img_s": "/dishes/420x340/traditional-caesar-salad.webp"
   },
   {
     "dish": "Cafe-Style Salad Caesar",
@@ -9869,7 +10275,9 @@
     "comment": "To bypass daily cooking, prepare a large batch of 'toasted' croutons and grilled chicken on Sunday. Keep the lettuce whole until serving to prevent wilting; using a specialized salad container that keeps dressing and croutons separate from the greens will allow you to pack this for lunch and enjoy a fresh-tasting salad with under 5 minutes of final prep.",
     "taste_score": 8.9,
     "satiety_index": 260,
-    "img_m": "/dishes/512x416/cafe-style-salad-caesar.webp"
+    "id": "cafe-style-salad-caesar",
+    "img_b": "/dishes/768x624/cafe-style-salad-caesar.webp",
+    "img_s": "/dishes/420x340/cafe-style-salad-caesar.webp"
   },
   {
     "dish": "Cobb Salad",
@@ -9934,7 +10342,9 @@
     "comment": "To save time, hard-boil a batch of eggs and cook extra chicken and bacon during your weekly meal prep; they store perfectly in the fridge for several days. This reduces the active cooking time to zero and limits preparation to quick chopping and assembly. Use a small jar to shake your vinaigrette components together—this emulsifies the dressing instantly and saves on cleanup.",
     "taste_score": 8.4,
     "satiety_index": 197,
-    "img_m": "/dishes/512x416/cobb-salad.webp"
+    "id": "cobb-salad",
+    "img_b": "/dishes/768x624/cobb-salad.webp",
+    "img_s": "/dishes/420x340/cobb-salad.webp"
   },
   {
     "dish": "Poutine",
@@ -9969,7 +10379,9 @@
     "comment": "To save time, use frozen fries in an air fryer for a crispy finish without the mess of deep frying. Prepare a large batch of gravy and freeze it in ice cube trays for instant portioning; the curds should always be added fresh at room temperature to ensure they melt slightly but keep their 'squeak'.",
     "taste_score": 9.2,
     "satiety_index": 165,
-    "img_m": "/dishes/512x416/poutine.webp"
+    "id": "poutine",
+    "img_b": "/dishes/768x624/poutine.webp",
+    "img_s": "/dishes/420x340/poutine.webp"
   },
   {
     "dish": "Montreal Smoked Meat Sandwich",
@@ -10014,7 +10426,9 @@
     "comment": "The best way to enjoy this at home is to smoke and steam a large brisket (3-5kg) at once. Slice it thinly while still warm, portion into 200g vacuum bags, and freeze. When hungry, simply steam the frozen slices for 10 minutes to restore the perfect texture, far better than microwaving.",
     "taste_score": 9.2,
     "satiety_index": 185,
-    "img_m": "/dishes/512x416/montreal-smoked-meat-sandwich.webp"
+    "id": "montreal-smoked-meat-sandwich",
+    "img_b": "/dishes/768x624/montreal-smoked-meat-sandwich.webp",
+    "img_s": "/dishes/420x340/montreal-smoked-meat-sandwich.webp"
   },
   {
     "dish": "Reuben sandwich",
@@ -10059,7 +10473,9 @@
     "comment": "To speed up, sear the corned beef and sauerkraut directly on the skillet before assembly; this melts the cheese twice as fast. Using a heavy bacon press or another skillet on top of the sandwich ensures even toasting and heat distribution in half the time.",
     "taste_score": 8.9,
     "satiety_index": 165,
-    "img_m": "/dishes/512x416/reuben-sandwich.webp"
+    "id": "reuben-sandwich",
+    "img_b": "/dishes/768x624/reuben-sandwich.webp",
+    "img_s": "/dishes/420x340/reuben-sandwich.webp"
   },
   {
     "dish": "Bagel with lox",
@@ -10099,7 +10515,9 @@
     "comment": "Use 'whipped' cream cheese spread—it applies instantly without tearing the bagel. Keep pre-sliced onions in a jar of cold water in the fridge to maintain crunch and remove harshness, saving you from chopping every morning.",
     "taste_score": 9.1,
     "satiety_index": 190,
-    "img_m": "/dishes/512x416/bagel-with-lox.webp"
+    "id": "bagel-with-lox",
+    "img_b": "/dishes/768x624/bagel-with-lox.webp",
+    "img_s": "/dishes/420x340/bagel-with-lox.webp"
   },
   {
     "dish": "Lobster Roll",
@@ -10149,7 +10567,9 @@
     "comment": "To save significant time, use flash-frozen pre-cooked lobster meat; it preserves the 'sea-fresh' taste while eliminating the 20-minute task of boiling and picking shells. Prepare the lemon-chive dressing in a larger batch and keep it chilled for up to 3 days. Toasting multiple buns simultaneously in a large skillet with butter allows you to serve a family in the same time it takes to make one roll.",
     "taste_score": 9.3,
     "satiety_index": 162.5,
-    "img_m": "/dishes/512x416/lobster-roll.webp"
+    "id": "lobster-roll",
+    "img_b": "/dishes/768x624/lobster-roll.webp",
+    "img_s": "/dishes/420x340/lobster-roll.webp"
   },
   {
     "dish": "Mac and Cheese",
@@ -10199,7 +10619,9 @@
     "comment": "To save time, boil the pasta directly in a milk-water mixture; the released starch naturally thickens the sauce, eliminating the need for a separate roux (butter and flour) [web:7]. Shredding a large block of cheese in bulk using a food processor and freezing it in portions ensures it's always ready and melts perfectly [web:9]. This one-pot approach significantly reduces cleanup and active monitoring compared to the traditional method.",
     "taste_score": 9.1,
     "satiety_index": 160,
-    "img_m": "/dishes/512x416/mac-and-cheese.webp"
+    "id": "mac-and-cheese",
+    "img_b": "/dishes/768x624/mac-and-cheese.webp",
+    "img_s": "/dishes/420x340/mac-and-cheese.webp"
   },
   {
     "dish": "Buffalo Wings",
@@ -10239,7 +10661,9 @@
     "comment": "Make a large batch for multiple meals: bake or fry 4x portions at once on sheet pans, cool quickly, and freeze cooked plain wings; reheat and sauce only what you eat fresh. Use pre-cut party wings or sectioned flats/drums to skip chopping. Air fryer cuts cooking to 12-15 min with no preheat oil drain. Keep dressing and celery separate until serving to avoid sogginess.",
     "taste_score": 9.1,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/buffalo-wings.webp"
+    "id": "buffalo-wings",
+    "img_b": "/dishes/768x624/buffalo-wings.webp",
+    "img_s": "/dishes/420x340/buffalo-wings.webp"
   },
   {
     "dish": "BBQ Ribs",
@@ -10284,7 +10708,9 @@
     "comment": "Cook a double batch wrapped in foil: low and slow cooking scales perfectly without extra active time, cool, portion, and refrigerate up to 3 days or freeze for months—reheat by glazing and broiling in 20 minutes. Use store-bought BBQ sauce mixed with spices to skip sauce prep, or pre-mix dry rub in bulk ahead. Remove membrane quickly with a paper towel for grip to cut prep precisely.",
     "taste_score": 9.4,
     "satiety_index": 156,
-    "img_m": "/dishes/512x416/bbq-ribs.webp"
+    "id": "bbq-ribs",
+    "img_b": "/dishes/768x624/bbq-ribs.webp",
+    "img_s": "/dishes/420x340/bbq-ribs.webp"
   },
   {
     "dish": "Gumbo",
@@ -10344,7 +10770,9 @@
     "comment": "Make a large batch of oven-baked roux ahead (flour and oil in Dutch oven at 350°F for 1-2 hours stirring occasionally) and store in fridge for weeks, spooning out just what you need. Use a frozen mirepoix (onion, celery, bell pepper) mix or pre-chopped veggies from the store if budget allows, or batch-chop and freeze your own. Brown sausage and okra while roux reheats with garlic, then simmer; cooking multiple servings at once cuts per-portion active time in half as steps scale efficiently. Prepare stock in big pots ahead and freeze.",
     "taste_score": 8.9,
     "satiety_index": 202,
-    "img_m": "/dishes/512x416/gumbo.webp"
+    "id": "gumbo",
+    "img_b": "/dishes/768x624/gumbo.webp",
+    "img_s": "/dishes/420x340/gumbo.webp"
   },
   {
     "dish": "Jambalaya",
@@ -10409,7 +10837,9 @@
     "comment": "Prep a big batch for 4 servings at once: chop the holy trinity (onion, bell pepper, celery) and meats in advance, store in fridge up to 1 day, then dump everything into the pot to halve chopping time. Use pre-cooked rice or microwaveable pouches to skip rinsing and boiling, cutting cook time. Keep stock ready-frozen in ice cube trays for quick thawing; use a pressure cooker or Instant Pot for the whole dish to reduce simmering to 10 minutes.",
     "taste_score": 8.9,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/jambalaya.webp"
+    "id": "jambalaya",
+    "img_b": "/dishes/768x624/jambalaya.webp",
+    "img_s": "/dishes/420x340/jambalaya.webp"
   },
   {
     "dish": "Clam Chowder",
@@ -10469,7 +10899,9 @@
     "comment": "Batch-cook a large pot for 4-6 servings to halve per-portion active time; cool quickly, portion into airtight containers, and refrigerate up to 3 days or freeze for 2 months. Use canned clams (drained, juice reserved or substituted with bottled clam juice) to skip cleaning/steaming fresh clams. Buy pre-diced frozen onions, celery, and carrot mirepoix mix if available cheaply, or pre-peel potatoes. Keep clam juice and roux base pre-made in fridge for instant assembly.",
     "taste_score": 8.5,
     "satiety_index": 289.4,
-    "img_m": "/dishes/512x416/clam-chowder.webp"
+    "id": "clam-chowder",
+    "img_b": "/dishes/768x624/clam-chowder.webp",
+    "img_s": "/dishes/420x340/clam-chowder.webp"
   },
   {
     "dish": "Chili con Carne",
@@ -10534,7 +10966,9 @@
     "comment": "Cook a large pot of chili for 4-6 servings: cool quickly, portion into airtight containers, and freeze for up to 3 months—reheats excellently with better flavor on day two. Use a food processor for chopping onion, garlic, and bell pepper to slash prep time. Opt for canned beans (rinsed) to skip soaking. For cooking, brown everything quickly in a skillet while the pot heats, then simmer covered to retain moisture and speed thickening. Pressure cook the whole batch in 15-20 minutes for single portions too.",
     "taste_score": 8.9,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/chili-con-carne.webp"
+    "id": "chili-con-carne",
+    "img_b": "/dishes/768x624/chili-con-carne.webp",
+    "img_s": "/dishes/420x340/chili-con-carne.webp"
   },
   {
     "dish": "Nachos",
@@ -10599,7 +11033,9 @@
     "comment": "Prep toppings mise en place style ahead and refrigerate cooked beef/beans separately: chop tomatoes/jalapeños/coriander, measure lime juice/sour cream. Use pre-shredded cheese. Keep beef and beans pre-cooked/frozen in portions to reheat quickly in one pan while oven preheats. Microwave single servings in 1-2 min instead of oven baking, or broil briefly for melt. Batch prep toppings for multiple meals cuts per-batch prep by 70%.",
     "taste_score": 9.1,
     "satiety_index": 133.65,
-    "img_m": "/dishes/512x416/nachos.webp"
+    "id": "nachos",
+    "img_b": "/dishes/768x624/nachos.webp",
+    "img_s": "/dishes/420x340/nachos.webp"
   },
   {
     "dish": "Tacos al Pastor",
@@ -10644,7 +11080,9 @@
     "comment": "Marinate pork ahead (overnight or freeze portions pre-marinated to skip). Use pre-sliced pork shoulder or tenderloin for thin slicing. Cook a large batch of meat on a hot cast-iron skillet or trompo substitute (vertical skewer from foil-wrapped stack), then store in fridge for 3-4 days or freeze. Warm multiple tortillas at once in microwave (damp paper towel, 30s) or foil in oven while meat rests. Prep toppings in bulk and store chopped onion/cilantro/pineapple separately in fridge. This cuts active time significantly for multiple servings.",
     "taste_score": 9.3,
     "satiety_index": 163.8,
-    "img_m": "/dishes/512x416/tacos-al-pastor.webp"
+    "id": "tacos-al-pastor",
+    "img_b": "/dishes/768x624/tacos-al-pastor.webp",
+    "img_s": "/dishes/420x340/tacos-al-pastor.webp"
   },
   {
     "dish": "Mole Poblano",
@@ -10709,7 +11147,9 @@
     "comment": "Prepare a large batch of mole paste and freeze in portions; it keeps for months and thaws quickly, cutting prep in half for future uses. Use pre-toasted nuts and sesame seeds from bulk buys to skip toasting time. Soak chiles while chopping and roasting other items in parallel on multiple burners. Strain through a fine sieve once for silkiness without multiple passes.",
     "taste_score": 8.8,
     "satiety_index": 163.8,
-    "img_m": "/dishes/512x416/mole-poblano.webp"
+    "id": "mole-poblano",
+    "img_b": "/dishes/768x624/mole-poblano.webp",
+    "img_s": "/dishes/420x340/mole-poblano.webp"
   },
   {
     "dish": "Chicken Enchilada",
@@ -10749,7 +11189,9 @@
     "comment": "Prepare a large batch of sauteed chicken filling and enchilada sauce ahead, storing refrigerated up to 3 days; assembly takes just minutes before baking. Use store-bought rotisserie chicken shredded to skip cooking the chicken entirely. Soften multiple tortillas in a damp towel microwaved for 30 seconds instead of individually heating. Make 4-6 portions at once to halve per-portion assembly time, freezing extras fully assembled (add cheese after thawing).",
     "taste_score": 9.2,
     "satiety_index": 163.8,
-    "img_m": "/dishes/512x416/chicken-enchilada.webp"
+    "id": "chicken-enchilada",
+    "img_b": "/dishes/768x624/chicken-enchilada.webp",
+    "img_s": "/dishes/420x340/chicken-enchilada.webp"
   },
   {
     "dish": "Chiles en Nogada",
@@ -10814,7 +11256,9 @@
     "comment": "Prepare the picadillo filling and nogada sauce in advance or batch for multiple servings and freeze portions; this spreads prep over days and cuts active time per meal in half. Use pre-roasted canned or thawed frozen peeled poblanos to skip 20 minutes of roasting and peeling. Soak walnuts overnight in milk to simplify blending and enhance creaminess without extra steps.",
     "taste_score": 8.9,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/chiles-en-nogada.webp"
+    "id": "chiles-en-nogada",
+    "img_b": "/dishes/768x624/chiles-en-nogada.webp",
+    "img_s": "/dishes/420x340/chiles-en-nogada.webp"
   },
   {
     "dish": "Tamales",
@@ -10854,7 +11298,9 @@
     "comment": "Soak corn husks in advance and keep them refrigerated, fully submerged, for up to 2 days, so you can start assembling immediately. Use leftover cooked shredded chicken and ready-made salsa as filling to avoid cooking a separate stew. Whip the masa dough with fat using a hand mixer to speed up aeration and achieve a lighter texture. Steam a full steamer basket of tamales at once; once cooled, refrigerate them in their husks for up to 3 days or freeze for several weeks, then reheat by steaming, which saves prep time on busy days.",
     "taste_score": 8.9,
     "satiety_index": 163.8,
-    "img_m": "/dishes/512x416/tamales.webp"
+    "id": "tamales",
+    "img_b": "/dishes/768x624/tamales.webp",
+    "img_s": "/dishes/420x340/tamales.webp"
   },
   {
     "dish": "Chilaquiles",
@@ -10924,7 +11370,9 @@
     "comment": "The fastest way to make chilaquiles at home is to batch‑prepare the components: bake or fry a large tray of tortilla chips in advance and store them in an airtight container, then keep a jar of tomatillo–chile sauce in the fridge or freezer so you only need to reheat it and toss with the chips. For busy mornings, you can simmer the sauce the night before, refrigerate it, and in the morning just warm the sauce, add the tortillas for a minute or two, and finish with crumbled queso fresco and fresh coriander. If you use the oven to crisp tortillas instead of frying, you can do several trays at once while you prepare the sauce on the stovetop, which cuts active cooking time.",
     "taste_score": 8.9,
     "satiety_index": 163.8,
-    "img_m": "/dishes/512x416/chilaquiles.webp"
+    "id": "chilaquiles",
+    "img_b": "/dishes/768x624/chilaquiles.webp",
+    "img_s": "/dishes/420x340/chilaquiles.webp"
   },
   {
     "dish": "Elote",
@@ -10969,7 +11417,9 @@
     "comment": "To drastically cut time, microwave the corn (in the husk or wrapped in damp paper towels) for 3–4 minutes before grilling; this par-cooks the kernels so you only need 2 minutes on the heat for a smoky char. Buying pre-shucked corn further reduces prep. You can also premix the mayo, lime, and chili into a single 'crema' to brush on instantly.",
     "taste_score": 9.1,
     "satiety_index": 126.4,
-    "img_m": "/dishes/512x416/elote.webp"
+    "id": "elote",
+    "img_b": "/dishes/768x624/elote.webp",
+    "img_s": "/dishes/420x340/elote.webp"
   },
   {
     "dish": "Pupusa",
@@ -11004,7 +11454,9 @@
     "comment": "To speed up pupusas at home, prepare a larger batch of refried beans and grated cheese in advance and keep them in the fridge or freezer in small portions, so you only need to mix dough and shape. Pre-portion the masa into balls and press them quickly by hand or with a simple plastic-lined plate or tortilla press to cut shaping time without any special tools. Cooking several pupusas at once on a large skillet or griddle instead of in batches will also shorten active time.",
     "taste_score": 8.9,
     "satiety_index": 163.8,
-    "img_m": "/dishes/512x416/pupusa.webp"
+    "id": "pupusa",
+    "img_b": "/dishes/768x624/pupusa.webp",
+    "img_s": "/dishes/420x340/pupusa.webp"
   },
   {
     "dish": "Arepa",
@@ -11039,7 +11491,9 @@
     "comment": "To speed up arepa prep, mix a larger batch of dough and shape all patties at once, then refrigerate them for up to a day or freeze with parchment between layers so you only need to pan‑fry from chilled or thawed. Keep the dough on the firmer side so patties hold their shape and you can pan‑fry several at the same time in a wide skillet with a lid, which shortens the cooking time while still giving a nice crust. Using a preheated non‑stick pan means you can use less oil without sticking, and you can reuse the same pan and oil for several batches, which saves both time and dishes.",
     "taste_score": 9.1,
     "satiety_index": 163.8,
-    "img_m": "/dishes/512x416/arepa.webp"
+    "id": "arepa",
+    "img_b": "/dishes/768x624/arepa.webp",
+    "img_s": "/dishes/420x340/arepa.webp"
   },
   {
     "dish": "Beef Empanada",
@@ -11099,7 +11553,9 @@
     "comment": "Use a simple unleavened dough: mix flour, salt, oil, and warm water, knead briefly, then rest 15–20 minutes while you cook the filling, so prep overlaps with passive dough time. Roll the dough into a log and cut into portions instead of shaping each circle from a ball, then stack circles between lightly oiled sheets so they do not dry out. Cook a large batch of beef-onion-garlic-tomato filling and freeze it flat in thin zip bags; it defrosts in minutes and turns empanadas into an assembly job. For bigger time savings, assemble and freeze fully formed, unbaked empanadas in a single layer, then store in a bag or box—bake straight from frozen, just adding a few extra minutes to baking time.",
     "taste_score": 9.2,
     "satiety_index": 163.8,
-    "img_m": "/dishes/512x416/beef-empanada.webp"
+    "id": "beef-empanada",
+    "img_b": "/dishes/768x624/beef-empanada.webp",
+    "img_s": "/dishes/420x340/beef-empanada.webp"
   },
   {
     "dish": "Ceviche",
@@ -11179,7 +11635,9 @@
     "comment": "For faster ceviche on busy days, keep small fillets of firm white fish like sea bass or corvina trimmed, deboned, and frozen flat in single-portion bags so they thaw quickly in cold water. Pre-boil and freeze sweet potato slices and choclo kernels in portioned containers so you only need to warm or defrost them before serving. Squeeze lime juice for 2–3 days at once and store it in a glass bottle in the fridge to avoid juicing every time and to reduce cleanup. If slicing onions and chilies is what slows you down, prep a small airtight container of thinly sliced red onion and ají limo in salted water; use it over 1–2 days so you only portion and assemble when hungry. With these tricks, active prep shrinks to mostly cutting the fish and tossing everything in the cold marinade.",
     "taste_score": 9.2,
     "satiety_index": 225,
-    "img_m": "/dishes/512x416/ceviche.webp"
+    "id": "ceviche",
+    "img_b": "/dishes/768x624/ceviche.webp",
+    "img_s": "/dishes/420x340/ceviche.webp"
   },
   {
     "dish": "Lomo saltado",
@@ -11264,7 +11722,9 @@
     "comment": "To save time, use frozen French fries (baked or air-fried) and pre-cooked or leftover rice. Pre-slicing the beef and vegetables allows for the high-heat stir-frying to take just minutes. For the best flavor, use a wok or a heavy skillet on maximum heat to sear the meat quickly without losing the crunch of the onions. Pre-mixing the soy sauce and vinegar into a single sauce base further speeds up the process during the intense cooking phase.",
     "taste_score": 9.2,
     "satiety_index": 185,
-    "img_m": "/dishes/512x416/lomo-saltado.webp"
+    "id": "lomo-saltado",
+    "img_b": "/dishes/768x624/lomo-saltado.webp",
+    "img_s": "/dishes/420x340/lomo-saltado.webp"
   },
   {
     "dish": "Cuy Chactado",
@@ -11324,7 +11784,9 @@
     "comment": "To optimize, pre-boil the guinea pig in salted water for 15 minutes; this ensures the meat is fully cooked and reduces the final deep-frying to just 5 minutes for the skin. You can marinate multiple portions and freeze them, as they fry excellently straight from the freezer. If you don't have a traditional volcanic stone, use a second heavy cast-iron skillet to press the meat flat during frying for that signature even crispiness.",
     "taste_score": 8.1,
     "satiety_index": 165,
-    "img_m": "/dishes/512x416/cuy-chactado.webp"
+    "id": "cuy-chactado",
+    "img_b": "/dishes/768x624/cuy-chactado.webp",
+    "img_s": "/dishes/420x340/cuy-chactado.webp"
   },
   {
     "dish": "Bandeja Paisa",
@@ -11389,7 +11851,9 @@
     "comment": "To optimize this complex dish, use a pressure cooker for the beans to cut cooking time from hours to 40 minutes. Utilize a rice cooker for hands-off starch prep. Prepare the chicharrón (pork belly) in an air fryer to achieve perfect crunch without constant supervision or mess. Batch-cook the ground beef and beans ahead of time—they reheat beautifully. Use frozen, pre-formed arepas to save prep time while focusing on the fresh proteins.",
     "taste_score": 8.5,
     "satiety_index": 185,
-    "img_m": "/dishes/512x416/bandeja-paisa.webp"
+    "id": "bandeja-paisa",
+    "img_b": "/dishes/768x624/bandeja-paisa.webp",
+    "img_s": "/dishes/420x340/bandeja-paisa.webp"
   },
   {
     "dish": "Feijoada",
@@ -11457,9 +11921,11 @@
     "cook_t_optimized": 25,
     "passive_t_hours": 2.5,
     "comment": "Traditional feijoada is time-intensive, but using a pressure cooker can tenderize the pork and offal in just 30-40 minutes, cutting total stove time by 70%. You can skip the 24-hour soaking period entirely by using canned black beans. For the best flavor-to-effort ratio, cook a large batch: this stew freezes perfectly for up to 3 months and the taste actually improves the next day as the collagen thickens the broth.",
-    "taste_score": 9.0,
+    "taste_score": 9,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/feijoada.webp"
+    "id": "feijoada",
+    "img_b": "/dishes/768x624/feijoada.webp",
+    "img_s": "/dishes/420x340/feijoada.webp"
   },
   {
     "dish": "Churrasco",
@@ -11524,7 +11990,9 @@
     "comment": "Make a large batch of chimichurri sauce in advance; it keeps for weeks in the fridge and the flavors only deepen over time, reducing active prep to just salting the meat. Use a heavily preheated cast-iron skillet if a grill isn't available to achieve a professional sear in half the time. Prepare multiple portions at once and rest them together to streamline the cooking process for subsequent meals.",
     "taste_score": 9.4,
     "satiety_index": 176,
-    "img_m": "/dishes/512x416/churrasco.webp"
+    "id": "churrasco",
+    "img_b": "/dishes/768x624/churrasco.webp",
+    "img_s": "/dishes/420x340/churrasco.webp"
   },
   {
     "dish": "Moqueca",
@@ -11604,7 +12072,9 @@
     "comment": "To optimize, use frozen pre-cleaned shrimp and pre-cut frozen bell pepper/onion mixes to eliminate chopping entirely. Prepare a large batch; Moqueca freezes beautifully and the flavor deepens after a day, allowing you to simply reheat for future meals.",
     "taste_score": 8.9,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/moqueca.webp"
+    "id": "moqueca",
+    "img_b": "/dishes/768x624/moqueca.webp",
+    "img_s": "/dishes/420x340/moqueca.webp"
   },
   {
     "dish": "Pão de queijo",
@@ -11654,7 +12124,9 @@
     "comment": "For a much faster preparation, use the blender method: combine all ingredients in a blender (liquids first) and pour the batter into greased mini-muffin tins, skipping the manual shaping entirely. Alternatively, prepare a large batch of dough balls and freeze them; they can be baked directly from the freezer with just 5 extra minutes of cook time, providing a fresh snack with zero daily prep.",
     "taste_score": 9.2,
     "satiety_index": 145,
-    "img_m": "/dishes/512x416/po-de-queijo.webp"
+    "id": "po-de-queijo",
+    "img_b": "/dishes/768x624/po-de-queijo.webp",
+    "img_s": "/dishes/420x340/po-de-queijo.webp"
   },
   {
     "dish": "Pastel de nata",
@@ -11709,7 +12181,9 @@
     "comment": "To minimize effort, use high-quality store-bought puff pastry and prepare the custard base in advance. The most professional optimization is to shape the tarts in the tin and freeze them raw; they can be baked directly from the freezer at a very high temperature (250°C-300°C). This high-heat method ensures the signature charred top and crispy base in nearly half the standard baking time. Making a large batch and freezing them allows for fresh tarts on demand with zero daily prep.",
     "taste_score": 9.2,
     "satiety_index": 65,
-    "img_m": "/dishes/512x416/pastel-de-nata.webp"
+    "id": "pastel-de-nata",
+    "img_b": "/dishes/768x624/pastel-de-nata.webp",
+    "img_s": "/dishes/420x340/pastel-de-nata.webp"
   },
   {
     "dish": "Bacalhau à Brás",
@@ -11754,7 +12228,9 @@
     "comment": "To make this in under 15 minutes, use store-bought 'batata palha' (matchstick potato crisps) and pre-soaked, shredded frozen cod (Bacalhau Desfiado). This eliminates the 24-hour soaking process and the labor-intensive task of manual shredding and potato slicing. Sauté the onions and fish first, then fold in the potatoes and eggs at the very end to prevent the chips from getting soggy.",
     "taste_score": 8.5,
     "satiety_index": 225,
-    "img_m": "/dishes/512x416/bacalhau-brs.webp"
+    "id": "bacalhau-brs",
+    "img_b": "/dishes/768x624/bacalhau-brs.webp",
+    "img_s": "/dishes/420x340/bacalhau-brs.webp"
   },
   {
     "dish": "Francesinha",
@@ -11824,7 +12300,9 @@
     "comment": "The secret to a fast Francesinha is batch-cooking the sauce: it freezes perfectly for months. In professional kitchens, the sauce is blended and simmered in large quantities; at home, you can do the same and simply reheat a portion while grilling the meats. Use a sandwich press to toast the inner layers simultaneously to save time, and always place the cheese slices so they overlap the edges, ensuring a perfect melt under the broiler.",
     "taste_score": 9.4,
     "satiety_index": 190,
-    "img_m": "/dishes/512x416/francesinha.webp"
+    "id": "francesinha",
+    "img_b": "/dishes/768x624/francesinha.webp",
+    "img_s": "/dishes/420x340/francesinha.webp"
   },
   {
     "dish": "Sardinhas assadas",
@@ -11874,7 +12352,9 @@
     "comment": "To significantly reduce prep time, ask your fishmonger to scale and gut the sardines for you. Use a double-sided fish grill basket to flip the entire batch at once, which prevents the delicate skin from sticking and ensures even charring. Preparing a larger batch of the garlic and parsley garnish in advance can also save time if you plan to serve this dish multiple times during the week.",
     "taste_score": 8.9,
     "satiety_index": 225,
-    "img_m": "/dishes/512x416/sardinhas-assadas.webp"
+    "id": "sardinhas-assadas",
+    "img_b": "/dishes/768x624/sardinhas-assadas.webp",
+    "img_s": "/dishes/420x340/sardinhas-assadas.webp"
   },
   {
     "dish": "Cornish Pasty",
@@ -11934,7 +12414,9 @@
     "comment": "You can prepare a large batch and freeze them raw; they bake perfectly straight from the freezer with only 15 extra minutes of oven time. Using pre-chopped frozen swede/onion mixes or store-bought shortcrust pastry can cut your active prep time to a few minutes while keeping the traditional flavor.",
     "taste_score": 8.9,
     "satiety_index": 134.2,
-    "img_m": "/dishes/512x416/cornish-pasty.webp"
+    "id": "cornish-pasty",
+    "img_b": "/dishes/768x624/cornish-pasty.webp",
+    "img_s": "/dishes/420x340/cornish-pasty.webp"
   },
   {
     "dish": "Shepherd's Pie",
@@ -11999,7 +12481,9 @@
     "comment": "Cook a large batch of the lamb filling and mashed potatoes to assemble multiple individual pies in oven-safe containers; they freeze perfectly for up to 2 months. Use frozen peas and carrots to eliminate chopping time without sacrificing nutrition. To speed up the potato prep, use a kettle to boil water instantly and keep the lid on the pot to retain heat.",
     "taste_score": 8.9,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/shepherds-pie.webp"
+    "id": "shepherds-pie",
+    "img_b": "/dishes/768x624/shepherds-pie.webp",
+    "img_s": "/dishes/420x340/shepherds-pie.webp"
   },
   {
     "dish": "Yorkshire Pudding",
@@ -12039,7 +12523,9 @@
     "comment": "To optimize, whisk the batter in a blender for 30 seconds instead of by hand. You can make a large batch and store it in the fridge for up to 48 hours; chilled batter often rises better. Best of all, Yorkshire puddings freeze perfectly—bake a dozen, freeze them, and reheat in a hot oven for just 5 minutes when needed, maintaining that fresh crunch with almost zero daily effort.",
     "taste_score": 7.1,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/yorkshire-pudding.webp"
+    "id": "yorkshire-pudding",
+    "img_b": "/dishes/768x624/yorkshire-pudding.webp",
+    "img_s": "/dishes/420x340/yorkshire-pudding.webp"
   },
   {
     "dish": "Sunday Roast",
@@ -12114,7 +12600,9 @@
     "comment": "To maximize efficiency, always roast a large joint of beef and a full tray of vegetables for 4+ servings at once; the oven duration remains the same but the 'active' time per portion drops significantly. Leftover beef is perfect for cold sandwiches, and extra roasted vegetables can be quickly fried into 'bubble and squeak' for Monday's lunch. Preparing the Yorkshire pudding batter a few hours ahead and letting it rest in the fridge ensures a better rise while clearing prep space before the final bake.",
     "taste_score": 8.4,
     "satiety_index": 175,
-    "img_m": "/dishes/512x416/sunday-roast.webp"
+    "id": "sunday-roast",
+    "img_b": "/dishes/768x624/sunday-roast.webp",
+    "img_s": "/dishes/420x340/sunday-roast.webp"
   },
   {
     "dish": "Haggis",
@@ -12169,7 +12657,9 @@
     "comment": "To significantly speed up preparation, use a pressure cooker to tenderize the meat in 45 minutes instead of several hours. Traditional stomach stuffing is labor-intensive; you can use a greased bowl covered with foil (stoved haggis) for the same flavor with much less effort. Making a large batch and freezing it in portions is highly recommended, as haggis retains its quality well when frozen.",
     "taste_score": 7.3,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/haggis.webp"
+    "id": "haggis",
+    "img_b": "/dishes/768x624/haggis.webp",
+    "img_s": "/dishes/420x340/haggis.webp"
   },
   {
     "dish": "Scones",
@@ -12219,7 +12709,9 @@
     "comment": "To optimize, pulse cold butter and flour in a food processor to reach the breadcrumb stage in seconds. You can shape a large batch and freeze them raw on a tray; they bake perfectly straight from the freezer with just a few extra minutes, giving you fresh scones daily with zero morning prep. Instead of using a round cutter, pat the dough into a rectangle and cut into squares with a sharp knife to eliminate re-rolling scraps and keep the texture light.",
     "taste_score": 8.9,
     "satiety_index": 65,
-    "img_m": "/dishes/512x416/scones.webp"
+    "id": "scones",
+    "img_b": "/dishes/768x624/scones.webp",
+    "img_s": "/dishes/420x340/scones.webp"
   },
   {
     "dish": "Jollof Rice",
@@ -12284,7 +12776,9 @@
     "comment": "Prepare a large batch of the tomato-pepper base ('Jollof base') and freeze it in portions to cut prep time to nearly zero on busy days. Parboiled long-grain rice is ideal for a consistent, non-mushy texture. Cooking multiple servings at once significantly reduces effort, as the flavor intensifies over time, making leftovers even better.",
     "taste_score": 9.1,
     "satiety_index": 165,
-    "img_m": "/dishes/512x416/jollof-rice.webp"
+    "id": "jollof-rice",
+    "img_b": "/dishes/768x624/jollof-rice.webp",
+    "img_s": "/dishes/420x340/jollof-rice.webp"
   },
   {
     "dish": "Bunny Chow",
@@ -12354,7 +12848,9 @@
     "comment": "To save time, use a pressure cooker for the beef curry to cut cooking from an hour to 20 minutes, or prepare a large batch of curry in advance as the flavor improves overnight. You can also use frozen pea and carrot mixes to eliminate chopping time, allowing you to simply hollow the bread and fill it when ready to eat.",
     "taste_score": 9.1,
     "satiety_index": 157,
-    "img_m": "/dishes/512x416/bunny-chow.webp"
+    "id": "bunny-chow",
+    "img_b": "/dishes/768x624/bunny-chow.webp",
+    "img_s": "/dishes/420x340/bunny-chow.webp"
   },
   {
     "dish": "Bobotie",
@@ -12414,7 +12910,9 @@
     "comment": "Bobotie is a perfect candidate for batch cooking: prepare a large meat base, portion it into containers, and freeze. When ready, simply add the fresh milk-egg topping and bake. You can use frozen pre-shredded onion to save on chopping time without the premium price of fresh pre-cut vegetables. Keep in mind: passive time is excluded from calculation.",
     "taste_score": 8.9,
     "satiety_index": 165,
-    "img_m": "/dishes/512x416/bobotie.webp"
+    "id": "bobotie",
+    "img_b": "/dishes/768x624/bobotie.webp",
+    "img_s": "/dishes/420x340/bobotie.webp"
   },
   {
     "dish": "Injera",
@@ -12444,7 +12942,9 @@
     "comment": "It's important to note, that passive time is excluded from time calculation. Injera requires 1-3 days of passive fermentation before cooking.",
     "taste_score": 7.3,
     "satiety_index": 148,
-    "img_m": "/dishes/512x416/injera.webp"
+    "id": "injera",
+    "img_b": "/dishes/768x624/injera.webp",
+    "img_s": "/dishes/420x340/injera.webp"
   },
   {
     "dish": "Doro Wat",
@@ -12514,7 +13014,9 @@
     "comment": "To cut prep time, pulse the onions in a food processor instead of hand-chopping. Using a pressure cooker (like an Instant Pot) reduces the long onion-softening phase from 45 minutes to just 12, and the chicken simmer to 15. For the most authentic taste, use Ghee (substitute for Niter Kibbeh) and prepare a double batch as the stew freezes perfectly and tastes even better the next day.",
     "taste_score": 8.9,
     "satiety_index": 165,
-    "img_m": "/dishes/512x416/doro-wat.webp"
+    "id": "doro-wat",
+    "img_b": "/dishes/768x624/doro-wat.webp",
+    "img_s": "/dishes/420x340/doro-wat.webp"
   },
   {
     "dish": "Chicken Muamba",
@@ -12584,7 +13086,9 @@
     "comment": "To slash time, use a food processor to pulse onion, garlic, and peppers into a paste instead of hand-chopping. Cook a larger batch of the chicken and palm oil base; it freezes perfectly for months. Add fresh okra only during the final reheating to keep its texture firm and avoid sliminess. A pressure cooker can tenderize the chicken in just 15 minutes.",
     "taste_score": 8.5,
     "satiety_index": 185,
-    "img_m": "/dishes/512x416/chicken-muamba.webp"
+    "id": "chicken-muamba",
+    "img_b": "/dishes/768x624/chicken-muamba.webp",
+    "img_s": "/dishes/420x340/chicken-muamba.webp"
   },
   {
     "dish": "Poke",
@@ -12649,7 +13153,9 @@
     "comment": "To slash prep time, cook a large batch of rice in a rice cooker and store it; poke rice is often served at room temperature, making it perfect for meal prep. Use a mandoline for paper-thin cucumber slices and buy pre-diced sashimi-grade tuna to avoid delicate knife work. You can even mix the dressing in a large jar and keep it in the fridge for a week of quick, fresh assembly.",
     "taste_score": 8.6,
     "satiety_index": 181.5,
-    "img_m": "/dishes/512x416/poke.webp"
+    "id": "poke",
+    "img_b": "/dishes/768x624/poke.webp",
+    "img_s": "/dishes/420x340/poke.webp"
   },
   {
     "dish": "Jamaican jerk chicken",
@@ -12714,7 +13220,9 @@
     "comment": "Prepare a large batch of the jerk marinade and freeze it in ice cube trays for easy portioning. For ultimate efficiency, marinate several portions of chicken at once and freeze them; the meat marinates as it thaws in the fridge, resulting in near-zero active prep. Batch-grilling multiple servings simultaneously halves the active cooking time per portion.",
     "taste_score": 8.9,
     "satiety_index": 182.1,
-    "img_m": "/dishes/512x416/jamaican-jerk-chicken.webp"
+    "id": "jamaican-jerk-chicken",
+    "img_b": "/dishes/768x624/jamaican-jerk-chicken.webp",
+    "img_s": "/dishes/420x340/jamaican-jerk-chicken.webp"
   },
   {
     "dish": "Cuban Sandwich",
@@ -12764,7 +13272,9 @@
     "comment": "To optimize, use two heavy cast-iron skillets (one as a press) to cook both sides simultaneously and flatten the sandwich perfectly without a panini press. Prepare a large batch of Mojo pork in a slow cooker over the weekend; the active sandwich assembly then takes under five minutes. You can also assemble multiple sandwiches and freeze them (without pickles), then press directly from the fridge for a quick meal.",
     "taste_score": 9.1,
     "satiety_index": 142,
-    "img_m": "/dishes/512x416/cuban-sandwich.webp"
+    "id": "cuban-sandwich",
+    "img_b": "/dishes/768x624/cuban-sandwich.webp",
+    "img_s": "/dishes/420x340/cuban-sandwich.webp"
   },
   {
     "dish": "Salade Niçoise",
@@ -12839,7 +13349,9 @@
     "comment": "To optimize, boil a large batch of eggs and potatoes at the start of the week; they stay fresh for days and reduce assembly to mere minutes. Use frozen green beans that blanch in half the time, or cook them in the same pot as the potatoes. Prepare a larger jar of the vinaigrette to keep in the fridge for instant seasoning of this or other salads.",
     "taste_score": 8.7,
     "satiety_index": 145,
-    "img_m": "/dishes/512x416/salade-nioise.webp"
+    "id": "salade-nioise",
+    "img_b": "/dishes/768x624/salade-nioise.webp",
+    "img_s": "/dishes/420x340/salade-nioise.webp"
   },
   {
     "dish": "Waldorf Salad",
@@ -12884,7 +13396,9 @@
     "comment": "Prepare multiple servings at once to cut the average preparation time; the salad maintains its texture well for up to 24 hours when refrigerated. Use an apple corer and slicer to speed up the dicing process, and toss the pieces immediately in the dressing to prevent oxidation without needing extra lemon juice. Buying walnuts in larger, unshelled quantities is more cost-effective, and they can be shelled in bulk ahead of time for quick assembly.",
     "taste_score": 8.9,
     "satiety_index": 125,
-    "img_m": "/dishes/512x416/waldorf-salad.webp"
+    "id": "waldorf-salad",
+    "img_b": "/dishes/768x624/waldorf-salad.webp",
+    "img_s": "/dishes/420x340/waldorf-salad.webp"
   },
   {
     "dish": "Coleslaw",
@@ -12934,7 +13448,9 @@
     "comment": "Coleslaw is an ideal candidate for batch prepping because it stays fresh for 3-5 days and the flavors actually improve as the vegetables marinate. Use a food processor with a shredding disc or a wide mandoline to prep the vegetables in seconds instead of hand-cutting. Preparing four servings at once takes nearly the same time as one, providing a ready-to-eat side for the whole week.",
     "taste_score": 8.2,
     "satiety_index": 110,
-    "img_m": "/dishes/512x416/coleslaw.webp"
+    "id": "coleslaw",
+    "img_b": "/dishes/768x624/coleslaw.webp",
+    "img_s": "/dishes/420x340/coleslaw.webp"
   },
   {
     "dish": "Shopska Salad",
@@ -12984,7 +13500,9 @@
     "comment": "Use a mandoline to slice onions and cucumbers in seconds for a uniform texture. For the authentic 'snowy' look, grate the Feta directly over the bowl using a fine grater instead of crumbling it; freezing the cheese for 20 minutes first makes this effortless. You can pre-slice peppers and onions in bulk; they stay crisp for up to 3 days in an airtight container, effectively halving the prep time for subsequent servings.",
     "taste_score": 8.5,
     "satiety_index": 115,
-    "img_m": "/dishes/512x416/shopska-salad.webp"
+    "id": "shopska-salad",
+    "img_b": "/dishes/768x624/shopska-salad.webp",
+    "img_s": "/dishes/420x340/shopska-salad.webp"
   },
   {
     "dish": "Gado-gado",
@@ -13039,7 +13557,9 @@
     "comment": "To slash cooking time, use the microwave to 'steam-blanch' cabbage and green beans in just 3 minutes by placing them in a bowl with a splash of water and covering them. You can boil eggs and potatoes in the same pot to save energy and cleanup time, or use a batch-cooking strategy by preparing a large quantity of peanut sauce and fried tofu/tempeh in advance to store in the freezer. For the freshest taste, slice the raw cucumber just before serving, and assemble the dish while the vegetables are still slightly warm to help the sauce adhere better.",
     "taste_score": 8.6,
     "satiety_index": 155,
-    "img_m": "/dishes/512x416/gado-gado.webp"
+    "id": "gado-gado",
+    "img_b": "/dishes/768x624/gado-gado.webp",
+    "img_s": "/dishes/420x340/gado-gado.webp"
   },
   {
     "dish": "Chicken Larb",
@@ -13099,7 +13619,9 @@
     "comment": "To save time, prepare a large batch of 'Khao Khua' (toasted rice powder) and store it in an airtight jar; it stays aromatic for months and provides the essential nutty texture. Pre-mix your lime juice, fish sauce, and chili dressing in a small bottle for instant use. Using pre-washed herb mixes and buying pre-minced chicken significantly reduces active prep time. For meal prepping, cook a double portion of meat and store it separately from the herbs to maintain freshness.",
     "taste_score": 8.8,
     "satiety_index": 145,
-    "img_m": "/dishes/512x416/chicken-larb.webp"
+    "id": "chicken-larb",
+    "img_b": "/dishes/768x624/chicken-larb.webp",
+    "img_s": "/dishes/420x340/chicken-larb.webp"
   },
   {
     "dish": "Wakame Salad",
@@ -13139,7 +13661,9 @@
     "comment": "Hydrate a larger batch of dried wakame at once, squeeze it very dry, and store it undressed in an airtight container in the fridge for up to 3 days. Keep a small jar of pre-mixed dressing (rice vinegar, sesame oil, sugar) ready; when you want a portion, just toss a handful of wakame with a spoonful of dressing and finish with sesame seeds, which cuts active prep to just a minute or two.",
     "taste_score": 8.2,
     "satiety_index": 95,
-    "img_m": "/dishes/512x416/wakame-salad.webp"
+    "id": "wakame-salad",
+    "img_b": "/dishes/768x624/wakame-salad.webp",
+    "img_s": "/dishes/420x340/wakame-salad.webp"
   },
   {
     "dish": "Shuba Salad",
@@ -13189,7 +13713,9 @@
     "comment": "To save over an hour, microwave whole root vegetables in a sealed bag with a splash of water for 10-15 minutes instead of boiling. For maximum efficiency, use store-bought vacuum-packed pre-boiled beets and a food processor's grating attachment for all layers. Marinate the onions in apple cider vinegar and a pinch of sugar for 5 minutes to remove bitterness and add a bright acidity that cuts through the heavy mayonnaise.",
     "taste_score": 7.5,
     "satiety_index": 150,
-    "img_m": "/dishes/512x416/shuba-salad.webp"
+    "id": "shuba-salad",
+    "img_b": "/dishes/768x624/shuba-salad.webp",
+    "img_s": "/dishes/420x340/shuba-salad.webp"
   },
   {
     "dish": "Vinegret",
@@ -13244,7 +13770,9 @@
     "comment": "Cut active time by using vacuum-packed pre-boiled vegetables and a mechanical grid dicer. Mix diced beets with oil separately before adding other ingredients to prevent them from staining everything purple. Preparing a large batch is ideal as the salad tastes better on the second day and stays fresh in the fridge for up to 5 days.",
     "taste_score": 8.3,
     "satiety_index": 135,
-    "img_m": "/dishes/512x416/vinegret.webp"
+    "id": "vinegret",
+    "img_b": "/dishes/768x624/vinegret.webp",
+    "img_s": "/dishes/420x340/vinegret.webp"
   },
   {
     "dish": "Potato Salad",
@@ -13304,7 +13832,9 @@
     "comment": "To cut prep time significantly, use a wire cooling rack to press boiled potatoes and eggs through for instant uniform dicing. You can 'boil' potatoes in the microwave in a covered bowl with a splash of water for just 8 minutes instead of 25. Mix the vinegar into the potatoes while they are still warm to maximize flavor absorption before adding the dressing. Prepare a large batch to save time; the flavor improves after a day in the fridge and stays fresh for up to 72 hours.",
     "taste_score": 8.5,
     "satiety_index": 160,
-    "img_m": "/dishes/512x416/potato-salad.webp"
+    "id": "potato-salad",
+    "img_b": "/dishes/768x624/potato-salad.webp",
+    "img_s": "/dishes/420x340/potato-salad.webp"
   },
   {
     "dish": "Tagliata con Rucola",
@@ -13344,7 +13874,9 @@
     "comment": "Prepare a larger batch of shaved Parmesan and pre-washed arugula to use throughout the week, minimizing daily prep to simple assembly. Grilling two steaks simultaneously in a large pan allows you to enjoy one hot and save the other for a cold salad the next day, effectively cutting the active cooking time per portion in half.",
     "taste_score": 9.2,
     "satiety_index": 165,
-    "img_m": "/dishes/512x416/tagliata-con-rucola.webp"
+    "id": "tagliata-con-rucola",
+    "img_b": "/dishes/768x624/tagliata-con-rucola.webp",
+    "img_s": "/dishes/420x340/tagliata-con-rucola.webp"
   },
   {
     "dish": "Ensalada Mixta",
@@ -13409,7 +13941,9 @@
     "comment": "Batch-cook a dozen hard-boiled eggs at once; they stay fresh in the fridge for 7 days, eliminating daily cooking time. Store sliced onions in cold water to remove harsh sulfur compounds while keeping them crisp for instant assembly. Use a small jar to emulsify the dressing in seconds, ensuring a more even coat with less oil.",
     "taste_score": 8.4,
     "satiety_index": 140,
-    "img_m": "/dishes/512x416/ensalada-mixta.webp"
+    "id": "ensalada-mixta",
+    "img_b": "/dishes/768x624/ensalada-mixta.webp",
+    "img_s": "/dishes/420x340/ensalada-mixta.webp"
   },
   {
     "dish": "Belgian Waffles",
@@ -13464,7 +13998,9 @@
     "comment": "Prepare the batter in a blender and refrigerate overnight to skip morning prep and enhance the depth of flavor through slow fermentation. For ultimate efficiency, cook a large batch, freeze the extras, and reheat them in a toaster to regain their signature crunch in seconds—perfect for busy weekdays.",
     "taste_score": 9,
     "satiety_index": 130,
-    "img_m": "/dishes/512x416/belgian-waffles.webp"
+    "id": "belgian-waffles",
+    "img_b": "/dishes/768x624/belgian-waffles.webp",
+    "img_s": "/dishes/420x340/belgian-waffles.webp"
   },
   {
     "dish": "Macarons",
@@ -13504,7 +14040,9 @@
     "comment": "Macarons are ideal for batch cooking: freeze finished shells for up to 3 months or filled ones for a month; the texture improves significantly after 24 hours of maturation. Use a food processor to pulse almond flour and powdered sugar together to skip manual sifting and ensure a smooth shell. Doubling the batch size cuts your active prep time per serving in half with minimal extra effort in piping.",
     "taste_score": 9,
     "satiety_index": 105,
-    "img_m": "/dishes/512x416/macarons.webp"
+    "id": "macarons",
+    "img_b": "/dishes/768x624/macarons.webp",
+    "img_s": "/dishes/420x340/macarons.webp"
   },
   {
     "dish": "Chicken Kiev",
@@ -13559,7 +14097,9 @@
     "comment": "Make a large batch of rolled and breaded chicken 'logs' and freeze them. This eliminates the labor-intensive prep and ensures the butter stays cold enough to not leak during frying. Use a double-breading technique for a sturdy crust and fry directly from frozen for the best results.",
     "taste_score": 9.5,
     "satiety_index": 160,
-    "img_m": "/dishes/512x416/chicken-kiev.webp"
+    "id": "chicken-kiev",
+    "img_b": "/dishes/768x624/chicken-kiev.webp",
+    "img_s": "/dishes/420x340/chicken-kiev.webp"
   },
   {
     "dish": "Brownie",
@@ -13599,7 +14139,9 @@
     "comment": "Bake a large batch at once and freeze the squares: brownies freeze perfectly and gain a fudgier texture when thawed. Use a single microwave-safe glass bowl for both melting the chocolate/butter and mixing the remaining ingredients to minimize cleanup. Line your baking pan with parchment paper 'slings' to lift the entire block out for instant cooling and slicing. You can also prepare a dry mix (flour, sugar) in advance to cut daily prep to just adding wet ingredients.",
     "taste_score": 9,
     "satiety_index": 140,
-    "img_m": "/dishes/512x416/brownie.webp"
+    "id": "brownie",
+    "img_b": "/dishes/768x624/brownie.webp",
+    "img_s": "/dishes/420x340/brownie.webp"
   },
   {
     "dish": "Katsudon",
@@ -13669,7 +14211,9 @@
     "comment": "To drastically cut time, batch-prepare the pork cutlets: bread them in bulk and freeze them raw. When ready to eat, you can fry them directly from frozen (just add 1-2 minutes to frying time). Alternatively, fry a batch and freeze; reheat in a toaster oven for the fastest meal. For the sauce, use 'Mentsuyu' (concentrated noodle soup base) diluted with water—this replaces dashi, soy sauce, mirin, and sugar instantly. You can also use frozen sliced onions to skip chopping.",
     "taste_score": 9.3,
     "satiety_index": 170,
-    "img_m": "/dishes/512x416/katsudon.webp"
+    "id": "katsudon",
+    "img_b": "/dishes/768x624/katsudon.webp",
+    "img_s": "/dishes/420x340/katsudon.webp"
   },
   {
     "dish": "Churros",
@@ -13729,7 +14273,9 @@
     "comment": "Pipe raw dough strips onto a parchment-lined baking sheet and freeze until solid, then transfer to a ziplock bag. You can fry them directly from frozen (add 1-2 minutes to cook time), which reduces prep time to zero for future snacks. Use kitchen shears to snip the dough directly into the hot oil to avoid handling sticky raw pastry and ensure clean edges.",
     "taste_score": 8.8,
     "satiety_index": 125,
-    "img_m": "/dishes/512x416/churros.webp"
+    "id": "churros",
+    "img_b": "/dishes/768x624/churros.webp",
+    "img_s": "/dishes/420x340/churros.webp"
   },
   {
     "dish": "Bryan Johnson's Nutty Pudding",
@@ -13784,7 +14330,9 @@
     "comment": "Grind nuts and seeds in bulk once a week and store in airtight containers in the fridge to cut daily prep time in half. Use frozen berries instead of fresh—they're often cheaper and blend into a creamier texture. Make 2-3 servings at once; the chia seeds will thicken it overnight, improving the pudding consistency.",
     "taste_score": 7.5,
     "satiety_index": 140,
-    "img_m": "/dishes/512x416/bryan-johnsons-nutty-pudding.webp"
+    "id": "bryan-johnsons-nutty-pudding",
+    "img_b": "/dishes/768x624/bryan-johnsons-nutty-pudding.webp",
+    "img_s": "/dishes/420x340/bryan-johnsons-nutty-pudding.webp"
   },
   {
     "dish": "Bryan Johnson's Super Veggie",
@@ -13854,6 +14402,8 @@
     "comment": "The biggest time-saver is cooking lentils in bulk for 3-4 days (they keep well). You can also buy frozen pre-cut broccoli/cauliflower mixes to skip washing and chopping—nutritionally they are just as good. If eating daily, blend the sauce ingredients (lime, vinegar, spices, oil) in a small jar for the whole week to just pour over.",
     "taste_score": 6.8,
     "satiety_index": 195,
-    "img_m": "/dishes/512x416/bryan-johnsons-super-veggie.webp"
+    "id": "bryan-johnsons-super-veggie",
+    "img_b": "/dishes/768x624/bryan-johnsons-super-veggie.webp",
+    "img_s": "/dishes/420x340/bryan-johnsons-super-veggie.webp"
   }
 ]
