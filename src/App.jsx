@@ -17,6 +17,7 @@ export default function App() {
   const priceUnit = usePrefs((s) => s.prefs.priceUnit);
   const theme = usePrefs((s) => s.prefs.theme);
   const viewMode = usePrefs((s) => s.prefs.viewMode);
+  const tasteScoreMethod = usePrefs((s) => s.prefs.tasteScoreMethod);
   const computationPriorities = usePrefs((s) => s.computationPriorities);
   const isDark = theme !== 'light';
   
@@ -102,6 +103,7 @@ export default function App() {
       isOptimized,
       priceUnit,
       priorities: computationPriorities,
+      tasteScoreMethod,
     };
     lastPayloadRef.current = payload;
 
@@ -113,7 +115,7 @@ export default function App() {
       seq,
       payload,
     });
-  }, [selectedZone, overrides, isOptimized, priceUnit, computationPriorities]);
+  }, [selectedZone, overrides, isOptimized, priceUnit, computationPriorities, tasteScoreMethod]);
 
   const retryRanking = () => {
     const w = workerRef.current;

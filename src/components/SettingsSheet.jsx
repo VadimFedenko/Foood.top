@@ -82,6 +82,7 @@ function ZoneOption({ zoneId, zone, isSelected, onSelect }) {
 export default function SettingsSheet({ open, onClose }) {
   const isOptimized = usePrefs((s) => s.prefs.isOptimized);
   const selectedZone = usePrefs((s) => s.prefs.selectedZone);
+  const tasteScoreMethod = usePrefs((s) => s.prefs.tasteScoreMethod);
   const closeBtnRef = useRef(null);
 
   // Lock background scroll while sheet is open (mobile UX).
@@ -117,6 +118,10 @@ export default function SettingsSheet({ open, onClose }) {
 
   const setZone = (zoneId) => {
     prefsActions.setPref({ selectedZone: zoneId });
+  };
+
+  const setTasteScoreMethod = (method) => {
+    prefsActions.setPref({ tasteScoreMethod: method });
   };
 
   return (
@@ -201,6 +206,29 @@ export default function SettingsSheet({ open, onClose }) {
                       title="Time optimized"
                       description="Many dishes can be prepared much faster using batching and professional kitchen techniques. This mode applies these optimized timings."
                       onSelect={setMode}
+                    />
+                  </div>
+                </div>
+
+                {/* Taste score method */}
+                <div>
+                  <div className="text-sm font-semibold text-surface-900 dark:text-surface-100 mb-2">
+                    Taste Score as
+                  </div>
+                  <div role="radiogroup" aria-label="Taste score method" className="space-y-2">
+                    <CookingModeOption
+                      value="taste_score"
+                      isSelected={tasteScoreMethod === 'taste_score'}
+                      title="AI Polarization Analysis"
+                      description="Uses taste_score as the taste parameter."
+                      onSelect={setTasteScoreMethod}
+                    />
+                    <CookingModeOption
+                      value="sentiment_score"
+                      isSelected={tasteScoreMethod === 'sentiment_score'}
+                      title="Amazon/Yelp Sentiment Analysis"
+                      description="Uses sentiment_score as the taste parameter."
+                      onSelect={setTasteScoreMethod}
                     />
                   </div>
                 </div>

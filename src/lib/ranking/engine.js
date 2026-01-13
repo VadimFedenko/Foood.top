@@ -483,12 +483,11 @@ function getLegacyOrMul({ base, overrides, absKey, mulKey, clampMin, clampMax, d
  * @param {Object} dish - The dish object
  * @param {string} zoneId - Economic zone ID
  * @param {Array} ingredientsDb - The ingredients database
- * @param {boolean} useOptimizedTime - Whether to use optimized cooking times
  * @param {Object} overrides - User overrides from localStorage { taste, time, price }
- * @param {string} priceUnit - Price unit for ranking ('serving', 'per1kg', 'per1000kcal')
+ * @param {string} tasteScoreMethod - Which taste score to use: 'taste_score' or 'sentiment_score'
  * @returns {Object} Complete dish analysis with all metrics
  */
-function analyzeDishStatic(dish, zoneId, ingredientsDb, overrides = {}) {
+function analyzeDishStatic(dish, zoneId, ingredientsDb, overrides = {}, tasteScoreMethod = 'taste_score') {
   const costResult = calculateDishCost(dish, zoneId, ingredientsDb);
   const baseHealth = calculateDishHealth(dish, ingredientsDb);
   const baseCalories = calculateDishCalories(dish, ingredientsDb);
@@ -498,7 +497,10 @@ function analyzeDishStatic(dish, zoneId, ingredientsDb, overrides = {}) {
     : 0;
   const baseEthics = calculateDishEthics(dish, ingredientsDb);
 
-  const baseTaste = clamp(isFiniteNumber(dish.taste_score) ? dish.taste_score : 5, 0, 10);
+  const tasteScoreValue = tasteScoreMethod === 'sentiment_score' 
+    ? (dish.sentiment_score ?? dish.taste_score ?? 5)
+    : (dish.taste_score ?? 5);
+  const baseTaste = clamp(isFiniteNumber(tasteScoreValue) ? tasteScoreValue : 5, 0, 10);
   const baseSatiety = dish.satiety_index ?? 5;
 
   const baseTimeNormal = calculateDishTime(dish, false);
@@ -1013,8 +1015,9 @@ export function calculateFinalScore(dishAnalysis, priorities, datasetStats) {
  * - selectedZone (prices)
  * - overrides (taste/time/price)
  * - dishes / ingredients dataset
+ * - tasteScoreMethod (which taste score to use)
  */
-export function analyzeAllDishesVariants(dishes, ingredients, zoneId, allOverrides = {}) {
+export function analyzeAllDishesVariants(dishes, ingredients, zoneId, allOverrides = {}, tasteScoreMethod = 'taste_score') {
   const ingredientIndex = ingredients instanceof Map
     ? ingredients
     : buildIngredientIndex(ingredients);
@@ -1023,7 +1026,7 @@ export function analyzeAllDishesVariants(dishes, ingredients, zoneId, allOverrid
   const staticAnalyzed = dishes.map((dish) => {
     const dishId = dish.id;
     const overrides = allOverrides[dishId] || {};
-    return analyzeDishStatic(dish, zoneId, ingredientIndex, overrides);
+    return analyzeDishStatic(dish, zoneId, ingredientIndex, overrides, tasteScoreMethod);
   });
 
   // Pre-compute normalization for independent metrics (same across all variants)

@@ -7,6 +7,7 @@ const ingredientIndex = buildIngredientIndex(ingredientsData);
 let cached = {
   zoneId: null,
   overridesKey: null,
+  tasteScoreMethod: null,
   analysisVariants: null,
 };
 
@@ -18,9 +19,9 @@ function safeStringify(value) {
   }
 }
 
-function ensureAnalysis(zoneId, overrides) {
+function ensureAnalysis(zoneId, overrides, tasteScoreMethod = 'taste_score') {
   const overridesKey = safeStringify(overrides ?? {});
-  if (cached.analysisVariants && cached.zoneId === zoneId && cached.overridesKey === overridesKey) {
+  if (cached.analysisVariants && cached.zoneId === zoneId && cached.overridesKey === overridesKey && cached.tasteScoreMethod === tasteScoreMethod) {
     return cached.analysisVariants;
   }
 
@@ -28,10 +29,11 @@ function ensureAnalysis(zoneId, overrides) {
     dishesData,
     ingredientIndex,
     zoneId,
-    overrides ?? {}
+    overrides ?? {},
+    tasteScoreMethod
   );
 
-  cached = { zoneId, overridesKey, analysisVariants };
+  cached = { zoneId, overridesKey, tasteScoreMethod, analysisVariants };
   return analysisVariants;
 }
 
@@ -46,10 +48,11 @@ self.onmessage = (e) => {
     isOptimized,
     priceUnit,
     priorities,
+    tasteScoreMethod,
   } = msg.payload || {};
 
   try {
-    const analysisVariants = ensureAnalysis(selectedZone, overrides);
+    const analysisVariants = ensureAnalysis(selectedZone, overrides, tasteScoreMethod || 'taste_score');
     const key = `${isOptimized ? 'optimized' : 'normal'}:${priceUnit || 'serving'}`;
     const base = analysisVariants?.variants?.[key] || { analyzed: [], datasetStats: {} };
     const rankedDishes = scoreAndSortDishes(base.analyzed || [], base.datasetStats || {}, priorities || {});

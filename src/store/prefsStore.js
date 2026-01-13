@@ -21,6 +21,7 @@ const DEFAULT_PREFS = {
   priceUnit: 'per1000kcal',
   theme: 'dark',
   viewMode: 'grid', // 'list' or 'grid'
+  tasteScoreMethod: 'taste_score', // 'taste_score' or 'sentiment_score'
 };
 
 function readJsonSafe(key) {
@@ -55,6 +56,7 @@ function mergeDefaults(stored) {
   merged.isOptimized =
     typeof merged.isOptimized === 'boolean' ? merged.isOptimized : DEFAULT_PREFS.isOptimized;
   merged.viewMode = merged.viewMode === 'grid' ? 'grid' : 'list';
+  merged.tasteScoreMethod = merged.tasteScoreMethod === 'sentiment_score' ? 'sentiment_score' : DEFAULT_PREFS.tasteScoreMethod;
   return merged;
 }
 
