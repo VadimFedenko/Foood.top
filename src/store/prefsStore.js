@@ -22,6 +22,7 @@ const DEFAULT_PREFS = {
   theme: 'dark',
   viewMode: 'grid', // 'list' or 'grid'
   tasteScoreMethod: 'taste_score', // 'taste_score' or 'sentiment_score'
+  currentPresetId: 'best-food-ever', // Track the active preset
 };
 
 function readJsonSafe(key) {
@@ -267,6 +268,58 @@ export const prefsActions = {
   },
   flushPriorities: () => prefsStore.flushPriorities(),
   setOverrideForDish: (dishId, o) => prefsStore.setOverrideForDish(dishId, o),
+  
+  /**
+   * Apply a preset's settings to the current preferences.
+   * Only applies settings that are explicitly defined (not null/undefined).
+   * Negative priority values indicate "niche" mode.
+   */
+  applyPreset: (preset) => {
+    if (!preset || !preset.settings) return;
+    
+    const settings = preset.settings;
+    const patch = {};
+    
+    // Apply priorities if defined
+    if (settings.priorities && typeof settings.priorities === 'object') {
+      const currentPriorities = prefsStore.getState().prefs.priorities || DEFAULT_PRIORITIES;
+      const newPriorities = { ...currentPriorities };
+      
+      Object.entries(settings.priorities).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+          newPriorities[key] = value;
+        }
+      });
+      
+      patch.priorities = newPriorities;
+    }
+    
+    // Apply other settings if defined
+    if (settings.selectedZone !== null && settings.selectedZone !== undefined) {
+      patch.selectedZone = settings.selectedZone;
+    }
+    if (settings.isOptimized !== null && settings.isOptimized !== undefined) {
+      patch.isOptimized = settings.isOptimized;
+    }
+    if (settings.priceUnit !== null && settings.priceUnit !== undefined) {
+      patch.priceUnit = settings.priceUnit;
+    }
+    if (settings.tasteScoreMethod !== null && settings.tasteScoreMethod !== undefined) {
+      patch.tasteScoreMethod = settings.tasteScoreMethod;
+    }
+    
+    // Track the current preset ID
+    patch.currentPresetId = preset.id;
+    
+    // Apply all changes at once
+    prefsStore.setPref(patch);
+    
+    // Update UI priorities and flush for immediate ranking update
+    if (patch.priorities) {
+      prefsStore.setUiPriorities(patch.priorities);
+      prefsStore.flushPriorities();
+    }
+  },
 };
 
 export function usePrefs(selector) {

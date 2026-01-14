@@ -19,11 +19,14 @@ import {
 /**
  * Compact metric display for tile overlay
  */
-function TileMetric({ icon: Icon, value, format }) {
+function TileMetric({ icon: Icon, value, format, isOverridden = false }) {
+  const iconColor = isOverridden ? 'text-amber-400' : 'text-white/50';
+  const textColor = isOverridden ? 'text-amber-300' : 'text-white/60';
+  
   return (
     <div className="flex items-center gap-1 text-[10px]">
-      <Icon size={10} className="text-white/50" />
-      <span className="font-mono text-white/60 leading-none">
+      <Icon size={10} className={iconColor} />
+      <span className={`font-mono ${textColor} leading-none`}>
         {format(value)}
       </span>
     </div>
@@ -109,6 +112,18 @@ export default function DishTile({
     };
   }, [dish, priceUnit]);
 
+  // Check if any priority is set (non-zero)
+  const hasActivePriorities = useMemo(() => {
+    return (
+      (priorities.taste !== undefined && priorities.taste !== 0) ||
+      (priorities.health !== undefined && priorities.health !== 0) ||
+      (priorities.cheapness !== undefined && priorities.cheapness !== 0) ||
+      (priorities.speed !== undefined && priorities.speed !== 0) ||
+      (priorities.lowCalorie !== undefined && priorities.lowCalorie !== 0) ||
+      (priorities.ethics !== undefined && priorities.ethics !== 0)
+    );
+  }, [priorities]);
+
   const metrics = useMemo(() => {
     // Filter metrics based on active priorities (only show if priority !== 0)
     const next = [];
@@ -119,6 +134,7 @@ export default function DishTile({
         icon: Utensils,
         value: values.taste,
         format: (v) => v.toFixed(1),
+        isOverridden: !!dish?.hasOverrides?.taste,
       });
     }
 
@@ -127,6 +143,7 @@ export default function DishTile({
         icon: Heart,
         value: values.health,
         format: (v) => v.toFixed(1),
+        isOverridden: !!dish?.hasOverrides?.health,
       });
     }
 
@@ -135,6 +152,7 @@ export default function DishTile({
         icon: DollarSign,
         value: values.price,
         format: (v) => v.toFixed(2),
+        isOverridden: !!dish?.hasOverrides?.price,
       });
     }
 
@@ -143,6 +161,7 @@ export default function DishTile({
         icon: Clock,
         value: values.time,
         format: (v) => formatTime(Math.round(v)),
+        isOverridden: !!dish?.hasOverrides?.time,
       });
     }
 
@@ -151,6 +170,7 @@ export default function DishTile({
         icon: Flame,
         value: values.calPerG,
         format: (v) => `${Math.round(v)}c/g`,
+        isOverridden: !!dish?.hasOverrides?.calories,
       });
     }
 
@@ -159,11 +179,12 @@ export default function DishTile({
         icon: Leaf,
         value: values.ethics,
         format: (v) => v.toFixed(1),
+        isOverridden: !!dish?.hasOverrides?.ethics,
       });
     }
 
     return next;
-  }, [values, priorities]);
+  }, [values, priorities, dish]);
   
 
   return (
@@ -189,21 +210,23 @@ export default function DishTile({
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" 
                style={{ backgroundImage: 'linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.15) 30%, transparent 60%)' }} />
           
-          {/* Score badge - top left */}
-          <div className="absolute top-2 left-2 z-10">
-            <div
-              className={`
-                px-2.5 py-2 rounded-xl
-                flex items-center justify-center
-                ${scoreColors.bg} ${scoreColors.glow}
-                backdrop-blur-sm border border-white/20
-              `}
-            >
-              <span className="text-xs font-display font-bold text-white leading-none">
-                {dish.score}
-              </span>
+          {/* Score badge - top left - only show if priorities are set */}
+          {hasActivePriorities && (
+            <div className="absolute top-2 left-2 z-10">
+              <div
+                className={`
+                  px-2.5 py-2 rounded-xl
+                  flex items-center justify-center
+                  ${scoreColors.bg} ${scoreColors.glow}
+                  backdrop-blur-sm border border-white/20
+                `}
+              >
+                <span className="text-xs font-display font-bold text-white leading-none">
+                  {dish.score}
+                </span>
+              </div>
             </div>
-          </div>
+          )}
           
           {/* Rank badge - top right */}
           <RankBadge rank={rank} />
@@ -219,6 +242,7 @@ export default function DishTile({
                     icon={metric.icon}
                     value={metric.value}
                     format={metric.format}
+                    isOverridden={metric.isOverridden}
                   />
                 ))}
               </div>

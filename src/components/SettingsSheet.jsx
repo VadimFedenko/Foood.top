@@ -4,6 +4,7 @@ import { X } from 'lucide-react';
 import { usePrefs, prefsActions } from '../store/prefsStore';
 import { ECONOMIC_ZONES } from '../lib/RankingEngine';
 import ZoneIcon from './ZoneIcon';
+import { useIsMobile } from '../lib/useIsMobile';
 
 function CookingModeOption({ value, isSelected, title, description, onSelect }) {
   return (
@@ -84,16 +85,17 @@ export default function SettingsSheet({ open, onClose }) {
   const selectedZone = usePrefs((s) => s.prefs.selectedZone);
   const tasteScoreMethod = usePrefs((s) => s.prefs.tasteScoreMethod);
   const closeBtnRef = useRef(null);
+  const isMobile = useIsMobile();
 
   // Lock background scroll while sheet is open (mobile UX).
   useEffect(() => {
-    if (!open) return;
+    if (!open || !isMobile) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = prev;
     };
-  }, [open]);
+  }, [open, isMobile]);
 
   // ESC to close.
   useEffect(() => {
@@ -140,31 +142,36 @@ export default function SettingsSheet({ open, onClose }) {
             aria-hidden="true"
           />
 
-          {/* Bottom sheet */}
+          {/* Settings panel - mobile: bottom sheet, desktop: centered modal */}
           <motion.div
             role="dialog"
             aria-modal="true"
             aria-label="Settings"
             className={`
-              absolute bottom-0 left-0 right-0
+              ${isMobile 
+                ? 'absolute bottom-0 left-0 right-0 rounded-t-2xl border-t border-surface-300/60 dark:border-surface-700/60'
+                : 'absolute top-1/2 left-1/2 w-full max-w-lg rounded-2xl border border-surface-300/60 dark:border-surface-700/60'
+              }
               bg-white dark:bg-surface-900
-              border-t border-surface-300/60 dark:border-surface-700/60
-              rounded-t-2xl shadow-2xl
-              max-h-[85vh] overflow-hidden
+              shadow-2xl
+              ${isMobile ? 'max-h-[85vh]' : 'max-h-[90vh]'}
+              overflow-hidden
             `}
-            initial={{ y: 24, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 24, opacity: 0 }}
+            initial={isMobile ? { y: 24, opacity: 0 } : { scale: 0.95, opacity: 0, x: '-50%', y: '-50%' }}
+            animate={isMobile ? { y: 0, opacity: 1 } : { scale: 1, opacity: 1, x: '-50%', y: '-50%' }}
+            exit={isMobile ? { y: 24, opacity: 0 } : { scale: 0.95, opacity: 0, x: '-50%', y: '-50%' }}
             transition={{ type: 'spring', stiffness: 420, damping: 40 }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Drag handle */}
-            <div className="pt-2 flex justify-center">
-              <div className="w-10 h-1 rounded-full bg-surface-300/70 dark:bg-surface-700/70" />
-            </div>
+            {/* Drag handle - only on mobile */}
+            {isMobile && (
+              <div className="pt-2 flex justify-center">
+                <div className="w-10 h-1 rounded-full bg-surface-300/70 dark:bg-surface-700/70" />
+              </div>
+            )}
 
             {/* Header */}
-            <div className="px-4 pt-3 pb-2 flex items-center justify-between">
+            <div className={`px-4 ${isMobile ? 'pt-3 pb-2' : 'pt-4 pb-3'} flex items-center justify-between`}>
               <div className="min-w-0">
                 <div className="text-base font-bold text-surface-900 dark:text-surface-100">
                   Settings
@@ -174,7 +181,7 @@ export default function SettingsSheet({ open, onClose }) {
                 ref={closeBtnRef}
                 type="button"
                 onClick={onClose}
-                className="w-10 h-10 rounded-xl flex items-center justify-center bg-surface-100/80 dark:bg-surface-800/80 border border-surface-300/50 dark:border-surface-700/50"
+                className="w-10 h-10 rounded-xl flex items-center justify-center bg-surface-100/80 dark:bg-surface-800/80 border border-surface-300/50 dark:border-surface-700/50 hover:bg-surface-200/80 dark:hover:bg-surface-700/80 transition-colors"
                 aria-label="Close settings"
               >
                 <X size={18} />
@@ -183,14 +190,14 @@ export default function SettingsSheet({ open, onClose }) {
 
             {/* Content */}
             <div
-              className="px-4 pb-4 overflow-y-auto custom-scrollbar"
-              style={{ paddingBottom: 'calc(16px + var(--safe-area-inset-bottom))' }}
+              className={`px-4 ${isMobile ? 'pb-4' : 'pb-6'} overflow-y-auto custom-scrollbar`}
+              style={isMobile ? { paddingBottom: 'calc(16px + var(--safe-area-inset-bottom))' } : {}}
             >
               <div className="mt-3 space-y-6">
                 {/* Cooking time mode */}
                 <div>
                   <div className="text-sm font-semibold text-surface-900 dark:text-surface-100 mb-2">
-                    Cooking time mode
+                    Speed Score Based on
                   </div>
                   <div role="radiogroup" aria-label="Cooking time mode" className="space-y-2">
                     <CookingModeOption
@@ -213,21 +220,21 @@ export default function SettingsSheet({ open, onClose }) {
                 {/* Taste score method */}
                 <div>
                   <div className="text-sm font-semibold text-surface-900 dark:text-surface-100 mb-2">
-                    Taste Score as
+                    Taste Score Based on:
                   </div>
                   <div role="radiogroup" aria-label="Taste score method" className="space-y-2">
                     <CookingModeOption
                       value="taste_score"
                       isSelected={tasteScoreMethod === 'taste_score'}
-                      title="AI Polarization Analysis"
-                      description="Uses taste_score as the taste parameter."
+                      title="AI Analysis"
+                      description="Opinion polarization analysis. Each dish was evaluated by the level of opinion polarization within consuming countries (to avoid 'Western bias') using Gemini 3 Flash Thinking with context from previous evaluations."
                       onSelect={setTasteScoreMethod}
                     />
                     <CookingModeOption
                       value="sentiment_score"
                       isSelected={tasteScoreMethod === 'sentiment_score'}
-                      title="Amazon/Yelp Sentiment Analysis"
-                      description="Uses sentiment_score as the taste parameter."
+                      title="Sentiment Analysis"
+                      description="Opinion polarization for each dish based on sentiment analysis from Yelp and Amazon Food Reviews databases."
                       onSelect={setTasteScoreMethod}
                     />
                   </div>
@@ -236,7 +243,7 @@ export default function SettingsSheet({ open, onClose }) {
                 {/* Economic zone */}
                 <div>
                   <div className="text-sm font-semibold text-surface-900 dark:text-surface-100 mb-2">
-                    Economic zone
+                    Price Score Based on
                   </div>
                   <div className="text-xs text-surface-500 dark:text-surface-400 mb-3 leading-snug">
                     Select an economic zone. This is used to calculate the local cost of preparing the dish in the selected region.

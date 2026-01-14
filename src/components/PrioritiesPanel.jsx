@@ -9,6 +9,7 @@ import { usePrioritiesPanelAutoToggle } from '../hooks/usePrioritiesPanelAutoTog
 import { usePrefs, prefsActions } from '../store/prefsStore';
 import ZoneDropdown from './ZoneDropdown';
 import ZoneIcon from './ZoneIcon';
+import { useIsMobile } from '../lib/useIsMobile';
 
 /**
  * Calculate percentage contribution of each priority
@@ -66,17 +67,13 @@ function CompactZoneIcon({ zoneId }) {
 function CompactIconsRow({ activePriorities, displayed, selectedZone, className = '' }) {
   return (
     <div className={`flex items-center gap-0.5 min-[340px]:gap-0.5 min-[480px]:gap-1 overflow-x-auto overflow-y-visible hide-scrollbar pt-2 ${className}`}>
-      {activePriorities.length > 0 ? (
-        activePriorities.map(config => (
-          <CompactPriorityIcon
-            key={config.key}
-            config={config}
-            value={displayed[config.key]}
-          />
-        ))
-      ) : (
-        <span className="text-xs text-surface-400 italic">No priorities set</span>
-      )}
+      {activePriorities.length > 0 && activePriorities.map(config => (
+        <CompactPriorityIcon
+          key={config.key}
+          config={config}
+          value={displayed[config.key]}
+        />
+      ))}
       {selectedZone && <CompactZoneIcon zoneId={selectedZone} />}
     </div>
   );
@@ -88,12 +85,14 @@ function CompactIconsRow({ activePriorities, displayed, selectedZone, className 
  */
 export default function PrioritiesPanel({ 
   onExpandedChange,
+  onDraggingChange,
   scrollableElement = null,
 }) {
   const displayed = usePrefs((s) => s.uiPriorities);
   const selectedZone = usePrefs((s) => s.prefs.selectedZone);
   const isDark = usePrefs((s) => s.prefs.theme) !== 'light';
   const viewMode = usePrefs((s) => s.prefs.viewMode);
+  const isMobile = useIsMobile();
 
   const prefersReducedMotion = useReducedMotion();
   const [isExpanded, setIsExpanded] = useState(true);
@@ -109,6 +108,7 @@ export default function PrioritiesPanel({
     
     const handlePointerUp = () => {
       setIsDragging(false);
+      onDraggingChange?.(false);
       prefsActions.flushPriorities();
     };
     
@@ -155,7 +155,10 @@ export default function PrioritiesPanel({
 
   // Handlers
   const handleDragStart = () => {
-    if (!isDragging) setIsDragging(true);
+    if (!isDragging) {
+      setIsDragging(true);
+      onDraggingChange?.(true);
+    }
   };
 
   const handleSliderChange = (key, value) => {
@@ -176,6 +179,7 @@ export default function PrioritiesPanel({
       PRIORITY_CONFIG.map(config => [config.key, 0])
     );
     setIsDragging(false);
+    onDraggingChange?.(false);
     prefsActions.setUiPriorities(resetPriorities);
     prefsActions.flushPriorities();
   };
@@ -231,8 +235,8 @@ export default function PrioritiesPanel({
   return (
     <div className="bg-white dark:bg-surface-800 border-b border-surface-300/50 dark:border-surface-700/50">
       {/* Header - always visible */}
-      <div className="px-4 py-2 relative overflow-visible">
-        {isExpanded ? (
+      {isExpanded ? (
+        <div className="px-4 py-2 relative overflow-visible">
           <div className="grid grid-cols-1 sm:grid-cols-[1fr_260px] gap-4 items-center">
             {/* Left header: priorities */}
             <div className="flex items-center justify-between gap-2 pr-10 sm:pr-0">
@@ -259,7 +263,25 @@ export default function PrioritiesPanel({
               </h2>
             </div>
           </div>
-        ) : (
+
+          {/* Persistent toggle arrow: absolute for expanded state */}
+          <button
+            onClick={handleToggleExpanded}
+            className="absolute right-2 top-2 p-2 rounded-lg hover:bg-surface-200/50 dark:hover:bg-surface-700/50 transition-colors z-10"
+            aria-label="Collapse panels"
+          >
+            <ChevronDown
+              size={20}
+              className="text-surface-500 dark:text-surface-300 transition-transform duration-300 rotate-180"
+            />
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={handleExpand}
+          className="w-full px-4 py-2 relative overflow-visible text-left hover:bg-surface-100/50 dark:hover:bg-surface-700/30 transition-colors cursor-pointer"
+          aria-label="Expand panels"
+        >
           <div className="pr-0 min-[480px]:pr-12">
             {/* Mobile layout: title and arrow in one row, icons below */}
             <div className="min-[480px]:hidden">
@@ -267,34 +289,24 @@ export default function PrioritiesPanel({
                 <h2 className="font-display font-semibold text-sm text-surface-800 dark:text-surface-100 whitespace-nowrap">
                   My Priorities
                 </h2>
-                <button
-                  onClick={handleExpand}
-                  className="p-1.5 rounded-lg hover:bg-surface-200/50 dark:hover:bg-surface-700/50 transition-colors flex-shrink-0"
-                  aria-label="Expand panels"
-                >
+                <div className="p-1.5 rounded-lg flex-shrink-0 pointer-events-none">
                   <ChevronDown
                     size={18}
                     className="text-surface-500 dark:text-surface-300 transition-transform duration-300"
                   />
-                </button>
+                </div>
               </div>
-              <button
-                onClick={handleExpand}
-                className="w-full hover:opacity-80 transition-opacity"
-              >
+              <div className="w-full">
                 <CompactIconsRow
                   activePriorities={activePriorities}
                   displayed={displayed}
                   selectedZone={selectedZone}
                   className="flex"
                 />
-              </button>
+              </div>
             </div>
             {/* Desktop layout: title and icons in one row */}
-            <button
-              onClick={handleExpand}
-              className="hidden min-[480px]:flex items-baseline gap-3 hover:opacity-80 transition-opacity"
-            >
+            <div className="hidden min-[480px]:flex items-baseline gap-3">
               <h2 className="font-display font-semibold text-lg text-surface-800 dark:text-surface-100 whitespace-nowrap">
                 My Priorities
               </h2>
@@ -304,38 +316,29 @@ export default function PrioritiesPanel({
                 selectedZone={selectedZone}
                 className="flex"
               />
-            </button>
+            </div>
           </div>
-        )}
 
-        {/* Persistent toggle arrow: absolute for expanded state and >= 480px collapsed state */}
-        <button
-          onClick={isExpanded ? handleToggleExpanded : handleExpand}
-          className={`absolute right-2 p-2 rounded-lg hover:bg-surface-200/50 dark:hover:bg-surface-700/50 transition-colors z-10 ${
-            isExpanded 
-              ? 'top-2' 
-              : 'hidden min-[480px]:block top-1/2 min-[480px]:-translate-y-1/2'
-          }`}
-          aria-label={isExpanded ? 'Collapse panels' : 'Expand panels'}
-        >
-          <ChevronDown
-            size={20}
-            className={`text-surface-500 dark:text-surface-300 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
-          />
+          {/* Persistent toggle arrow: absolute for >= 480px collapsed state */}
+          <div className="hidden min-[480px]:block absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg pointer-events-none z-10">
+            <ChevronDown
+              size={20}
+              className="text-surface-500 dark:text-surface-300 transition-transform duration-300"
+            />
+          </div>
         </button>
-      </div>
+      )}
 
       {/* Main content - height animation (0 <-> auto) */}
       <motion.div
         className="overflow-hidden"
         initial={false}
-        animate={isExpanded ? { height: contentHeight, opacity: 1 } : { height: 0, opacity: 0 }}
+        animate={isExpanded ? { height: contentHeight } : { height: 0 }}
         transition={{
           height: prefersReducedMotion ? { duration: 0 } : { duration: 0.35, ease: [0.25, 0.1, 0.25, 1] },
-          opacity: prefersReducedMotion ? { duration: 0 } : { duration: 0.25, ease: [0.4, 0, 0.2, 1] },
         }}
         style={{
-          willChange: 'height, opacity',
+          willChange: 'height',
           pointerEvents: isExpanded ? 'auto' : 'none',
         }}
         aria-hidden={!isExpanded}

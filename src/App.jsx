@@ -4,7 +4,7 @@ import Header from './components/Header';
 import PrioritiesPanel from './components/PrioritiesPanel';
 import DishList from './components/DishList';
 import DishGrid from './components/DishGrid';
-import { usePrefs, prefsActions } from './store/prefsStore';
+import { usePrefs } from './store/prefsStore';
 
 /**
  * Main Application Component
@@ -29,9 +29,6 @@ export default function App() {
   // Explicit scroll container element for the priorities auto-toggle logic.
   // This avoids PrioritiesPanel needing DOM querySelector/MutationObserver.
   const [scrollableElement, setScrollableElement] = useState(null);
-  
-  // Shady feature: Worst Food Ever mode
-  const [isWorstMode, setIsWorstMode] = useState(false);
 
   // Ranking data computed in a worker to keep first paint + interactions snappy.
   const workerRef = useRef(null);
@@ -41,6 +38,8 @@ export default function App() {
   const [rankingStatus, setRankingStatus] = useState('loading'); // 'loading' | 'ready' | 'error'
   const [rankingError, setRankingError] = useState(null);
   const lastPayloadRef = useRef(null);
+  const pendingRankingUpdateRef = useRef(null); // { type:'result'|'error', seq, rankedDishes, rankingMeta, message }
+  const isUserDraggingRef = useRef(false);
   
 
   // Apply theme class to document
@@ -64,6 +63,16 @@ export default function App() {
       if (msg.seq !== seqRef.current) return;
 
       if (msg.type === 'result') {
+        if (isUserDraggingRef.current) {
+          pendingRankingUpdateRef.current = {
+            type: 'result',
+            seq: msg.seq,
+            rankedDishes: Array.isArray(msg.rankedDishes) ? msg.rankedDishes : [],
+            rankingMeta: msg.rankingMeta || null,
+            message: null,
+          };
+          return;
+        }
         setRankedDishes(Array.isArray(msg.rankedDishes) ? msg.rankedDishes : []);
         setRankingMeta(msg.rankingMeta || null);
         setRankingStatus('ready');
@@ -71,6 +80,16 @@ export default function App() {
       }
 
       if (msg.type === 'error') {
+        if (isUserDraggingRef.current) {
+          pendingRankingUpdateRef.current = {
+            type: 'error',
+            seq: msg.seq,
+            rankedDishes: null,
+            rankingMeta: null,
+            message: msg.message || 'Ranking worker error',
+          };
+          return;
+        }
         setRankingStatus('error');
         setRankingError(msg.message || 'Ranking worker error');
       }
@@ -89,13 +108,37 @@ export default function App() {
     };
   }, []);
 
+  const handleDraggingChange = (dragging) => {
+    isUserDraggingRef.current = !!dragging;
+    if (dragging) return;
+    const pending = pendingRankingUpdateRef.current;
+    if (!pending) return;
+    if (pending.seq !== seqRef.current) {
+      pendingRankingUpdateRef.current = null;
+      return;
+    }
+    pendingRankingUpdateRef.current = null;
+    if (pending.type === 'result') {
+      setRankedDishes(pending.rankedDishes || []);
+      setRankingMeta(pending.rankingMeta || null);
+      setRankingStatus('ready');
+      setRankingError(null);
+    } else {
+      setRankingStatus('error');
+      setRankingError(pending.message || 'Ranking worker error');
+    }
+  };
+
   // Recompute ranking whenever inputs change (computation itself runs off-main-thread).
   useEffect(() => {
     const w = workerRef.current;
     if (!w) return;
 
-    setRankingStatus('loading');
-    setRankingError(null);
+    // While user is dragging on mobile, avoid UI "loading" flicker + list churn.
+    if (!isUserDraggingRef.current) {
+      setRankingStatus('loading');
+      setRankingError(null);
+    }
 
     const payload = {
       selectedZone,
@@ -130,26 +173,6 @@ export default function App() {
   };
 
 
-  // Shady feature: Toggle Worst Food Ever mode and set fixed priority values
-  const handleWorstModeToggle = () => {
-    setIsWorstMode(prev => {
-      const newMode = !prev;
-      
-      // Invert the sign of active priorities and flush so ranking updates immediately.
-      prefsActions.updateUiPriorities((current) => {
-        const updated = {};
-        Object.keys(current || {}).forEach((key) => {
-          const value = current[key];
-          const absValue = Math.abs(value);
-          updated[key] = value === 0 ? 0 : (newMode ? -absValue : absValue);
-        });
-        return updated;
-      });
-      prefsActions.flushPriorities();
-      
-      return newMode;
-    });
-  };
 
   return (
     <div className="min-h-screen bg-surface-100 dark:bg-surface-900 pattern-grid transition-colors duration-300">
@@ -160,21 +183,16 @@ export default function App() {
                       bg-white dark:bg-surface-900 lg:bg-white/50 lg:dark:bg-transparent transition-colors duration-300">
         {/* Sticky Header - highest z-index for dropdowns */}
         <div className="sticky top-0 z-50">
-          <Header
-            isWorstMode={isWorstMode}
-            onWorstModeToggle={handleWorstModeToggle}
-            isPrioritiesExpanded={isPrioritiesExpanded}
-          />
+          <Header />
         </div>
 
         {/* Sticky Priorities Panel - lower z-index, will stick below header when scrolling */}
         <div
-          className={`sticky z-40 ${
-            !isPrioritiesExpanded ? 'top-0 min-[480px]:top-[73px]' : 'top-[73px]'
-          }`}
+          className="sticky z-40 top-[73px]"
         >
           <PrioritiesPanel
             onExpandedChange={setIsPrioritiesExpanded}
+            onDraggingChange={handleDraggingChange}
             scrollableElement={scrollableElement}
           />
         </div>

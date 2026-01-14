@@ -22,6 +22,10 @@ function isFiniteNumber(n) {
   return Number.isFinite(n);
 }
 
+function round1(n) {
+  return Math.round(n * 10) / 10;
+}
+
 function safeMulFromAbs({ abs, base }) {
   if (!isFiniteNumber(abs)) return null;
   if (!isFiniteNumber(base) || base === 0) return abs === 0 ? 0 : 1;
@@ -312,15 +316,15 @@ export default function EditableScoreBreakdown({
 
     if (draftScores.taste != null && changed('taste')) {
       const mul = safeMulFromAbs({ abs: clamp(draftScores.taste, 0, 10), base: baseTaste });
-      if (mul != null) patch.tasteMul = Math.max(0, mul);
+      if (mul != null) patch.tasteMul = round1(Math.max(0, mul));
     }
     if (draftScores.health != null && changed('health')) {
       const mul = safeMulFromAbs({ abs: clamp(draftScores.health, 0, 10), base: baseHealth });
-      if (mul != null) patch.healthMul = Math.max(0, mul);
+      if (mul != null) patch.healthMul = round1(Math.max(0, mul));
     }
     if (draftScores.ethics != null && changed('ethics')) {
       const mul = safeMulFromAbs({ abs: clamp(draftScores.ethics, 0, 10), base: baseEthics });
-      if (mul != null) patch.ethicsMul = Math.max(0, mul);
+      if (mul != null) patch.ethicsMul = round1(Math.max(0, mul));
     }
 
     if (draftScores.speed != null && changed('speed')) {
@@ -329,19 +333,19 @@ export default function EditableScoreBreakdown({
       const timeTarget = valueForScoreFromSorted(dists.speedValuesSorted, dists.speedHigherIsBetter, desiredBase);
       if (timeTarget != null) {
         const mul = safeMulFromAbs({ abs: Math.max(1, timeTarget), base: baseTime });
-        if (mul != null) patch.timeMul = Math.max(0, mul);
+        if (mul != null) patch.timeMul = round1(Math.max(0, mul));
       }
     }
 
     if (draftScores.lowCalorie != null && changed('lowCalorie')) {
-      if (caloriesMul != null) patch.caloriesMul = Math.max(0, caloriesMul);
+      if (caloriesMul != null) patch.caloriesMul = round1(Math.max(0, caloriesMul));
     }
 
     if (draftScores.satiety != null && changed('satiety')) {
       const satietyTarget = valueForScoreFromSorted(dists.satietyValuesSorted, dists.satietyHigherIsBetter, clamp(draftScores.satiety, 0, 10));
       if (satietyTarget != null) {
         const mul = safeMulFromAbs({ abs: Math.max(0, satietyTarget), base: baseSatiety });
-        if (mul != null) patch.satietyMul = Math.max(0, mul);
+        if (mul != null) patch.satietyMul = round1(Math.max(0, mul));
       }
     }
 
@@ -350,7 +354,7 @@ export default function EditableScoreBreakdown({
       if (desiredCostInUnit != null) {
         const serving = inverseConvertPriceToUnit(desiredCostInUnit, weight, predictedCalories, priceUnit);
         const mul = safeMulFromAbs({ abs: Math.max(0.01, serving), base: basePriceServing });
-        if (mul != null) patch.priceMul = Math.max(0, mul);
+        if (mul != null) patch.priceMul = round1(Math.max(0, mul));
       }
     }
 

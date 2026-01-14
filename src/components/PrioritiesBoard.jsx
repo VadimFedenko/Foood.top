@@ -21,12 +21,12 @@ const PRIORITY_CONFIG = [
     negativeLabel: 'Niche',
     positiveIcon: Utensils, 
     negativeIcon: Cookie,
-    color: 'from-orange-300 to-orange-500',
-    colorDark: 'from-orange-500 to-orange-400',
-    negativeColor: 'from-rose-300 to-rose-500',
-    negativeColorDark: 'from-rose-500 to-rose-400',
-    iconColor: 'text-orange-400',
-    negativeIconColor: 'text-rose-400',
+    color: 'from-amber-400 via-orange-500 to-orange-600',
+    colorDark: 'from-amber-500 via-orange-500 to-orange-600',
+    negativeColor: 'from-rose-400 via-rose-500 to-rose-600',
+    negativeColorDark: 'from-rose-500 via-rose-500 to-rose-600',
+    iconColor: 'text-amber-500',
+    negativeIconColor: 'text-rose-500',
     description: 'Flavor & enjoyment'
   },
   { 
@@ -35,12 +35,12 @@ const PRIORITY_CONFIG = [
     negativeLabel: 'Junky',
     positiveIcon: Heart, 
     negativeIcon: Skull,
-    color: 'from-red-300 to-red-500',
-    colorDark: 'from-red-500 to-red-400',
-    negativeColor: 'from-purple-300 to-purple-500',
-    negativeColorDark: 'from-purple-500 to-purple-400',
-    iconColor: 'text-red-400',
-    negativeIconColor: 'text-purple-400',
+    color: 'from-rose-400 via-red-500 to-red-600',
+    colorDark: 'from-rose-500 via-red-500 to-red-600',
+    negativeColor: 'from-purple-400 via-purple-500 to-purple-600',
+    negativeColorDark: 'from-purple-500 via-purple-500 to-purple-600',
+    iconColor: 'text-rose-500',
+    negativeIconColor: 'text-purple-500',
     description: 'Nutritional value'
   },
   { 
@@ -49,26 +49,26 @@ const PRIORITY_CONFIG = [
     negativeLabel: 'Costly',
     positiveIcon: DollarSign, 
     negativeIcon: Banknote,
-    color: 'from-emerald-300 to-emerald-500',
-    colorDark: 'from-emerald-500 to-emerald-400',
-    negativeColor: 'from-amber-300 to-amber-500',
-    negativeColorDark: 'from-amber-500 to-amber-400',
-    iconColor: 'text-emerald-400',
-    negativeIconColor: 'text-amber-400',
+    color: 'from-emerald-400 via-emerald-500 to-emerald-600',
+    colorDark: 'from-emerald-500 via-emerald-500 to-emerald-600',
+    negativeColor: 'from-amber-400 via-amber-500 to-amber-600',
+    negativeColorDark: 'from-amber-500 via-amber-500 to-amber-600',
+    iconColor: 'text-emerald-500',
+    negativeIconColor: 'text-amber-500',
     description: 'Lower cost'
   },
   { 
     key: 'speed', 
-    positiveLabel: 'Speedy',
+    positiveLabel: 'Fast',
     negativeLabel: 'Timey',
     positiveIcon: Timer, 
     negativeIcon: Hourglass,
-    color: 'from-blue-300 to-blue-500',
-    colorDark: 'from-blue-500 to-blue-400',
-    negativeColor: 'from-indigo-300 to-indigo-500',
-    negativeColorDark: 'from-indigo-500 to-indigo-400',
-    iconColor: 'text-blue-400',
-    negativeIconColor: 'text-indigo-400',
+    color: 'from-blue-400 via-blue-500 to-blue-600',
+    colorDark: 'from-blue-500 via-blue-500 to-blue-600',
+    negativeColor: 'from-indigo-400 via-indigo-500 to-indigo-600',
+    negativeColorDark: 'from-indigo-500 via-indigo-500 to-indigo-600',
+    iconColor: 'text-blue-500',
+    negativeIconColor: 'text-indigo-500',
     description: 'Quick to make'
   },
   { 
@@ -77,12 +77,12 @@ const PRIORITY_CONFIG = [
     negativeLabel: 'High-Cal',
     positiveIcon: Flame, 
     negativeIcon: Zap,
-    color: 'from-purple-300 to-purple-500',
-    colorDark: 'from-purple-500 to-purple-400',
-    negativeColor: 'from-orange-300 to-red-500',
-    negativeColorDark: 'from-orange-500 to-red-400',
-    iconColor: 'text-purple-400',
-    negativeIconColor: 'text-orange-400',
+    color: 'from-violet-400 via-purple-500 to-purple-600',
+    colorDark: 'from-violet-500 via-purple-500 to-purple-600',
+    negativeColor: 'from-orange-400 via-orange-500 to-red-600',
+    negativeColorDark: 'from-orange-500 via-orange-500 to-red-600',
+    iconColor: 'text-violet-500',
+    negativeIconColor: 'text-orange-500',
     description: 'Lower kcal/100g'
   },
   { 
@@ -91,12 +91,12 @@ const PRIORITY_CONFIG = [
     negativeLabel: 'Unethical',
     positiveIcon: Leaf, 
     negativeIcon: AlertTriangle,
-    color: 'from-lime-300 to-green-500',
-    colorDark: 'from-lime-500 to-green-400',
-    negativeColor: 'from-red-300 to-red-600',
-    negativeColorDark: 'from-red-600 to-red-500',
-    iconColor: 'text-lime-400',
-    negativeIconColor: 'text-red-400',
+    color: 'from-lime-400 via-green-500 to-emerald-600',
+    colorDark: 'from-lime-500 via-green-500 to-emerald-600',
+    negativeColor: 'from-red-400 via-red-500 to-red-700',
+    negativeColorDark: 'from-red-500 via-red-500 to-red-700',
+    iconColor: 'text-lime-500',
+    negativeIconColor: 'text-red-500',
     description: 'Ethical sourcing'
   },
 ];
@@ -117,7 +117,7 @@ export default function PrioritiesBoard({
   isDark 
 }) {
   return (
-    <div className="flex-1 bg-white/60 dark:bg-surface-800/80 rounded-xl p-1.5 sm:p-2 border border-surface-300/50 dark:border-surface-700/50 shadow-sm dark:shadow-none flex flex-col">
+    <div className="flex-1 bg-white dark:bg-surface-800 rounded-xl p-1.5 sm:p-2 border border-surface-300/50 dark:border-surface-700/50 flex flex-col">
       {/* Sliders grid */}
       <div className="flex justify-around items-start gap-0 sm:gap-0 overflow-x-auto hide-scrollbar">
         {priorityConfig.map(config => (
@@ -136,8 +136,8 @@ export default function PrioritiesBoard({
       
       {/* Hint when all priorities are zero */}
       {allPrioritiesZero && (
-        <div className="mt-1.5 sm:mt-2 p-1.5 sm:p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
-          <p className="text-[10px] sm:text-[11px] text-amber-600 dark:text-amber-300/90 text-center">
+        <div className="mt-1.5 sm:mt-2 p-1.5 sm:p-2 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800">
+          <p className="text-[10px] sm:text-[11px] text-amber-700 dark:text-amber-300 text-center">
             💡 Adjust the sliders above to rank dishes by your preferences. 
             All dishes currently show a neutral score (50).
           </p>

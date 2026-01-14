@@ -25,6 +25,11 @@ function PrioritySlider({
   const [localValue, setLocalValue] = useState(absValue);
   const [isDragging, setIsDragging] = useState(false);
   const isDraggingRef = useRef(false);
+  const localValueRef = useRef(localValue);
+  const isReversedRef = useRef(isReversed);
+  const isMobileRef = useRef(isMobile);
+  const onChangeRef = useRef(onChange);
+  const committedRef = useRef(false);
   
   // Sync local value when prop changes (but not during drag)
   useEffect(() => {
@@ -32,6 +37,20 @@ function PrioritySlider({
       setLocalValue(absValue);
     }
   }, [absValue]);
+
+  // Keep refs in sync for stable debug + handlers
+  useEffect(() => {
+    localValueRef.current = localValue;
+  }, [localValue]);
+  useEffect(() => {
+    isReversedRef.current = isReversed;
+  }, [isReversed]);
+  useEffect(() => {
+    isMobileRef.current = isMobile;
+  }, [isMobile]);
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
   
   // Select icon and label based on reversed state
   const Icon = isReversed ? config.negativeIcon : config.positiveIcon;
@@ -52,16 +71,20 @@ function PrioritySlider({
   
   const fillHeight = displayValueRaw * 10;
   const thumbBottom = fillHeight;
+  // Mobile perf: avoid layout-driven `bottom:%` updates; track height is 100px on mobile (<640px).
+  const mobileThumbTranslateY = 8 - fillHeight; // px, aligns thumb center to the value position
 
-  const handlePointerDown = (e) => {
+  const handlePointerDown = () => {
     setIsDragging(true);
     isDraggingRef.current = true;
+    committedRef.current = false;
     onDragStart?.();
   };
   
   const handleChange = (e) => {
     const val = parseInt(e.target.value, 10);
     setLocalValue(val);
+    localValueRef.current = val;
     // On desktop: update store immediately for real-time sorting (lightweight, throttled)
     // On mobile: only update local state to avoid heavy sorting during drag
     if (!isMobile) {
@@ -74,10 +97,13 @@ function PrioritySlider({
     if (isDraggingRef.current) {
       // On mobile: commit final value to store only on release (triggers sorting)
       // On desktop: value already updated in handleChange, but commit here for consistency
-      const finalValue = isReversed ? -localValue : localValue;
-      if (isMobile) {
-        // On mobile, onChange was not called during drag, so commit now
-        onChange(finalValue);
+      const finalValue = isReversedRef.current ? -localValueRef.current : localValueRef.current;
+      if (!committedRef.current) {
+        committedRef.current = true;
+        if (isMobileRef.current) {
+          // On mobile, onChange was not called during drag, so commit now
+          onChangeRef.current?.(finalValue);
+        }
       }
       // On desktop, onChange was already called in handleChange, so this is just cleanup
       setIsDragging(false);
@@ -92,8 +118,11 @@ function PrioritySlider({
         if (isDraggingRef.current) {
           // On mobile: commit final value to store only on release (triggers sorting)
           // On desktop: ensure state is synced
-          const finalValue = isReversed ? -localValue : localValue;
-          onChange(finalValue);
+          const finalValue = isReversedRef.current ? -localValueRef.current : localValueRef.current;
+          if (!committedRef.current) {
+            committedRef.current = true;
+            onChangeRef.current?.(finalValue);
+          }
           setIsDragging(false);
           isDraggingRef.current = false;
         }
@@ -107,7 +136,7 @@ function PrioritySlider({
         window.removeEventListener('pointercancel', handleGlobalPointerUp);
       };
     }
-  }, [isDragging, localValue, isReversed, onChange]);
+  }, [isDragging]);
 
   return (
     <div className="flex flex-col items-center gap-1 sm:gap-1.5">
@@ -128,7 +157,7 @@ function PrioritySlider({
       {/* Slider track container - responsive height */}
       <div className="relative h-[100px] sm:h-[110px] md:h-[120px] w-10 flex items-center justify-center">
         {/* Track background with gradient */}
-        <div className="absolute inset-x-0 mx-auto w-2 h-full rounded-full bg-surface-300 dark:bg-surface-700 overflow-hidden">
+        <div className="absolute inset-x-0 mx-auto w-2.5 h-full rounded-full bg-surface-300 dark:bg-surface-700 overflow-hidden">
           {/* Active fill - grows from bottom */}
           {/* On desktop: use height for better gradient rendering */}
           {/* On mobile: use scaleY transform for GPU acceleration */}
@@ -144,12 +173,15 @@ function PrioritySlider({
             />
           ) : (
             <div
-              className={`absolute left-0 right-0 bottom-0 bg-gradient-to-t transition-all duration-150 ${
+              className={`absolute left-0 right-0 bottom-0 bg-gradient-to-t ${
+                isDragging ? 'transition-none' : 'transition-all duration-150'
+              } ${
                 displayValueRaw !== 0 ? gradientColor : 'from-surface-400 to-surface-500'
               }`}
               style={{
                 height: `${fillHeight}%`,
                 opacity: displayValueRaw !== 0 ? 1 : 0.3,
+                willChange: 'height',
               }}
             />
           )}
@@ -179,18 +211,22 @@ function PrioritySlider({
         {/* On mobile: use bottom position (still GPU-friendly) */}
         <div
           className={`
-            absolute left-1/2 -translate-x-1/2 w-8 h-4 rounded-md
+            absolute left-1/2 w-8 h-4 rounded-lg
             shadow-lg cursor-pointer pointer-events-none
-            border-2 transition-all duration-150
+            border-2 ${isDragging ? 'transition-colors duration-150' : 'transition-transform transition-colors duration-150'}
             ${displayValueRaw !== 0 
               ? `bg-gradient-to-b ${gradientColor} border-white/90` 
               : 'bg-surface-500 border-surface-400/50'
             }
           `}
           style={{
-            bottom: `${thumbBottom}%`,
-            marginBottom: '-8px',
+            bottom: isMobile ? 0 : `${thumbBottom}%`,
+            transform: isMobile
+              ? `translate(-50%, ${mobileThumbTranslateY}px)`
+              : `translateX(-50%)`,
+            marginBottom: isMobile ? 0 : '-8px',
             opacity: displayValueRaw !== 0 ? 1 : 0.6,
+            willChange: 'transform',
           }}
         >
           {/* Grip lines */}

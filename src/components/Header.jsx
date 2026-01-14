@@ -1,55 +1,68 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { UtensilsCrossed } from 'lucide-react';
 import SettingsButton from './SettingsButton';
 import SettingsSheet from './SettingsSheet';
 import ThemeToggle from './ThemeToggle';
 import ViewModeToggle from './ViewModeToggle';
+import PresetSelector from './PresetSelector';
 import { usePrefs, prefsActions } from '../store/prefsStore';
 
 /**
  * Main application header
- * Contains logo, settings, and theme toggle
+ * Contains logo, preset selector, settings, and theme toggle
  */
-export default function Header({ 
-  isWorstMode,
-  onWorstModeToggle,
-  isPrioritiesExpanded
-}) {
+export default function Header() {
   const isDark = usePrefs((s) => s.prefs.theme) !== 'light';
   const viewMode = usePrefs((s) => s.prefs.viewMode);
+  const currentPresetId = usePrefs((s) => s.prefs.currentPresetId);
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [presets, setPresets] = useState([]);
+  
+  // Load presets from JSON file
+  useEffect(() => {
+    fetch('/presets.json')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.presets && Array.isArray(data.presets)) {
+          setPresets(data.presets);
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to load presets:', err);
+      });
+  }, []);
   
   const handleViewModeToggle = () => {
     prefsActions.setPref({ viewMode: viewMode === 'list' ? 'grid' : 'list' });
   };
+  
+  const handlePresetSelect = (preset) => {
+    prefsActions.applyPreset(preset);
+  };
+  
+  // Find current preset object
+  const currentPreset = presets.find((p) => p.id === currentPresetId) || presets[0] || null;
 
   return (
     <header
       className={`
         bg-white dark:bg-surface-800 border-b border-surface-700/50 dark:border-surface-700/50
-        ${!isPrioritiesExpanded ? 'hidden min-[480px]:block' : ''}
+        ${''}
       `}
     >
       <div className="px-4 py-3 flex items-center justify-between">
-        {/* Logo */}
+        {/* Logo and Preset Selector */}
         <div className="flex items-center gap-3 min-w-0 flex-1">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-food-400 to-food-600 
-                          flex items-center justify-center shadow-lg glow-orange">
+                          flex items-center justify-center shadow-lg glow-orange max-[440px]:hidden">
             <UtensilsCrossed size={22} className="text-white" />
           </div>
-          <button
-            onClick={onWorstModeToggle}
-            className="text-left hover:opacity-80 transition-opacity cursor-pointer min-w-0 flex-1"
-            title={isWorstMode ? "Click to switch back to Best Food Ever" : "Click to switch to Worst Food Ever"}
-          >
-            <h1 className="font-display font-bold text-lg text-surface-900 dark:text-surface-100 truncate">
-              {isWorstMode ? 'Worst Food Ever' : 'Best Food Ever'}
-            </h1>
-            <p className="text-[10px] text-surface-500 dark:text-surface-400 uppercase tracking-wider truncate">
-              Personal Food Leaderboard
-            </p>
-          </button>
+          <PresetSelector
+            presets={presets}
+            currentPreset={currentPreset}
+            onSelectPreset={handlePresetSelect}
+          />
         </div>
 
         {/* Controls */}
@@ -67,6 +80,3 @@ export default function Header({
     </header>
   );
 }
-
-
-

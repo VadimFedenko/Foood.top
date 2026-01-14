@@ -17,6 +17,10 @@ export function usePrioritiesPanelAutoToggle({
   topThresholdPx = 2,
   wheelExpandAccumThreshold = 40,
   touchExpandPullThreshold = 24,
+  // When true, do NOT lock list scroll while expanded and avoid preventDefault().
+  // This is useful for mobile overlay patterns where the panel itself no longer
+  // animates height and we want to keep scrolling cheap.
+  disableScrollLock = false,
 }) {
   const stateRef = useRef({ isExpanded });
   const callbacksRef = useRef({ setExpanded });
@@ -63,18 +67,24 @@ export function usePrioritiesPanelAutoToggle({
       const prev = lastScrollTopRef.current;
       const delta = current - prev;
 
-      // If the panel is expanded, do not allow the list to scroll at all.
-      // This also covers cases like dragging the scrollbar thumb or keyboard scroll.
+      // If the panel is expanded:
+      // - Desktop/default: lock list scroll (panel controls consume the gesture)
+      // - Mobile overlay mode: allow scroll, but collapse on downward intent
       if (stateRef.current.isExpanded) {
-        const locked =
-          lockedScrollTopRef.current == null ? prev : lockedScrollTopRef.current;
-        if (current !== locked) {
-          el.scrollTop = locked;
+        if (!disableScrollLock) {
+          // Do not allow the list to scroll at all.
+          const locked =
+            lockedScrollTopRef.current == null ? prev : lockedScrollTopRef.current;
+          if (current !== locked) {
+            el.scrollTop = locked;
+          }
+          lastScrollTopRef.current = locked;
+          if (current > locked) collapse();
+          return;
         }
-        lastScrollTopRef.current = locked;
-        // Collapse only on a downward scroll attempt. Scrolling upward while expanded
-        // should not collapse the panel (otherwise it loops on "wheel up").
-        if (current > locked) collapse();
+        // In mobile mode, allow scroll; collapse only when user scrolls down.
+        lastScrollTopRef.current = current;
+        if (delta > 0) collapse();
         return;
       }
 
@@ -90,12 +100,16 @@ export function usePrioritiesPanelAutoToggle({
 
     const onWheel = (e) => {
       if (stateRef.current.isExpanded) {
-        // Consume wheel so the list doesn't move while expanded.
-        if (e.cancelable) e.preventDefault();
-        lockedScrollTopRef.current =
-          lockedScrollTopRef.current == null ? el.scrollTop : lockedScrollTopRef.current;
-        // Collapse only on downward intent (scrolling content down).
-        // If user wheels up (pulling content up), keep panel open to avoid open/close loop.
+        if (!disableScrollLock) {
+          // Consume wheel so the list doesn't move while expanded.
+          if (e.cancelable) e.preventDefault();
+          lockedScrollTopRef.current =
+            lockedScrollTopRef.current == null ? el.scrollTop : lockedScrollTopRef.current;
+          // Collapse only on downward intent (scrolling content down).
+          if (e.deltaY > 0) collapse();
+          return;
+        }
+        // Mobile: don't preventDefault, just collapse on downward intent.
         if (e.deltaY > 0) collapse();
         return;
       }
@@ -128,11 +142,13 @@ export function usePrioritiesPanelAutoToggle({
 
     const onTouchMove = (e) => {
       if (stateRef.current.isExpanded) {
-        // Consume the gesture so the list doesn't move while expanded.
-        if (e.cancelable) e.preventDefault();
-        lockedScrollTopRef.current =
-          lockedScrollTopRef.current == null ? el.scrollTop : lockedScrollTopRef.current;
-        touchStartYRef.current = null;
+        if (!disableScrollLock) {
+          // Consume the gesture so the list doesn't move while expanded.
+          if (e.cancelable) e.preventDefault();
+          lockedScrollTopRef.current =
+            lockedScrollTopRef.current == null ? el.scrollTop : lockedScrollTopRef.current;
+          touchStartYRef.current = null;
+        }
 
         // Collapse only on swipe-up (finger moving up -> content would scroll down).
         if (touchStartYExpandedRef.current == null) {
@@ -161,12 +177,11 @@ export function usePrioritiesPanelAutoToggle({
 
     lastScrollTopRef.current = el.scrollTop;
     el.addEventListener('scroll', onScroll, { passive: true });
-    // Must be non-passive so we can preventDefault and stop the list from moving
-    // while priorities panel is expanded.
-    el.addEventListener('wheel', onWheel, { passive: false });
+    // Must be non-passive only when we actively preventDefault (desktop mode).
+    el.addEventListener('wheel', onWheel, { passive: disableScrollLock });
     el.addEventListener('touchstart', onTouchStart, { passive: true });
-    // Must be non-passive so we can preventDefault when expanded.
-    el.addEventListener('touchmove', onTouchMove, { passive: false });
+    // Must be non-passive only when we actively preventDefault (desktop mode).
+    el.addEventListener('touchmove', onTouchMove, { passive: disableScrollLock });
     el.addEventListener('touchend', onTouchEnd, { passive: true });
     el.addEventListener('touchcancel', onTouchEnd, { passive: true });
 
@@ -184,6 +199,7 @@ export function usePrioritiesPanelAutoToggle({
     topThresholdPx,
     wheelExpandAccumThreshold,
     touchExpandPullThreshold,
+    disableScrollLock,
   ]);
 }
 
