@@ -109,7 +109,15 @@ export default defineConfig({
         manualChunks(id) {
           if (!id.includes('node_modules')) return;
           
-          if (id.includes('react-dom') || id.includes('react/') || id.includes('react\\')) {
+          // React and all React-related packages should be in the same chunk
+          if (
+            id.includes('react-dom') || 
+            id.includes('react/') || 
+            id.includes('react\\') ||
+            id.includes('react-i18next') ||
+            id.includes('i18next') ||
+            id.includes('use-sync-external-store')
+          ) {
             return 'vendor-react';
           }
           if (id.includes('framer-motion')) {
