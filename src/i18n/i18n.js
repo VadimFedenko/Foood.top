@@ -1,17 +1,8 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-import en from './locales/en.json';
-import ru from './locales/ru.json';
-import ua from './locales/ua.json';
-
-// Data translations (dishes and ingredients) - separate namespaces
-import dishesEn from './locales/data/dishes.en.json';
-import dishesRu from './locales/data/dishes.ru.json';
-import dishesUa from './locales/data/dishes.ua.json';
-import ingredientsEn from './locales/data/ingredients.en.json';
-import ingredientsRu from './locales/data/ingredients.ru.json';
-import ingredientsUa from './locales/data/ingredients.ua.json';
+// No static imports of locale JSON — we load only the current language at init
+// to avoid parsing ~850KB of JSON on the main thread before first paint.
 
 function detectBrowserLanguage() {
   if (typeof navigator === 'undefined') return null;
@@ -39,45 +30,85 @@ function readInitialLanguage() {
     const prefs = raw ? JSON.parse(raw) : null;
     const lng = prefs?.language;
     if (lng === 'ru' || lng === 'ua' || lng === 'en') {
-      // Явный выбор пользователя из настроек – используем его.
       return lng;
     }
   } catch {
-    // ignore and fall back to browser language / default
+    // ignore
   }
 
-  // Настройки ещё не сохранены – пробуем подобрать язык по браузеру.
   const detected = detectBrowserLanguage();
   if (detected) return detected;
 
-  // Фоллбек – английский.
   return null;
 }
 
-i18n.use(initReactI18next).init({
-  resources: {
-    en: { 
-      translation: en,
-      dishes: dishesEn,
-      ingredients: ingredientsEn,
+const supportedLngs = ['en', 'ru', 'ua'];
+
+/**
+ * Load translation + dishes + ingredients for one language (dynamic import).
+ * Used at init (current language only) and when switching language.
+ */
+export async function loadLanguageResources(lng) {
+  if (!supportedLngs.includes(lng)) {
+    lng = 'en';
+  }
+  const [translation, dishes, ingredients] = await Promise.all([
+    import(`./locales/${lng}.json`),
+    import(`./locales/data/dishes.${lng}.json`),
+    import(`./locales/data/ingredients.${lng}.json`),
+  ]);
+  return {
+    translation: translation.default,
+    dishes: dishes.default,
+    ingredients: ingredients.default,
+  };
+}
+
+/** Already-loaded languages (so we don't re-fetch when switching back). */
+const loadedLngs = new Set();
+
+/**
+ * Initialize i18n: load only the current language's resources, then init.
+ * Call this before rendering the app. Other languages load on demand when user switches.
+ */
+export async function initI18n() {
+  const lng = readInitialLanguage() || 'en';
+
+  const resources = await loadLanguageResources(lng);
+  loadedLngs.add(lng);
+
+  i18n.use(initReactI18next).init({
+    resources: {
+      [lng]: resources,
     },
-    ru: { 
-      translation: ru,
-      dishes: dishesRu,
-      ingredients: ingredientsRu,
-    },
-    ua: { 
-      translation: ua,
-      dishes: dishesUa,
-      ingredients: ingredientsUa,
-    },
-  },
-  lng: readInitialLanguage() || 'en',
-  fallbackLng: 'en',
-  defaultNS: 'translation',
-  interpolation: { escapeValue: false },
-});
+    lng,
+    fallbackLng: 'en',
+    defaultNS: 'translation',
+    interpolation: { escapeValue: false },
+  });
+
+  // Load English in background for fallback when current language is not en
+  if (lng !== 'en' && !loadedLngs.has('en')) {
+    loadLanguageResources('en').then((r) => {
+      loadedLngs.add('en');
+      i18n.addResourceBundle('en', 'translation', r.translation);
+      i18n.addResourceBundle('en', 'dishes', r.dishes);
+      i18n.addResourceBundle('en', 'ingredients', r.ingredients);
+    });
+  }
+
+  // When user switches language, load that language's resources if not yet loaded
+  i18n.on('languageChanged', (nextLng) => {
+    if (loadedLngs.has(nextLng)) return;
+    loadLanguageResources(nextLng).then((r) => {
+      loadedLngs.add(nextLng);
+      i18n.addResourceBundle(nextLng, 'translation', r.translation);
+      i18n.addResourceBundle(nextLng, 'dishes', r.dishes);
+      i18n.addResourceBundle(nextLng, 'ingredients', r.ingredients);
+    });
+  });
+
+  return i18n;
+}
 
 export default i18n;
-
-

@@ -481,6 +481,20 @@ export default function DishModal({
       setHeroHeightPx(heroCollapsedPx);
     }
   }, [isOpen, isMobile]);
+
+  // When entering edit mode, scroll the slide container to the bottom so the full form (sliders + buttons) is in view on small screens
+  useEffect(() => {
+    if (!isEditingScores) return;
+    const el = contentScrollRef.current;
+    if (!el) return;
+    const scrollToBottom = () => {
+      el.scrollTop = el.scrollHeight - el.clientHeight;
+    };
+    requestAnimationFrame(() => {
+      scrollToBottom();
+      requestAnimationFrame(scrollToBottom);
+    });
+  }, [isEditingScores]);
   
   useEffect(() => {
     if (isOpen) {

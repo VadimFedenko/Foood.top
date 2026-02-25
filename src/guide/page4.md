@@ -1,25 +1,25 @@
-# That’s it!
-Even if I were the only person on the planet, I’d still build this app (in between crying into a pillow because of an existential crisis).
-But the real goal is to inspire you to make culinary masterpieces: cooking tasty, fast, healthy, and cheap is actually simple.
-I hope this app helps you the same way it helps me.
+# That’s all for now!  
 
-*   **Free, open source**
-*   **Offline, no accounts**
-*   **No tracking** *(How the hell am I supposed to know how many users the service has?)*
-*   **Local data only**
-*   **PWA**
+Even if I were the last person on Earth, I’d still build this app (*with tears in my pillow from existential dread*). But hey—the real goal is to inspire you to cook masterpieces: tasty, fast, healthy, and cheap. Simple stuff.  
 
-<details> <summary><strong>Some plans</strong></summary>
+Hope it helps you as much as it does me. 
 
-*   *New dishes. Why don’t we have gyudon? We need gyudon.*
-*   *New optional priorities: FODMAP index, pH calculation.*
-*   *We need more data*
-*   *Ingredient closeness graph for optimization and dish similarity.*
-*   *Computing the balance of taste modalities in dishes from their ingredients*
+* **Free** | **Open Source** *([github.com/VadimFedenko/BestFoodEver](https://github.com/VadimFedenko/BestFoodEver))*  
+* **Offline-first, no accounts needed**  
+* **No tracking** (*How the hell would I even know how many users there are?*)  
+* **Data stays on your device**  
+* **PWA** (*Progressive Web App*)  
 
-</details>
+<details> <summary><strong>Roadmap</strong></summary>
 
+- More dishes. *Why no gudon yet? We need gudon.*  
+- Extra filters: **FODMAP index, pH calculator**  
+- Better data and accuracy  
+- Ingredient proximity graph for recipe optimization  
+- Flavor profile balance per ingredient  
 
-  
+</details>  
 
-*Vadim Fedenko 2026*
+Got feedback or just wanna chat? Hit me up at **creep@internet.ru** or Telegram — **[@1337](https://t.me/1337)** (I respond faster there).  
+
+*Vadim Fedenko | 2026*

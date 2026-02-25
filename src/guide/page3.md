@@ -1,7 +1,7 @@
 # Data & Methodology
 
 Before we talk about data, here’s the most **important** part: you don’t have to agree with any of it — the app is fully customizable. The data is just a starting point.
-You can give dishes your own scores (press **Edit** in **Score Breakdown**). Your overrides are saved locally on your device.
+You can give dishes your own scores (press **I’ve tasted it! [Edit Rating]** in **Score Breakdown**). Your overrides are saved locally on your device.
 Hate oatmeal → rate its taste 0/10. It will drop to the very bottom.
 
 How do we calculate the scores?

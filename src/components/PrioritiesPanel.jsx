@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect, useCallback } from 'react';
+import { useMemo, useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useReducedMotion } from '../lib/motion';
 import { ChevronDown, ChevronUp } from '../icons/lucide';
@@ -12,7 +12,8 @@ import { userPresetsActions } from '../store/userPresetsStore';
 import ZoneDropdown from './ZoneDropdown';
 import ZoneIcon from './ZoneIcon';
 import { useIsMobile } from '../lib/useIsMobile';
-import SavePresetModal from './SavePresetModal';
+
+const SavePresetModal = lazy(() => import('./SavePresetModal'));
 
 /**
  * Compact priority icon for collapsed state
@@ -200,10 +201,10 @@ export default function PrioritiesPanel({
     <div className="bg-white dark:bg-surface-800 border-b border-surface-300/50 dark:border-surface-700/50">
       {/* Header - always visible */}
       {isExpanded ? (
-        <div className="px-4 py-2 relative overflow-visible">
-          <div className="grid grid-cols-1 sm:grid-cols-[1fr_260px] gap-4 items-center">
+        <div className="px-4 py-2 relative overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-[minmax(240px,1fr)_260px] gap-4 items-center">
             {/* Left header: priorities */}
-            <div className="flex items-center justify-between gap-2 pr-10 sm:pr-0">
+            <div className="flex items-center justify-between gap-2 pr-10 md:pr-0 min-w-0">
               <h2 className="font-display font-semibold text-sm min-[480px]:text-lg text-surface-800 dark:text-surface-100 whitespace-nowrap">
                 {t('priorities.title')}
               </h2>
@@ -230,8 +231,8 @@ export default function PrioritiesPanel({
             </div>
 
             {/* Right header: map */}
-            <div className="hidden sm:flex items-center justify-between">
-              <h2 className="font-display font-semibold text-lg text-surface-800 dark:text-surface-100">
+            <div className="hidden md:flex items-center justify-between min-w-0">
+              <h2 className="font-display font-semibold text-lg text-surface-800 dark:text-surface-100 truncate">
                 {t('zones.title')}
               </h2>
             </div>
@@ -346,11 +347,15 @@ export default function PrioritiesPanel({
         clickCapture
       />
 
-      <SavePresetModal
-        open={isSaveModalOpen}
-        onCancel={() => setIsSaveModalOpen(false)}
-        onSave={handleSavePreset}
-      />
+      {isSaveModalOpen && (
+        <Suspense fallback={null}>
+          <SavePresetModal
+            open={isSaveModalOpen}
+            onCancel={() => setIsSaveModalOpen(false)}
+            onSave={handleSavePreset}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }

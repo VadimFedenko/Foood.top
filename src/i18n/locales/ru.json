@@ -94,7 +94,7 @@
     }
   },
   "zones": {
-    "title": "Экономическая Зона",
+    "title": "Эконом. Зона",
     "east_euro_agrarian": "Восточная Европа",
     "west_eu_industrial": "Западная Европа",
     "northern_import": "Северный импорт",
@@ -180,10 +180,13 @@
     },
     "scoreBreakdown": {
       "title": "Разбор Оценки",
-      "edit": "Редактировать",
+      "edit": "Изменить оценку",
+      "editAlreadyTasted": "Изменить снова",
       "reset": "Сброс",
       "save": "Сохранить",
       "cancel": "Отмена",
+      "tastedTitle": "Попробованные блюда",
+      "tastedProgress": "Попробовано {{tasted}} из {{total}} блюд",
       "priorities": {
         "taste": "Вкус",
         "health": "Здоровье",

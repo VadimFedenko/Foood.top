@@ -80,6 +80,12 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Keep loading placeholder until app mounts (theme-preload removed in App.jsx). Prevents gray flash when index.css loads. */
+html.theme-preload body {
+  background: #000 !important;
+  color: #fff !important;
+}
+
 body {
   font-family: 'DM Sans', system-ui, sans-serif;
   background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-mid) 50%, var(--bg-gradient-end) 100%);

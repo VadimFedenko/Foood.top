@@ -43,21 +43,21 @@ export default function OverviewSlide({
         </div>
       )}
 
-      <div className="grid grid-cols-3 gap-2 sm:gap-4">
-        <div className="bg-surface-100/80 dark:bg-surface-800/80 rounded-lg p-2 sm:p-4 text-center">
-          <Clock size={14} className="mx-auto text-cyan-500 mb-0.5 sm:mb-1 sm:w-5 sm:h-5" />
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-3">
+        <div className="bg-surface-100/80 dark:bg-surface-800/80 rounded-lg p-1.5 sm:p-3 text-center">
+          <Clock size={12} className="mx-auto text-cyan-500 mb-0.5 sm:w-4 sm:h-4" />
           <div className="text-[10px] sm:text-xs text-surface-500">{t('slides.overview.time')}</div>
-          <div className="text-sm sm:text-lg font-semibold text-surface-700 dark:text-surface-200">{formatTime(dish?.time ?? 0)}</div>
+          <div className="text-xs sm:text-base font-semibold text-surface-700 dark:text-surface-200">{formatTime(dish?.time ?? 0)}</div>
         </div>
-        <div className="bg-surface-100/80 dark:bg-surface-800/80 rounded-lg p-2 sm:p-4 text-center">
-          <DollarSign size={14} className="mx-auto text-emerald-500 mb-0.5 sm:mb-1 sm:w-5 sm:h-5" />
+        <div className="bg-surface-100/80 dark:bg-surface-800/80 rounded-lg p-1.5 sm:p-3 text-center">
+          <DollarSign size={12} className="mx-auto text-emerald-500 mb-0.5 sm:w-4 sm:h-4" />
           <div className="text-[10px] sm:text-xs text-surface-500">{t('slides.overview.cost')}{priceUnitLabel}</div>
-          <div className="text-sm sm:text-lg font-semibold text-surface-700 dark:text-surface-200">${(dish?.cost ?? 0).toFixed(2)}</div>
+          <div className="text-xs sm:text-base font-semibold text-surface-700 dark:text-surface-200">${(dish?.cost ?? 0).toFixed(2)}</div>
         </div>
-        <div className="bg-surface-100/80 dark:bg-surface-800/80 rounded-lg p-2 sm:p-4 text-center">
-          <Flame size={14} className="mx-auto text-orange-500 mb-0.5 sm:mb-1 sm:w-5 sm:h-5" />
+        <div className="bg-surface-100/80 dark:bg-surface-800/80 rounded-lg p-1.5 sm:p-3 text-center">
+          <Flame size={12} className="mx-auto text-orange-500 mb-0.5 sm:w-4 sm:h-4" />
           <div className="text-[10px] sm:text-xs text-surface-500">{t('slides.overview.calories')}</div>
-          <div className="text-sm sm:text-lg font-semibold text-surface-700 dark:text-surface-200">{dish?.calories ?? 0}</div>
+          <div className="text-xs sm:text-base font-semibold text-surface-700 dark:text-surface-200">{dish?.calories ?? 0}</div>
         </div>
       </div>
 

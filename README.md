@@ -6,14 +6,21 @@
 [![PWA Ready](https://img.shields.io/badge/PWA-Ready-blueviolet)]()
 [![Offline First](https://img.shields.io/badge/Offline-First-green)]()
 
- The Story
-Ever tried to eat healthy, only to watch your grocery bill skyrocket? Or wanted to cook something delicious, but had no time?
+![Foood.top UI](/public/screenshots/screenshot.jpg)
 
-Here's an idea: take as many dishes as you can, rate each one on a 10-point scale across Taste, Health, Time, and Cost. Average the scores, and the top result is your optimal meal.
 
-This concept came to me in 2020. I feel like this changed my life radically. But I always approximated the scores in my head. This idea begged for automation.
+Hey friends, I've got something cool for you!
 
-**BestFoodEver** is the result of analyzing massive datasets—from scraping culinary sites to economic databases and scientific nutritional reviews—to build the world's first personalized food ranking system.
+Let’s say you’re wondering, what to cook for dinner?
+For years, I've been preparing meals based on this idea: I've evaluated all dishes by taste, price, preparation time, and health benefits; created a top list, and keep rotating through the best dishes in my diet. Mathematically, these are the most "optimal" dishes to prepare.
+
+Yes, generating crazy ideas is my forte, but this particular idea turned out to be a good one. I gradually convinced my friends, and recently I took it to full automation: over several months, I compiled a giant dataset for each criterion and placed it in a database of a small offline app.
+In it, you can customize any criteria, build top lists of the WORST dishes, BEST dishes, or anything else you like — the top lists are generated based on any parameters.
+
+Give it a try, share your feedback on what's working and what's not, what you'd like to add, and any other thoughts — Foood.top
+
+
+**TLDR** Foood.top is the result of analyzing massive datasets—from scraping culinary sites to economic databases and scientific nutritional reviews—to build the world's first personalized food ranking system.
 
 
 ## Usage
@@ -22,7 +29,7 @@ This concept came to me in 2020. I feel like this changed my life radically. But
 2. **Select Region:** Choose your economic zone for accurate pricing (e.g., *Mediterranean* for cheap produce, *Northern Import* for expensive goods).
 3. **Browse the Top:** The list updates instantly to show *your* best food matches.
 4. **Save preset** for fast access.
-5. **Edit/Override:** Click any dish -> "Score Breakdown" -> "Edit" to save your own ratings locally.
+5. **Edit/Override:** Click any dish -> "I’ve tasted it! [Edit Rating]" to save your own ratings locally.
 
 ## Data & Methodology
 The app runs on a pre-compiled analysis of thousands of data points. Here is how the scores are calculated:

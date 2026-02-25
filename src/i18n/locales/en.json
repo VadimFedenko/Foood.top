@@ -180,10 +180,13 @@
     },
     "scoreBreakdown": {
       "title": "Score Breakdown",
-      "edit": "Edit",
+      "edit": "Edit Rating",
+      "editAlreadyTasted": "Edit Again",
       "reset": "Reset",
       "save": "Save",
       "cancel": "Cancel",
+      "tastedTitle": "Tasted dishes",
+      "tastedProgress": "Tasted {{tasted}} of {{total}} dishes",
       "priorities": {
         "taste": "Taste",
         "health": "Health",

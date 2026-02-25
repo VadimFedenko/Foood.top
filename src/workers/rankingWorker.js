@@ -121,6 +121,8 @@ self.onmessage = async (e) => {
         satietyValuesSorted: analysisVariants?.meta?.satietyValuesSorted || [],
         satietyHigherIsBetter: analysisVariants?.meta?.satietyHigherIsBetter ?? true,
       },
+      // Total number of dishes available in the current ranking variant
+      totalDishes: Array.isArray(base.analyzed) ? base.analyzed.length : 0,
     };
 
     self.postMessage({ type: 'result', seq, rankedDishes, rankingMeta });

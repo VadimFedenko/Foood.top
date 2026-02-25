@@ -10,10 +10,10 @@ import {
   Leaf,
   X,
   RotateCcw,
-  Edit3,
   Check,
 } from '../icons/lucide';
 import { formatTime } from './dishCardUtils';
+import { usePrefs } from '../store/prefsStore';
 
 function clamp(n, min, max) {
   return Math.max(min, Math.min(max, n));
@@ -123,7 +123,7 @@ function ScoreSlider({
     : (isModified ? 'text-amber-600 dark:text-amber-400' : 'text-surface-700 dark:text-surface-200');
   
   return (
-    <div className={`flex items-center gap-2 sm:gap-3 py-1.5 sm:py-2 ${disabled ? 'opacity-50' : ''}`}>
+    <div className={`flex items-center gap-2 sm:gap-3 py-1 sm:py-1.5 ${disabled ? 'opacity-50' : ''}`}>
       <div className="flex items-center gap-1.5 sm:gap-2 w-16 sm:w-24 flex-shrink-0">
         <Icon size={14} className={`${iconColor} sm:w-4 sm:h-4`} />
         <span className={`text-xs sm:text-sm font-medium truncate ${labelColor}`}>
@@ -224,6 +224,7 @@ export default function EditableScoreBreakdown({
   isDark = false,
 }) {
   const { t } = useTranslation();
+  const overrides = usePrefs((s) => s.prefs.overrides);
   const [isEditing, setIsEditing] = useState(false);
   const [draftScores, setDraftScores] = useState({});
   const [initialScores, setInitialScores] = useState({});
@@ -270,6 +271,19 @@ export default function EditableScoreBreakdown({
     if (!o || typeof o !== 'object') return false;
     return Object.values(o).some(Boolean);
   }, [dish]);
+
+  const tastedCount = useMemo(() => {
+    if (!overrides || typeof overrides !== 'object') return 0;
+    return Object.keys(overrides).length;
+  }, [overrides]);
+
+  const totalDishes =
+    typeof rankingMeta?.totalDishes === 'number' && rankingMeta.totalDishes > 0
+      ? rankingMeta.totalDishes
+      : null;
+
+  const tastedProgress =
+    totalDishes && totalDishes > 0 ? Math.min(100, (tastedCount / totalDishes) * 100) : 0;
   
   const handleStartEdit = () => {
     // Initialize draft for all metrics (including inactive ones for display)
@@ -428,57 +442,60 @@ export default function EditableScoreBreakdown({
     };
   }, [currentScoreByKey, dish, draftScores, isOptimized, priceUnit, rankingMeta, unitLabel]);
   
+  const editButtonLabel = hasModifications
+    ? t('slides.scoreBreakdown.editAlreadyTasted')
+    : t('slides.scoreBreakdown.edit');
+
   return (
     <div>
       <div className="flex items-center justify-between mb-2 sm:mb-3">
         <h4 className="text-sm sm:text-base font-semibold text-surface-700 dark:text-surface-200">
           {t('slides.scoreBreakdown.title')}
         </h4>
-        <div className="flex items-center gap-2 sm:gap-3">
-          {hasModifications && !isEditing && (
+        {isEditing ? (
+          <div className="flex items-center gap-2 sm:gap-3">
             <button
-              onClick={onResetAll}
-              className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded text-[10px] sm:text-xs font-medium
-                         text-amber-600 dark:text-amber-400 bg-amber-500/10 hover:bg-amber-500/20"
-            >
-              <RotateCcw size={10} className="sm:w-3 sm:h-3" />
-              {t('slides.scoreBreakdown.reset')}
-            </button>
-          )}
-          {isEditing ? (
-            <>
-              <button
-                onClick={handleCancel}
-                className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded text-xs sm:text-sm font-medium
-                           text-surface-600 dark:text-surface-400 bg-surface-200 dark:bg-surface-700 hover:bg-surface-300 dark:hover:bg-surface-600"
-              >
-                <X size={12} className="sm:w-4 sm:h-4" />
-                {t('slides.scoreBreakdown.cancel')}
-              </button>
-              <button
-                onClick={handleSave}
-                className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded text-xs sm:text-sm font-medium
-                           text-white bg-food-500 hover:bg-food-600"
-              >
-                <Check size={12} className="sm:w-4 sm:h-4" />
-                {t('slides.scoreBreakdown.save')}
-              </button>
-            </>
-          ) : (
-            <button
-              onClick={handleStartEdit}
+              onClick={handleCancel}
               className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded text-xs sm:text-sm font-medium
-                         text-food-600 dark:text-food-400 bg-food-500/10 hover:bg-food-500/20"
-              disabled={activeMetrics.length === 0}
+                         text-surface-600 dark:text-surface-400 bg-surface-200 dark:bg-surface-700 hover:bg-surface-300 dark:hover:bg-surface-600"
             >
-              <Edit3 size={12} className="sm:w-4 sm:h-4" />
-              {t('slides.scoreBreakdown.edit')}
+              <X size={12} className="sm:w-4 sm:h-4" />
+              {t('slides.scoreBreakdown.cancel')}
             </button>
-          )}
-        </div>
+            <button
+              onClick={handleSave}
+              className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded text-xs sm:text-sm font-medium
+                         text-white bg-food-500 hover:bg-food-600"
+            >
+              <Check size={12} className="sm:w-4 sm:h-4" />
+              {t('slides.scoreBreakdown.save')}
+            </button>
+          </div>
+        ) : (
+          <>
+            {hasModifications ? (
+              <button
+                onClick={onResetAll}
+                className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded text-[10px] sm:text-xs font-medium
+                           text-amber-600 dark:text-amber-400 bg-amber-500/10 hover:bg-amber-500/20"
+              >
+                <RotateCcw size={10} className="sm:w-3 sm:h-3" />
+                {t('slides.scoreBreakdown.reset')}
+              </button>
+            ) : (
+              <span
+                className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded text-[10px] sm:text-xs font-medium invisible select-none"
+                aria-hidden="true"
+              >
+                <RotateCcw size={10} className="sm:w-3 sm:h-3" />
+                {t('slides.scoreBreakdown.reset')}
+              </span>
+            )}
+          </>
+        )}
       </div>
-      
-      <div className="space-y-1 sm:space-y-2 bg-surface-100/80 dark:bg-surface-800/80 rounded-lg p-3 sm:p-4">
+
+      <div className="space-y-0.5 sm:space-y-1 bg-surface-100/80 dark:bg-surface-800/80 rounded-lg p-3 sm:p-4">
         {isEditing ? (
           <>
             {metricsWithActive.map(metric => {
@@ -529,6 +546,41 @@ export default function EditableScoreBreakdown({
               />
             );
           })
+        )}
+        
+        {/* Progress bar: Tasted X of Y dishes (shown whenever we have total count) */}
+        {totalDishes && (
+          <div className="mt-3 pt-2 border-t border-surface-200 dark:border-surface-700">
+            <div className="flex items-center justify-between text-[11px] sm:text-xs text-surface-500 dark:text-surface-400 mb-1">
+              <span className="font-semibold text-food-50 dark:text-food-200">
+                {t('slides.scoreBreakdown.tastedTitle')}
+              </span>
+              <span className="text-surface-100 dark:text-surface-200">
+                {t('slides.scoreBreakdown.tastedProgress', {
+                  tasted: tastedCount,
+                  total: totalDishes,
+                })}
+              </span>
+            </div>
+            <div className="h-1.5 sm:h-2 rounded-full bg-surface-300/70 dark:bg-surface-700 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-food-400 to-food-500"
+                style={{ width: `${tastedProgress}%` }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Full-width "I've tasted it" / \"Dish Tasted [Edit Again]\" button at bottom, inside card */}
+        {!isEditing && (
+          <button
+            onClick={handleStartEdit}
+            className="mt-6 w-full flex items-center justify-center py-1.5 sm:py-2 rounded-lg text-sm sm:text-base font-medium
+                       text-white bg-food-500 hover:bg-food-600 shadow-sm"
+            disabled={activeMetrics.length === 0}
+          >
+            {editButtonLabel}
+          </button>
         )}
       </div>
     </div>

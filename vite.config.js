@@ -122,9 +122,6 @@ export default defineConfig({
           if (id.includes('framer-motion')) {
             return 'vendor-motion';
           }
-          if (id.includes('lucide-react')) {
-            return 'vendor-icons';
-          }
           return 'vendor';
         },
         chunkFileNames: 'assets/[name]-[hash].js',

@@ -1,10 +1,7 @@
-// Centralized Lucide icon exports.
+// Centralized icon exports.
 //
-// NOTE:
-// - lucide-react uses `package.exports`, so deep imports like `dist/esm/icons/*.mjs/.js` are blocked.
-// - `lucide-react/icons` exists, but it doesn't export every alias (e.g. `Edit3`), which we use.
-// - Importing from the root keeps compatibility; production builds still tree-shake with `sideEffects: false`.
-
+// Optimized: we ship a tiny inline SVG set (generated from lucide once),
+// so the app doesn't pull `lucide-react` into the initial bundle/chunks.
 export {
   AlertTriangle,
   ArrowDown,
@@ -58,6 +55,6 @@ export {
   Wheat,
   X,
   Zap,
-} from 'lucide-react';
+} from './lucide-inline.generated.jsx';
 
 

@@ -180,10 +180,13 @@
     },
     "scoreBreakdown": {
       "title": "Розбір оцінки",
-      "edit": "Редагувати",
+      "edit": "Змінити оцінку",
+      "editAlreadyTasted": "Змінити знову",
       "reset": "Скид",
       "save": "Зберегти",
       "cancel": "Скасувати",
+      "tastedTitle": "Спробовані страви",
+      "tastedProgress": "Спробовано {{tasted}} з {{total}} страв",
       "priorities": {
         "taste": "Смак",
         "health": "Здоров'я",
