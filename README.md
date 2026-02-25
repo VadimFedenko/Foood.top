@@ -1,4 +1,4 @@
-# BestFoodEver
+# BestFoodEver / Foood.top
 
 **Your personal food leaderboard!**
 
@@ -6,7 +6,7 @@
 [![PWA Ready](https://img.shields.io/badge/PWA-Ready-blueviolet)]()
 [![Offline First](https://img.shields.io/badge/Offline-First-green)]()
 
-![Foood.top UI](/public/screenshots/screenshot.jpg)
+![Foood.top UI](public/screenshots/screenshot.jpg)
 
 
 Hey friends, I've got something cool for you!
