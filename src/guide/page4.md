@@ -1,14 +1,16 @@
 # That’s all for now!  
 
-Even if I were the last person on Earth, I’d still build this app (*with tears in my pillow from existential dread*). But hey—the real goal is to inspire you to cook masterpieces: tasty, fast, healthy, and cheap. Simple stuff.  
+Even if I were the last person on Earth, I’d still build this app (*perhaps with tears in my pillow from existential dread*).
+But uh—let's say the real goal is to inspire you to cook masterpieces: tasty, fast, healthy, and cheap. Simple stuff.  
 
 Hope it helps you as much as it does me. 
 
-* **Free** | **Open Source** *([github.com/VadimFedenko/BestFoodEver](https://github.com/VadimFedenko/BestFoodEver))*  
+* **Free** | **Open Source** *([github.com/VadimFedenko/BestFoodEver](https://github.com/VadimFedenko/Foood.top))*  
 * **Offline-first, no accounts needed**  
 * **No tracking** (*How the hell would I even know how many users there are?*)  
 * **Data stays on your device**  
 * **PWA** (*Progressive Web App*)  
+* **MIT License**
 
 <details> <summary><strong>Roadmap</strong></summary>
 

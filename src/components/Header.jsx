@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { UtensilsCrossed } from '../icons/lucide';
 import SettingsButton from './SettingsButton';
 import SettingsSheet from './SettingsSheet';
 import ThemeToggle from './ThemeToggle';
@@ -47,10 +46,7 @@ export default function Header() {
       <div className="px-4 py-3 flex items-center justify-between">
         {/* Logo and Preset Selector */}
         <div className="flex items-center gap-3 min-w-0 flex-1">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-food-400 to-food-600 
-                          flex items-center justify-center shadow-lg glow-orange max-[440px]:hidden">
-            <UtensilsCrossed size={22} className="text-white" />
-          </div>
+          <img src="/foood_logo.svg" alt="Best Food Ever" className="w-10 h-10 rounded-xl object-contain max-[440px]:hidden" />
           <PresetSelector
             presets={presets}
             currentPreset={currentPreset}
